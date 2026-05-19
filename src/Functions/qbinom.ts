@@ -1,5 +1,3 @@
-import lgamma from "./lgamma";
-
 /**
  * Quantile function for the binomial distribution.
  *
@@ -12,9 +10,9 @@ import lgamma from "./lgamma";
  *
  *   n_crossings_min = qbinom(0.05, n_useful - 1, 0.5)
  *
- * Implementation: log-space PMF accumulation via lgamma to avoid
- * overflow for large n. Linear search from k=0 upward (Anhøj
- * use-cases typically have n < 200, so worst case is ~100 iterations).
+ * Implementation: incremental log-PMF recurrence in log-space, walking
+ * k=0..n until the cumulative reaches p. Each step is two log-evaluations
+ * plus one exp; no lgamma calls in the hot path.
  *
  * @param p - Probability in (0, 1)
  * @param n - Non-negative integer, number of trials
@@ -45,20 +43,21 @@ export default function qbinom(p: number, n: number, prob: number): number {
 
   const logProb: number = Math.log(prob);
   const log1mProb: number = Math.log(1 - prob);
-  const lgammaN1: number = lgamma(n + 1);
 
-  let cumulative: number = 0;
-  for (let k: number = 0; k <= n; k++) {
-    // log P(X = k) = lgamma(n+1) - lgamma(k+1) - lgamma(n-k+1)
-    //              + k * log(prob) + (n - k) * log(1 - prob)
-    const logPmf: number = lgammaN1 - lgamma(k + 1) - lgamma(n - k + 1)
-                          + k * logProb + (n - k) * log1mProb;
+  // Incremental log-PMF avoids ~2n lgamma calls inside the hot path.
+  // PMF(k+1) / PMF(k) = (n-k)/(k+1) * prob/(1-prob), so the log-ratio
+  // is added per step rather than recomputing two factorials each time.
+  let logPmf: number = n * log1mProb;
+  let cumulative: number = Math.exp(logPmf);
+  if (cumulative >= p) return 0;
+
+  for (let k: number = 0; k < n; k++) {
+    logPmf += Math.log((n - k) / (k + 1)) + logProb - log1mProb;
     cumulative += Math.exp(logPmf);
     if (cumulative >= p) {
-      return k;
+      return k + 1;
     }
   }
 
-  // Fallback for fp drift at k = n
   return n;
 }

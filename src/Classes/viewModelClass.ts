@@ -151,15 +151,9 @@ export type outliersObject = {
   two_in_three: string[];
   shift: string[];
   anhoj_long_run: string[];
-  // Chart-level OR-aggregate across all groups in the series.
-  global_signals: {
-    long_run: boolean;
-    few_crossings: boolean;
-  };
-  // Per-group Anhøj signal state (one entry per baseline-split / group).
-  // Order matches groupStartEndIndexes for the same indicator. Used by
-  // initialiseGroupedLines to dash only the affected centerline segments.
-  per_group_signals?: { long_run: boolean; few_crossings: boolean }[];
+  // One entry per data-group (baseline-split). Order matches
+  // groupStartEndIndexes for the same indicator.
+  per_group_signals: { long_run: boolean; few_crossings: boolean }[];
 }
 
 export type colourPaletteType = {
@@ -690,10 +684,9 @@ export default class viewModelClass {
         aesthetics.colour_outline = getAesthetic(outliers.astpoint[i], "outliers",
                                   "ast_colour", settings) as string;
       }
-      // Anhøj long-run points are direction-agnostic. Pre-map "upper"/"lower"
-      // to the existing neutral_high/neutral_low color keys so the user
-      // configures a single above/below color pair without going through
-      // improvement_direction.
+      // Anhøj is direction-agnostic — pre-map upper/lower to the
+      // existing neutral_high/neutral_low color keys instead of going
+      // through improvement_direction.
       if (outliers.anhoj_long_run[i] !== "none") {
         const neutralFlag: string = outliers.anhoj_long_run[i] === "upper"
                                       ? "neutral_high"
@@ -795,29 +788,31 @@ export default class viewModelClass {
     // Per-group Anhøj signal state, used to dash only the centerline
     // segments whose data-group has a signal. Falls back to all-false
     // when Anhøj rules are disabled or the chart has no groups recorded.
-    const groupStartEndForIndicator: number[][] = this.groupStartEndIndexes[0] ?? [];
+    const groupBounds: number[][] = this.groupStartEndIndexes[0] ?? [];
     const perGroupSignals = this.outliers[0]?.per_group_signals ?? [];
-    const groupSignalDashedFor = (idx: number): boolean => {
-      for (let g: number = 0; g < groupStartEndForIndicator.length; g++) {
-        const start: number = groupStartEndForIndicator[g][0];
-        const end: number = groupStartEndForIndicator[g][1];
-        // Existing rule-code uses slice(start, end) which is exclusive of
-        // end. Treat group membership the same: idx in [start, end).
-        if (idx >= start && idx < end) {
-          const sig = perGroupSignals[g];
-          return sig ? (sig.long_run || sig.few_crossings) : false;
-        }
-      }
-      return false;
-    };
+    // Pre-compute dashed flag per data-group; index by group walked in
+    // sync with i below (groups are contiguous, monotonic in i).
+    const dashedByGroup: boolean[] = groupBounds.map((_, g) => {
+      const sig = perGroupSignals[g];
+      return sig ? (sig.long_run || sig.few_crossings) : false;
+    });
+    let currentGroupIdx: number = 0;
 
     for (let i: number = 0; i < nLimits; i++) {
+      // groupBounds entries are [start, end) — advance cursor when i
+      // crosses into the next group.
+      while (currentGroupIdx < groupBounds.length
+             && i >= groupBounds[currentGroupIdx][1]) {
+        currentGroupIdx++;
+      }
+      const groupSignalDashed: boolean = currentGroupIdx < dashedByGroup.length
+                                          ? dashedByGroup[currentGroupIdx]
+                                          : false;
       const isRebaselinePoint: boolean = this.splitIndexes.includes(i - 1) || (inputData.groupingIndexes?.includes(i - 1) ?? false);
       let isNewAltTarget: boolean = false;
       if (i > 0 && settings.lines.show_alt_target && !isNullOrUndefined(controlLimits.alt_targets)) {
         isNewAltTarget = controlLimits.alt_targets[i] !== controlLimits.alt_targets[i - 1];
       }
-      const groupSignalDashed: boolean = groupSignalDashedFor(i);
       labels.forEach(label => {
         const join_rebaselines: boolean = settings.lines[`join_rebaselines_${lineNameMap[label]}` as LineSettingsKeys] as boolean;
         // By adding an additional null line value at each re-baseline point
@@ -900,12 +895,6 @@ export default class viewModelClass {
     })
   }
 
-  // Outlier detection orchestrator. Iterates each data group via
-  // groupStartEndIndexes and dispatches to the per-rule modules. Anhøj
-  // rules (anhoj_long_run + anhoj_few_crossings) live in the same loop but
-  // bypass checkFlagDirection because they are direction-agnostic.
-  // per_group_signals is stashed on the result for initialiseGroupedLines
-  // to render per-segment centerline dashing in multi-group charts.
   flagOutliers(controlLimits: controlLimitsObject, groupStartEndIndexes: number[][],
                 inputSettings: settingsValueType, derivedSettings: derivedSettingsClass): outliersObject {
     const process_flag_type: string = inputSettings.outliers.process_flag_type;
@@ -914,21 +903,15 @@ export default class viewModelClass {
     const shift_n: number = inputSettings.outliers.shift_n;
     const ast_specification: boolean = inputSettings.outliers.astronomical_limit === "Specification";
     const two_in_three_specification: boolean = inputSettings.outliers.two_in_three_limit === "Specification";
+    const perGroupSignals: { long_run: boolean; few_crossings: boolean }[] = [];
     const outliers: outliersObject = {
       astpoint: rep("none", controlLimits.values.length),
       two_in_three: rep("none", controlLimits.values.length),
       trend: rep("none", controlLimits.values.length),
       shift: rep("none", controlLimits.values.length),
       anhoj_long_run: rep("none", controlLimits.values.length),
-      // Anhøj global signals are computed per group below. OR-aggregate
-      // across all groups so the chart-level flag reflects "any group has
-      // signal". Per-segment dashing uses per-group state via lineData
-      // (see initialiseGroupedLines).
-      global_signals: { long_run: false, few_crossings: false }
+      per_group_signals: perGroupSignals
     }
-    // Per-group signal state (used by initialiseGroupedLines to dash only
-    // the segments where signal actually fired).
-    const perGroupSignals: { long_run: boolean; few_crossings: boolean }[] = [];
     for (let i: number = 0; i < groupStartEndIndexes.length; i++) {
       const start: number = groupStartEndIndexes[i][0];
       const end: number = groupStartEndIndexes[i][1];
@@ -971,7 +954,6 @@ export default class viewModelClass {
         shift(group_values, group_targets, shift_n)
           .forEach((flag, idx) => outliers.shift[start + idx] = flag)
       }
-      // Anhøj rules — direction-agnostic, centerline-driven.
       if (inputSettings.outliers.anhoj_long_run) {
         const groupFlags: string[] = anhojLongRun(group_values, group_targets);
         groupFlags.forEach((flag, idx) => outliers.anhoj_long_run[start + idx] = flag);
@@ -981,28 +963,19 @@ export default class viewModelClass {
         group_signal.few_crossings = anhojFewCrossings(group_values, group_targets);
       }
       perGroupSignals.push(group_signal);
-      outliers.global_signals.long_run = outliers.global_signals.long_run || group_signal.long_run;
-      outliers.global_signals.few_crossings = outliers.global_signals.few_crossings || group_signal.few_crossings;
     }
-    // Direction-mapping bypass for Anhøj fields: anhoj_long_run preserves
-    // raw "upper"/"lower" semantics so the renderer can map them to
-    // neutral_high/neutral_low keys without going through improvement/
-    // deterioration mapping. global_signals is an object, not an array.
-    Object.keys(outliers).forEach(key => {
-      // Skip Anhøj fields and non-array members (global_signals,
-      // per_group_signals). Anhøj flags retain raw upper/lower semantics
-      // and are colored via neutral_high/neutral_low at the call-site.
-      if (key === "anhoj_long_run"
-          || key === "global_signals"
-          || key === "per_group_signals") {
-        return;
+    // Anhøj flags (anhoj_long_run) keep raw "upper"/"lower" semantics so
+    // the renderer can pre-map them to neutral_high/neutral_low. Other
+    // legacy rules still go through direction mapping.
+    const directionMappedKeys: ReadonlyArray<keyof outliersObject>
+      = ["astpoint", "trend", "two_in_three", "shift"];
+    directionMappedKeys.forEach(key => {
+      const arr = outliers[key] as string[];
+      for (let i = 0; i < arr.length; i++) {
+        arr[i] = checkFlagDirection(arr[i],
+                                    { process_flag_type, improvement_direction });
       }
-      for (let i = 0; i < outliers[key as keyof outliersObject].length; i++) {
-        outliers[key as keyof outliersObject][i] = checkFlagDirection(outliers[key as keyof outliersObject][i],
-                                                                      { process_flag_type, improvement_direction });
-      }
-    })
-    outliers.per_group_signals = perGroupSignals;
+    });
     return outliers;
   }
 }
