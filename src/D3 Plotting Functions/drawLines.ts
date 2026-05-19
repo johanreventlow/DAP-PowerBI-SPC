@@ -44,6 +44,13 @@ export default function drawLines(selection: svgBaseType, visualObj: Visual) {
                         : getAesthetic(currLine, "lines", "colour", { lines: currPoint.aesthetics } as settingsValueType) as string;
           strokeWidth[i] =  getAesthetic(currLine, "lines", "width", { lines: currPoint.aesthetics } as settingsValueType) as string;
           strokeDashArray[i] =  getAesthetic(currLine, "lines", "type", { lines: currPoint.aesthetics } as settingsValueType) as string;
+          // Anhøj signal: when the centerline ("targets") segment belongs
+          // to a data-group whose long-run or few-crossings signal has
+          // fired, force a dashed stroke regardless of the configured
+          // line type.
+          if (currLine === "targets" && currPoint.group_signal_dashed) {
+            strokeDashArray[i] = "4 2";
+          }
 
           if (i > 0) {
             conditionalStroke = conditionalStroke || (stroke[i] !== stroke[i - 1]);
