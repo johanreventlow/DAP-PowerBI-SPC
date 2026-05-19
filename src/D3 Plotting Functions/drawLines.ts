@@ -56,7 +56,17 @@ export default function drawLines(selection: svgBaseType, visualObj: Visual) {
                     : getAesthetic(currLine, "lines", "colour", { lines: d.aesthetics } as defaultSettingsType)
           })
           .attr("stroke-width", (d: lineData) => getAesthetic(currLine, "lines", "width", { lines: d.aesthetics } as defaultSettingsType))
-          .attr("stroke-dasharray", (d: lineData) => getAesthetic(currLine, "lines", "type", { lines: d.aesthetics } as defaultSettingsType))
+          .attr("stroke-dasharray", (d: lineData) => {
+            // Anhøj signal: when the centerline ("targets") segment belongs
+            // to a data-group whose long-run or few-crossings signal has
+            // fired, force a dashed stroke regardless of the user's
+            // configured line type. Other line types fall back to the
+            // configured aesthetic.
+            if (currLine === "targets" && d.group_signal_dashed) {
+              return "4 2";
+            }
+            return getAesthetic(currLine, "lines", "type", { lines: d.aesthetics } as defaultSettingsType);
+          })
           .attr("stroke-dashoffset", (_, idx: number) => {
               const prev_x: number = visualObj.plotProperties.xScale(currLineData[0].x);
               const curr_x: number = visualObj.plotProperties.xScale(currLineData[idx].x);

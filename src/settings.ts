@@ -356,6 +356,19 @@ const settingsModel = {
           ]
         },
         ...createOutlierColours("twointhree", defaultColours)
+      },
+      "Anhøj Rules": {
+        anhoj_long_run: {
+          displayName: "Highlight Anhøj Long Run",
+          type: FormattingComponent.ToggleSwitch,
+          default: false
+        },
+        anhoj_few_crossings: {
+          displayName: "Dash Centerline on Few Crossings",
+          type: FormattingComponent.ToggleSwitch,
+          default: false
+        },
+        ...createOutlierColours("anhoj_long_run", defaultColours)
       }
     }
   },
