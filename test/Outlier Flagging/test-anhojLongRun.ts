@@ -30,7 +30,7 @@ describe("anhojLongRun", () => {
             const fx = anhojFixtures.find(f => f.name === "boundary_run_over_max")!;
             const flags = anhojLongRun(fx.values, centerlineArray(fx));
 
-            const expected: string[] = new Array<string>(20).fill("none");
+            const expected: ("upper" | "lower" | "none")[] = new Array<"upper" | "lower" | "none">(20).fill("none");
             for (let i: number = 1; i <= 8; i++) {
                 expected[i] = "upper";
             }
@@ -56,7 +56,7 @@ describe("anhojLongRun", () => {
         it("all observations on centerline: returns all 'none'", () => {
             const fx = anhojFixtures.find(f => f.name === "all_ties")!;
             const flags = anhojLongRun(fx.values, centerlineArray(fx));
-            expect(flags).toEqual(new Array<string>(12).fill("none"));
+            expect(flags).toEqual(new Array<"upper" | "lower" | "none">(12).fill("none"));
         });
 
         it("observations exactly on centerline are flagged 'none' themselves", () => {
