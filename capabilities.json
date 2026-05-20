@@ -183,6 +183,24 @@
         },
         "twointhree_colour_neutral_high":{
           "type": { "fill": { "solid": { "color": true } } }
+        },
+        "anhoj_long_run": {
+          "type" : { "bool" : true }
+        },
+        "anhoj_few_crossings": {
+          "type" : { "bool" : true }
+        },
+        "anhoj_long_run_colour_improvement":{
+          "type": { "fill": { "solid": { "color": true } } }
+        },
+        "anhoj_long_run_colour_deterioration":{
+          "type": { "fill": { "solid": { "color": true } } }
+        },
+        "anhoj_long_run_colour_neutral_low":{
+          "type": { "fill": { "solid": { "color": true } } }
+        },
+        "anhoj_long_run_colour_neutral_high":{
+          "type": { "fill": { "solid": { "color": true } } }
         }
       }
     },
