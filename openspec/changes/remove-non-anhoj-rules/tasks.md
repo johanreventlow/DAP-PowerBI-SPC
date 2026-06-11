@@ -14,11 +14,11 @@ hvert nummereret afsnit = ét atomisk commit, grønt på tsc + vitest.
 
 ## 2. Commit 2 — fjern shift/trend/twoInThree-reglerne
 
-- [ ] 2.1 Slet `src/Outlier Flagging/shift.ts`, `trend.ts`, `twoInThree.ts`; ryd `index.ts`
-- [ ] 2.2 `viewModelClass.ts`: reducér `outliersObject` til `{ astpoint, per_group_signals }`; fjern regel-grene i `flagOutliers` (inkl. `trend_n`/`shift_n`/two-in-three-reads); forenkl direction-mapping til kun `astpoint`; fjern felter fra `summaryTableRowData` + tabel-kolonnedefinitioner
-- [ ] 2.3 Ryd referencer i `buildTooltip.ts` + `getAesthetic.ts` (+ evt. conditional-formatting-paths fundet ved grep-sweep: `shift`, `trend`(regel), `two_in_three`, `twointhree`)
-- [ ] 2.4 Slet `shift.test.ts`, `trend.test.ts`, `twoInThree.test.ts`, `anhojVsShift.test.ts`; opdatér `flagOutliersMultiGroup.test.ts` (stub-settings uden fjernede toggles) + `checkFlagDirection.test.ts` hvis den refererer fjernede regler
-- [ ] 2.5 Verifikation: `tsc --noEmit` rent + `npm test` grøn → commit
+- [x] 2.1 Slet `src/Outlier Flagging/shift.ts`, `trend.ts`, `twoInThree.ts`; ryd `index.ts`
+- [x] 2.2 `viewModelClass.ts`: reducér `outliersObject` til `{ astpoint, per_group_signals }`; fjern regel-grene i `flagOutliers` (inkl. `trend_n`/`shift_n`/two-in-three-reads); forenkl direction-mapping til kun `astpoint`; fjern felter fra `summaryTableRowData` + tabel-kolonnedefinitioner
+- [x] 2.3 Ryd referencer i `buildTooltip.ts` + `getAesthetic.ts` (+ evt. conditional-formatting-paths fundet ved grep-sweep: `shift`, `trend`(regel), `two_in_three`, `twointhree`)
+- [x] 2.4 Slet `shift.test.ts`, `trend.test.ts`, `twoInThree.test.ts`, `anhojVsShift.test.ts`; opdatér `flagOutliersMultiGroup.test.ts` (stub-settings uden fjernede toggles) + `checkFlagDirection.test.ts` hvis den refererer fjernede regler
+- [x] 2.5 Verifikation: `tsc --noEmit` rent + `npm test` grøn → commit
 
 ## 3. Commit 3 — settings/capabilities-oprydning + docs
 

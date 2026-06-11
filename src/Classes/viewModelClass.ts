@@ -19,9 +19,6 @@ import valueFormatter from "../Functions/valueFormatter";
 import calculateTrendLine from "../Functions/calculateTrendLine";
 import groupBy from "../Functions/groupBy";
 import astronomical from "../Outlier Flagging/astronomical";
-import trend from "../Outlier Flagging/trend";
-import twoInThree from "../Outlier Flagging/twoInThree";
-import shift from "../Outlier Flagging/shift";
 import anhojLongRun from "../Outlier Flagging/anhojLongRun";
 import anhojFewCrossings from "../Outlier Flagging/anhojFewCrossings";
 import { lineNameMap } from "../Functions/getAesthetic";
@@ -65,9 +62,6 @@ export type summaryTableRowData = {
   speclimits_upper: number | undefined;
   trend_line: number | undefined;
   astpoint: string;
-  trend: string;
-  shift: string;
-  two_in_three: string;
 }
 
 export type summaryTableRowDataGrouped = {
@@ -143,9 +137,6 @@ export type controlLimitsArgs = {
 
 export type outliersObject = {
   astpoint: string[];
-  trend: string[];
-  two_in_three: string[];
-  shift: string[];
   // One entry per data-group (baseline-split). Order matches
   // groupStartEndIndexes for the same indicator.
   per_group_signals: { long_run: boolean; few_crossings: boolean }[];
@@ -596,36 +587,12 @@ export default class viewModelClass {
     if (settings.outliers.astronomical) {
       this.tableColumns[0].push({ name: "astpoint", label: "Ast. Point" });
     }
-    if (settings.outliers.trend) {
-      this.tableColumns[0].push({ name: "trend", label: "Trend" });
-    }
-    if (settings.outliers.shift) {
-      this.tableColumns[0].push({ name: "shift", label: "Shift" });
-    }
 
     for (let i: number = 0; i < controlLimits.keys.length; i++) {
       const index: number = controlLimits.keys[i].x;
       const aesthetics: settingsValueType["scatter"] = inputData.scatter_formatting[i];
       if (this.colourPalette.isHighContrast) {
         aesthetics.colour = this.colourPalette.foregroundColour;
-      }
-      if (outliers.shift[i] !== "none") {
-        aesthetics.colour = getAesthetic(outliers.shift[i], "outliers",
-                                  "shift_colour", settings) as string;
-        aesthetics.colour_outline = getAesthetic(outliers.shift[i], "outliers",
-                                  "shift_colour", settings) as string;
-      }
-      if (outliers.trend[i] !== "none") {
-        aesthetics.colour = getAesthetic(outliers.trend[i], "outliers",
-                                  "trend_colour", settings) as string;
-        aesthetics.colour_outline = getAesthetic(outliers.trend[i], "outliers",
-                                  "trend_colour", settings) as string;
-      }
-      if (outliers.two_in_three[i] !== "none") {
-        aesthetics.colour = getAesthetic(outliers.two_in_three[i], "outliers",
-                                  "twointhree_colour", settings) as string;
-        aesthetics.colour_outline = getAesthetic(outliers.two_in_three[i], "outliers",
-                                  "twointhree_colour", settings) as string;
       }
       if (outliers.astpoint[i] !== "none") {
         aesthetics.colour = getAesthetic(outliers.astpoint[i], "outliers",
@@ -650,9 +617,7 @@ export default class viewModelClass {
         speclimits_upper: controlLimits?.speclimits_upper?.[i],
         trend_line: controlLimits?.trend_line?.[i],
         astpoint: outliers.astpoint[i],
-        trend: outliers.trend[i],
-        shift: outliers.shift[i],
-        two_in_three: outliers.two_in_three[i]
+
       }
 
 
@@ -836,16 +801,10 @@ export default class viewModelClass {
                 inputSettings: settingsValueType, derivedSettings: derivedSettingsClass): outliersObject {
     const process_flag_type: string = inputSettings.outliers.process_flag_type;
     const improvement_direction: string = inputSettings.outliers.improvement_direction;
-    const trend_n: number = inputSettings.outliers.trend_n;
-    const shift_n: number = inputSettings.outliers.shift_n;
     const ast_specification: boolean = inputSettings.outliers.astronomical_limit === "Specification";
-    const two_in_three_specification: boolean = inputSettings.outliers.two_in_three_limit === "Specification";
     const perGroupSignals: { long_run: boolean; few_crossings: boolean }[] = [];
     const outliers: outliersObject = {
       astpoint: rep("none", controlLimits.values.length),
-      two_in_three: rep("none", controlLimits.values.length),
-      trend: rep("none", controlLimits.values.length),
-      shift: rep("none", controlLimits.values.length),
       per_group_signals: perGroupSignals
     }
     for (let i: number = 0; i < groupStartEndIndexes.length; i++) {
@@ -855,7 +814,7 @@ export default class viewModelClass {
       const group_targets: number[] = controlLimits.targets.slice(start, end) as number[];
       const group_signal = { long_run: false, few_crossings: false };
 
-      if (derivedSettings.chart_type_props.has_control_limits || ast_specification || two_in_three_specification) {
+      if (derivedSettings.chart_type_props.has_control_limits || ast_specification) {
         const limit_map: Record<string, string> = {
           "1 Sigma": "68",
           "2 Sigma": "95",
@@ -871,24 +830,6 @@ export default class viewModelClass {
           astronomical(group_values, lower_limits, upper_limits)
             .forEach((flag, idx) => outliers.astpoint[start + idx] = flag)
         }
-        if (inputSettings.outliers.two_in_three) {
-          const highlight_series: boolean = inputSettings.outliers.two_in_three_highlight_series;
-          const two_in_three_limit: string = limit_map[inputSettings.outliers.two_in_three_limit];
-          const ll_prefix: string = two_in_three_specification ? "speclimits_lower" : "ll";
-          const ul_prefix: string = two_in_three_specification ? "speclimits_upper" : "ul";
-          const lower_warn_limits: number[] = controlLimits[`${ll_prefix}${two_in_three_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
-          const upper_warn_limits: number[] = controlLimits[`${ul_prefix}${two_in_three_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
-          twoInThree(group_values, lower_warn_limits, upper_warn_limits, highlight_series)
-            .forEach((flag, idx) => outliers.two_in_three[start + idx] = flag)
-        }
-      }
-      if (inputSettings.outliers.trend) {
-        trend(group_values, trend_n)
-          .forEach((flag, idx) => outliers.trend[start + idx] = flag)
-      }
-      if (inputSettings.outliers.shift) {
-        shift(group_values, group_targets, shift_n)
-          .forEach((flag, idx) => outliers.shift[start + idx] = flag)
       }
       if (inputSettings.outliers.anhoj_long_run) {
         group_signal.long_run = anhojLongRun(group_values, group_targets);
@@ -899,17 +840,12 @@ export default class viewModelClass {
       perGroupSignals.push(group_signal);
     }
     // Anhøj rules are series-level signals (dashed centerline) and have
-    // no per-point flags to direction-map. The legacy point-flagging
-    // rules still go through improvement_direction mapping.
-    const directionMappedKeys: ReadonlyArray<keyof outliersObject>
-      = ["astpoint", "trend", "two_in_three", "shift"];
-    directionMappedKeys.forEach(key => {
-      const arr = outliers[key] as string[];
-      for (let i = 0; i < arr.length; i++) {
-        arr[i] = checkFlagDirection(arr[i],
-                                    { process_flag_type, improvement_direction });
-      }
-    });
+    // no per-point flags to direction-map; only astronomical flags are
+    // mapped through improvement_direction.
+    for (let i = 0; i < outliers.astpoint.length; i++) {
+      outliers.astpoint[i] = checkFlagDirection(outliers.astpoint[i],
+                                  { process_flag_type, improvement_direction });
+    }
     return outliers;
   }
 }
