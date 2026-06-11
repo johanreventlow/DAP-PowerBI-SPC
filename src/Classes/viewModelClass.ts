@@ -150,7 +150,6 @@ export type outliersObject = {
   trend: string[];
   two_in_three: string[];
   shift: string[];
-  anhoj_long_run: string[];
   // One entry per data-group (baseline-split). Order matches
   // groupStartEndIndexes for the same indicator.
   per_group_signals: { long_run: boolean; few_crossings: boolean }[];
@@ -684,18 +683,6 @@ export default class viewModelClass {
         aesthetics.colour_outline = getAesthetic(outliers.astpoint[i], "outliers",
                                   "ast_colour", settings) as string;
       }
-      // Anhøj is direction-agnostic — pre-map upper/lower to the
-      // existing neutral_high/neutral_low color keys instead of going
-      // through improvement_direction.
-      if (outliers.anhoj_long_run[i] !== "none") {
-        const neutralFlag: string = outliers.anhoj_long_run[i] === "upper"
-                                      ? "neutral_high"
-                                      : "neutral_low";
-        aesthetics.colour = getAesthetic(neutralFlag, "outliers",
-                                  "anhoj_long_run_colour", settings) as string;
-        aesthetics.colour_outline = getAesthetic(neutralFlag, "outliers",
-                                  "anhoj_long_run_colour", settings) as string;
-      }
       const table_row: summaryTableRowData = {
         date: controlLimits.keys[i].label,
         numerator: controlLimits.numerators?.[i],
@@ -909,7 +896,6 @@ export default class viewModelClass {
       two_in_three: rep("none", controlLimits.values.length),
       trend: rep("none", controlLimits.values.length),
       shift: rep("none", controlLimits.values.length),
-      anhoj_long_run: rep("none", controlLimits.values.length),
       per_group_signals: perGroupSignals
     }
     for (let i: number = 0; i < groupStartEndIndexes.length; i++) {
@@ -955,18 +941,16 @@ export default class viewModelClass {
           .forEach((flag, idx) => outliers.shift[start + idx] = flag)
       }
       if (inputSettings.outliers.anhoj_long_run) {
-        const groupFlags: string[] = anhojLongRun(group_values, group_targets);
-        groupFlags.forEach((flag, idx) => outliers.anhoj_long_run[start + idx] = flag);
-        group_signal.long_run = groupFlags.some(f => f !== "none");
+        group_signal.long_run = anhojLongRun(group_values, group_targets);
       }
       if (inputSettings.outliers.anhoj_few_crossings) {
         group_signal.few_crossings = anhojFewCrossings(group_values, group_targets);
       }
       perGroupSignals.push(group_signal);
     }
-    // Anhøj flags (anhoj_long_run) keep raw "upper"/"lower" semantics so
-    // the renderer can pre-map them to neutral_high/neutral_low. Other
-    // legacy rules still go through direction mapping.
+    // Anhøj rules are series-level signals (dashed centerline) and have
+    // no per-point flags to direction-map. The legacy point-flagging
+    // rules still go through improvement_direction mapping.
     const directionMappedKeys: ReadonlyArray<keyof outliersObject>
       = ["astpoint", "trend", "two_in_three", "shift"];
     directionMappedKeys.forEach(key => {

@@ -42,10 +42,8 @@ const outliersSettings = {
       twointhree_colour_neutral_high: colourOption("Neutral (High) Two-in-Three Colour", "neutral_high")
     },
     "Anhoej Rules": {
-      anhoj_long_run: toggleOption("Highlight Anhoej Long Run", false),
-      anhoj_few_crossings: toggleOption("Dash Centerline on Few Crossings", false),
-      anhoj_long_run_colour_neutral_low: colourOption("Neutral (Low) Anhoej Colour", "neutral_low"),
-      anhoj_long_run_colour_neutral_high: colourOption("Neutral (High) Anhoej Colour", "neutral_high")
+      anhoj_long_run: toggleOption("Dash Centerline on Long Run", false),
+      anhoj_few_crossings: toggleOption("Dash Centerline on Few Crossings", false)
     }
   }
 };

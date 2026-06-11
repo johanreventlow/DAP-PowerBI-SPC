@@ -2,84 +2,47 @@ import anhojLongRun from "../../src/Outlier Flagging/anhojLongRun";
 import { anhojFixtures, centerlineArray } from "./anhojFixtures";
 
 describe("anhojLongRun", () => {
-    describe("fixture parity (vs qicharts2 + own contract)", () => {
+    describe("fixture parity (vs qicharts2 long_run_signal)", () => {
         anhojFixtures.forEach(fx => {
-            it(`'${fx.name}': flag-count consistent with long_run_signal`, () => {
+            it(`'${fx.name}': signal matches qicharts2 (${fx.stats.long_run_signal})`, () => {
                 const centerline = centerlineArray(fx);
-                const flags = anhojLongRun(fx.values, centerline);
-
-                expect(flags.length).toBe(fx.values.length);
-
-                const flaggedCount = flags.filter(f => f !== "none").length;
-
-                if (fx.stats.long_run_signal) {
-                    // Signal fires: at least one max-length run is flagged.
-                    // Total flagged points >= longest_run (one max-length run worth).
-                    expect(flaggedCount).toBeGreaterThanOrEqual(fx.stats.longest_run!);
-                } else {
-                    // No signal: every flag is "none"
-                    expect(flaggedCount).toBe(0);
-                }
+                expect(anhojLongRun(fx.values, centerline)).toBe(fx.stats.long_run_signal);
             });
         });
     });
 
-    describe("specific point-flag assertions", () => {
-        it("'boundary_run_over_max': flags exactly the 8 'upper' points", () => {
-            // Pattern: Z HHHHHHHH Z H Z H ZZZZZZZ → run of 8 hundreds at indices 1..8
-            const fx = anhojFixtures.find(f => f.name === "boundary_run_over_max")!;
-            const flags = anhojLongRun(fx.values, centerlineArray(fx));
-
-            const expected: ("upper" | "lower" | "none")[] = new Array<"upper" | "lower" | "none">(20).fill("none");
-            for (let i: number = 1; i <= 8; i++) {
-                expected[i] = "upper";
-            }
-            expect(flags).toEqual(expected);
-        });
-
-        it("'long_run_only': flags the 9-point upper run at indices 7..15", () => {
-            const fx = anhojFixtures.find(f => f.name === "long_run_only")!;
-            const flags = anhojLongRun(fx.values, centerlineArray(fx));
-
-            // Values 11,12,10,13,11,12,10,13,11 are at original positions 7..15
-            for (let i: number = 7; i <= 15; i++) {
-                expect(flags[i]).toBe("upper");
-            }
-            // Points outside the run (and the tie-on-median at index 3 and 18) are "none"
-            expect(flags[0]).toBe("none");
-            expect(flags[6]).toBe("none");
-            expect(flags[16]).toBe("none");
-        });
-    });
-
     describe("edge cases", () => {
-        it("all observations on centerline: returns all 'none'", () => {
+        it("all observations on centerline: no signal", () => {
             const fx = anhojFixtures.find(f => f.name === "all_ties")!;
-            const flags = anhojLongRun(fx.values, centerlineArray(fx));
-            expect(flags).toEqual(new Array<"upper" | "lower" | "none">(12).fill("none"));
+            expect(anhojLongRun(fx.values, centerlineArray(fx))).toBe(false);
         });
 
-        it("observations exactly on centerline are flagged 'none' themselves", () => {
-            // Custom: 1,2,3,5,5,7,6,8,9,5 with centerline=5 → ties at indices 3,4,9
-            const val = [1, 2, 3, 5, 5, 7, 6, 8, 9, 5];
+        it("observations exactly on centerline are excluded from runs", () => {
+            // 6 over centerline i træk, men afbrudt af ties — ties bryder
+            // IKKE et run (de filtreres fra, jf. qicharts2 n_useful)
+            const val = [1, 7, 6, 5, 8, 9, 5, 7, 6, 1];
             const centerline = new Array<number>(10).fill(5);
-            const flags = anhojLongRun(val, centerline);
-            expect(flags[3]).toBe("none");
-            expect(flags[4]).toBe("none");
-            expect(flags[9]).toBe("none");
-        });
-
-        it("returns array of same length as input", () => {
-            const val = [1, 2, 3];
-            const centerline = [2, 2, 2];
-            const flags = anhojLongRun(val, centerline);
-            expect(flags.length).toBe(3);
+            // useful sides: -1, +1, +1, +1, +1, +1, +1, -1 → longest run 6,
+            // n_useful=8 → threshold round(log2(8))+3 = 6 → 6 > 6 falsk
+            expect(anhojLongRun(val, centerline)).toBe(false);
         });
 
         it("operator is strict > (run AT threshold does not fire)", () => {
             const fx = anhojFixtures.find(f => f.name === "boundary_run_at_max")!;
-            const flags = anhojLongRun(fx.values, centerlineArray(fx));
-            expect(flags.every(f => f === "none")).toBe(true);
+            expect(anhojLongRun(fx.values, centerlineArray(fx))).toBe(false);
+        });
+
+        it("fewer than 2 useful observations: no signal", () => {
+            expect(anhojLongRun([5], [3])).toBe(false);
+            expect(anhojLongRun([], [])).toBe(false);
+        });
+
+        it("non-finite observations are excluded (parity with R NA-drop)", () => {
+            // 9 finite punkter over centerline + NaN/null-huller.
+            // n_useful=9 → threshold round(log2(9))+3 = 6 → run af 9 > 6 → signal
+            const val = [7, 8, NaN, 9, 7, null as unknown as number, 8, 9, 7, 8, 9];
+            const centerline = new Array<number>(11).fill(5);
+            expect(anhojLongRun(val, centerline)).toBe(true);
         });
     });
 });

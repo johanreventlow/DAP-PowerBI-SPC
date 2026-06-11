@@ -17,7 +17,7 @@ export default function anhojFewCrossings(
   val: readonly number[],
   centerline: readonly number[]
 ): boolean {
-  const { sides } = computeSides(val, centerline);
+  const sides: number[] = computeSides(val, centerline);
   const nUseful: number = sides.length;
   if (nUseful < 2) {
     return false;
