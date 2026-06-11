@@ -73,7 +73,7 @@ const linesSettings = {
       plot_label_prefix_alt_target: textOption("Value Prefix", "")
     },
     "95% Limits": {
-      show_95: toggleOption("Show 95% Lines", true),
+      show_95: toggleOption("Show 95% Lines", false),
       width_95: numberOption("Line Width", 2, { min: 0, max: 100 }),
       type_95: lineTypeOption("Line Type", "2 5"),
       colour_95: colourOption("Line Colour", "limits"),

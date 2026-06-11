@@ -13,8 +13,8 @@ Settings + capabilities ændres ALTID synkront i samme commit.
 
 ## 2. Commit 2 — 95% default fra
 
-- [ ] 2.1 `linesSettings.ts`: `show_95` default `true` → `false` (matcher qicharts2 `show.95=FALSE`)
-- [ ] 2.2 Verifikation + commit (lille, men selvstændig adfærdsændring)
+- [x] 2.1 `linesSettings.ts`: `show_95` default `true` → `false` (matcher qicharts2 `show.95=FALSE`)
+- [x] 2.2 Verifikation + commit (lille, men selvstændig adfærdsændring)
 
 ## 3. Commit 3 — astronomical: fast 3σ + én farve, direction-mapping ud
 
