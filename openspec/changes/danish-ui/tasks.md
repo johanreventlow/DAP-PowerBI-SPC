@@ -17,6 +17,6 @@
 
 ## 3. Commit 3 — afslutning
 
-- [ ] 3.1 Grep-sweep for oversete engelske labels i bruger-vendte filer
-- [ ] 3.2 NEWS + version-bump + `pbiviz package`
+- [x] 3.1 Grep-sweep for oversete engelske labels i bruger-vendte filer
+- [x] 3.2 NEWS + version-bump + `pbiviz package`
 - [ ] 3.3 **[MANUELT TRIN]** Power BI: panel/felt-brønde/tooltip/tabel/fejl på dansk; æøå rendres korrekt; gemte settings virker

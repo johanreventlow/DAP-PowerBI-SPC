@@ -1,5 +1,17 @@
 # NEWS
 
+## (development) — Dansk brugerflade
+
+### Nye features
+
+* **Hele den bruger-vendte flade er oversat til dansk**: formatting-panel
+  (kort, grupper, indstillinger, dropdown-labels), felt-brønde,
+  tooltips, oversigtstabel-kolonner og fejlbeskeder. Terminologi følger
+  dansk SPC-praksis (Anhøj/qicharts2): serie, kryds, kontrolgrænser,
+  centerlinje, mållinje, faser, seriediagram.
+* Interne værdier og gemte rapport-indstillinger er uændrede —
+  opgradering kræver ingen migration.
+
 ## (development) — On-canvas Anhøj-statistik
 
 ### Nye features

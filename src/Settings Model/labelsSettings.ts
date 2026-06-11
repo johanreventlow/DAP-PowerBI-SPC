@@ -21,7 +21,7 @@ const labelsSettings = {
       label_line_width: numberOption("Forbindelseslinje: tykkelse", 1, { min: 0, max: 100 }),
       label_line_type: lineTypeOption("Forbindelseslinje: type", "10 0"),
       label_line_max_length: numberOption("Maks. linjelængde (px)", 1000, { min: 0, max: 10000 }),
-      label_marker_show: toggleOption("Show Line Markers", true),
+      label_marker_show: toggleOption("Vis linjemarkører", true),
       label_marker_offset: numberOption("Markørafstand fra værdi (px)", 5),
       label_marker_size: numberOption("Punktstørrelse", 3, { min: 0, max: 100 }),
       label_marker_colour: colourOption("Punktfarve", "standard"),
