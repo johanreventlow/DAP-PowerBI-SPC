@@ -1,5 +1,21 @@
 # NEWS
 
+## (development) — On-canvas Anhøj-statistik
+
+### Nye features
+
+* **Runs-analyse direkte på chartet** (Outlier Settings → Anhoej Rules →
+  "Show Runs Analysis on Chart", default fra): persistent tekstblok per
+  fase med "Længste serie: N (maks M)" og "Kryds: N (min M)" — tallene
+  matcher qicharts2's `summary()` eksakt. Labels, font, størrelse og
+  farve er konfigurerbare; danske default-labels.
+
+### Interne ændringer
+
+* `anhojStats()` i `anhojShared.ts` eksponerer fuld runs-analyse;
+  reglerne er tynde wrappers. `per_group_signals[g].stats` bærer
+  statistikken til rendering.
+
 ## (development) — Limit-flade alignet til qicharts2
 
 ### Breaking changes

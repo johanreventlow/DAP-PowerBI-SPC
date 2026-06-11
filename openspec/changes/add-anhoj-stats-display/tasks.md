@@ -17,6 +17,6 @@
 
 ## 3. Commit 3 — docs + build
 
-- [ ] 3.1 NEWS-entry (Nye features)
-- [ ] 3.2 Version-bump + `pbiviz package`
+- [x] 3.1 NEWS-entry (Nye features)
+- [x] 3.2 Version-bump + `pbiviz package`
 - [ ] 3.3 **[MANUELT TRIN]** Power BI: toggle til → statistik vises per fase; default fra
