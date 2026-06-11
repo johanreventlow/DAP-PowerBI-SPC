@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import viewModelClass from "../../src/Classes/viewModelClass";
 import type { defaultSettingsType } from "../../src/Classes/settingsClass";
 import type derivedSettingsClass from "../../src/Classes/derivedSettingsClass";

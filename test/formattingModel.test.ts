@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import settingsClass from "../src/Classes/settingsClass";
 import buildDataView from "./helpers/buildDataView";
 

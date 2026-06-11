@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import qbinom from "../../src/Functions/qbinom";
 
 // Reference values computed via R 4.5.2:
