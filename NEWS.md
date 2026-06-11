@@ -1,5 +1,14 @@
 # NEWS
 
+## (development) — Kontrolgrænsebånd
+
+### Nye features
+
+* **Udfyldt kontrolgrænseområde** (Linjer → 99%-kontrolgrænser →
+  "Udfyld kontrolgrænseområde", default fra): farvelagt bånd mellem
+  nedre og øvre kontrolgrænse i geom_ribbon-stil, med konfigurerbar
+  farve og gennemsigtighed. Tegnes per fase og bag linjer/datapunkter.
+
 ## (development) — Dansk brugerflade
 
 ### Nye features

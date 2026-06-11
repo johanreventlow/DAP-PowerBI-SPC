@@ -208,6 +208,15 @@
         "show_99": {
           "type" : { "bool" : true }
         },
+        "show_band_99": {
+          "type" : { "bool" : true }
+        },
+        "band_colour_99":{
+          "type": { "fill": { "solid": { "color": true } } }
+        },
+        "band_opacity_99": {
+          "type" : { "numeric": true }
+        },
         "show_95": {
           "type" : { "bool" : true }
         },

@@ -97,6 +97,9 @@ const linesSettings = {
     },
     "99%-kontrolgrænser": {
       show_99: toggleOption("Vis 99%-kontrolgrænser", true),
+      show_band_99: toggleOption("Udfyld kontrolgrænseområde", false),
+      band_colour_99: colourOption("Områdefarve", "limits"),
+      band_opacity_99: numberOption("Områdets gennemsigtighed", 0.1, { min: 0, max: 1 }),
       width_99: numberOption("Linjetykkelse", 2, { min: 0, max: 100 }),
       type_99: lineTypeOption("Linjetype", "10 10"),
       colour_99: colourOption("Linjefarve", "limits"),
