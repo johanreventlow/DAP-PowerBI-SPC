@@ -1,4 +1,4 @@
-import { computeSides } from "./anhojShared";
+import { anhojStats } from "./anhojShared";
 
 /**
  * Anhøj long-run rule (series-level signal).
@@ -20,20 +20,5 @@ export default function anhojLongRun(
   val: readonly number[],
   centerline: readonly number[]
 ): boolean {
-  const sides: number[] = computeSides(val, centerline);
-  const nUseful: number = sides.length;
-  if (nUseful < 2) {
-    return false;
-  }
-
-  const longestRunMax: number = Math.round(Math.log2(nUseful)) + 3;
-
-  let longestRun: number = 1;
-  let currentRun: number = 1;
-  for (let i: number = 1; i < nUseful; i++) {
-    currentRun = sides[i] === sides[i - 1] ? currentRun + 1 : 1;
-    if (currentRun > longestRun) longestRun = currentRun;
-  }
-
-  return longestRun > longestRunMax;
+  return anhojStats(val, centerline).longRunSignal;
 }

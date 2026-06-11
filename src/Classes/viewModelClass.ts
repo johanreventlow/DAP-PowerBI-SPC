@@ -16,8 +16,7 @@ import validateDataViewColumns from "../Functions/validateDataViewColumns";
 import valueFormatter from "../Functions/valueFormatter";
 import groupBy from "../Functions/groupBy";
 import astronomical from "../Outlier Flagging/astronomical";
-import anhojLongRun from "../Outlier Flagging/anhojLongRun";
-import anhojFewCrossings from "../Outlier Flagging/anhojFewCrossings";
+import { anhojStats, type AnhojStats } from "../Outlier Flagging/anhojShared";
 import { lineNameMap } from "../Functions/getAesthetic";
 import isValidNumber from "../Functions/isValidNumber";
 import { default as updateOptionsUndefined, UpdateOptionsValidTypes } from "../Functions/updateOptionsUndefined";
@@ -124,7 +123,7 @@ export type outliersObject = {
   astpoint: string[];
   // One entry per data-group (baseline-split). Order matches
   // groupStartEndIndexes for the same indicator.
-  per_group_signals: { long_run: boolean; few_crossings: boolean }[];
+  per_group_signals: { long_run: boolean; few_crossings: boolean; stats: AnhojStats }[];
 }
 
 export type colourPaletteType = {
@@ -747,7 +746,7 @@ export default class viewModelClass {
 
   flagOutliers(controlLimits: controlLimitsObject, groupStartEndIndexes: number[][],
                 inputSettings: settingsValueType, derivedSettings: derivedSettingsClass): outliersObject {
-    const perGroupSignals: { long_run: boolean; few_crossings: boolean }[] = [];
+    const perGroupSignals: { long_run: boolean; few_crossings: boolean; stats: AnhojStats }[] = [];
     const outliers: outliersObject = {
       astpoint: rep("none", controlLimits.values.length),
       per_group_signals: perGroupSignals
@@ -757,7 +756,14 @@ export default class viewModelClass {
       const end: number = groupStartEndIndexes[i][1];
       const group_values: number[] = controlLimits.values.slice(start, end);
       const group_targets: number[] = controlLimits.targets.slice(start, end) as number[];
-      const group_signal = { long_run: false, few_crossings: false };
+      // Runs-analysen beregnes altid (driver on-canvas statistik);
+      // dash-signalerne forbliver gated af deres toggles.
+      const stats: AnhojStats = anhojStats(group_values, group_targets);
+      const group_signal = {
+        long_run: inputSettings.outliers.anhoj_long_run ? stats.longRunSignal : false,
+        few_crossings: inputSettings.outliers.anhoj_few_crossings ? stats.fewCrossingsSignal : false,
+        stats
+      };
 
       // Astronomical evalueres altid mod 3σ (ll99/ul99) — qicharts2 sigma.signal
       if (derivedSettings.chart_type_props.has_control_limits) {
@@ -767,12 +773,6 @@ export default class viewModelClass {
           astronomical(group_values, lower_limits, upper_limits)
             .forEach((flag, idx) => outliers.astpoint[start + idx] = flag)
         }
-      }
-      if (inputSettings.outliers.anhoj_long_run) {
-        group_signal.long_run = anhojLongRun(group_values, group_targets);
-      }
-      if (inputSettings.outliers.anhoj_few_crossings) {
-        group_signal.few_crossings = anhojFewCrossings(group_values, group_targets);
       }
       perGroupSignals.push(group_signal);
     }

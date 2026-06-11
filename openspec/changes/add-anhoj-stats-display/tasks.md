@@ -2,10 +2,10 @@
 
 ## 1. Commit 1 — statistik-eksponering
 
-- [ ] 1.1 `anhojShared.ts`: `AnhojStats`-type + `anhojStats()`; `anhojLongRun`/`anhojFewCrossings` → wrappers
-- [ ] 1.2 `viewModelClass.ts`: `per_group_signals[g].stats`; flagOutliers beregner stats én gang per gruppe
-- [ ] 1.3 Tests: `anhojStats` mod alle fixtures (nUseful/longestRun/maks/kryds/min); flagOutliersMultiGroup asserter stats-eksponering
-- [ ] 1.4 tsc + vitest grøn → commit
+- [x] 1.1 `anhojShared.ts`: `AnhojStats`-type + `anhojStats()`; `anhojLongRun`/`anhojFewCrossings` → wrappers
+- [x] 1.2 `viewModelClass.ts`: `per_group_signals[g].stats`; flagOutliers beregner stats én gang per gruppe
+- [x] 1.3 Tests: `anhojStats` mod alle fixtures (nUseful/longestRun/maks/kryds/min); flagOutliersMultiGroup asserter stats-eksponering
+- [x] 1.4 tsc + vitest grøn → commit
 
 ## 2. Commit 2 — settings + rendering
 

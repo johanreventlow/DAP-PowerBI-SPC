@@ -44,14 +44,24 @@ describe("flagOutliers — multi-group Anhøj signals", () => {
     it("evaluates each group in isolation (signals do not leak)", () => {
         expect(outliers.per_group_signals.length).toBe(3);
         // boundary_run_over_max: long run fires, crossings normal
-        expect(outliers.per_group_signals[0]).toEqual({ long_run: true, few_crossings: false });
+        expect(outliers.per_group_signals[0]).toMatchObject({ long_run: true, few_crossings: false });
         // normal_series: nothing fires
-        expect(outliers.per_group_signals[1]).toEqual({ long_run: false, few_crossings: false });
+        expect(outliers.per_group_signals[1]).toMatchObject({ long_run: false, few_crossings: false });
         // boundary_crossings_below_min: few crossings fires, run normal
-        expect(outliers.per_group_signals[2]).toEqual({ long_run: false, few_crossings: true });
+        expect(outliers.per_group_signals[2]).toMatchObject({ long_run: false, few_crossings: true });
     });
 
-    it("toggles off: no signals computed", () => {
+    it("exposes per-group Anhøj stats matching the fixtures", () => {
+        outliers.per_group_signals.forEach((sig, g) => {
+            expect(sig.stats.nUseful).toBe(groups[g].stats.n_useful);
+            expect(sig.stats.longestRun).toBe(groups[g].stats.longest_run);
+            expect(sig.stats.longestRunMax).toBe(groups[g].stats.longest_run_max);
+            expect(sig.stats.nCrossings).toBe(groups[g].stats.n_crossings);
+            expect(sig.stats.nCrossingsMin).toBe(groups[g].stats.n_crossings_min);
+        });
+    });
+
+    it("toggles off: no dash signals, but stats still computed", () => {
         const offSettings = {
             outliers: {
                 ...(settings as { outliers: Record<string, unknown> }).outliers,
@@ -66,8 +76,9 @@ describe("flagOutliers — multi-group Anhøj signals", () => {
             offSettings,
             derivedSettings
         );
-        res.per_group_signals.forEach(sig => {
-            expect(sig).toEqual({ long_run: false, few_crossings: false });
+        res.per_group_signals.forEach((sig, g) => {
+            expect(sig).toMatchObject({ long_run: false, few_crossings: false });
+            expect(sig.stats.longestRun).toBe(groups[g].stats.longest_run);
         });
     });
 });
