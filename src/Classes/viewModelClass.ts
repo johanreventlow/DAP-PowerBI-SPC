@@ -54,8 +54,6 @@ export type summaryTableRowData = {
   ll95: number | undefined;
   ul95: number | undefined;
   ul99: number | undefined;
-  speclimits_lower: number | undefined;
-  speclimits_upper: number | undefined;
   trend_line: number | undefined;
   astpoint: string;
 }
@@ -113,8 +111,6 @@ export type controlLimitsObject = {
   ul99?: (number | undefined)[];
   count?: (number | undefined)[];
   alt_targets?: (number | undefined)[];
-  speclimits_lower?: (number | undefined)[];
-  speclimits_upper?: (number | undefined)[];
   trend_line?: (number | undefined)[];
 };
 
@@ -410,8 +406,6 @@ export default class viewModelClass {
     }
 
     controlLimits.alt_targets = inputData.alt_targets;
-    controlLimits.speclimits_lower = inputData.speclimits_lower;
-    controlLimits.speclimits_upper = inputData.speclimits_upper;
 
     for (const key in controlLimits) {
       const keyTyped: keyof controlLimitsObject = key as keyof controlLimitsObject;
@@ -554,10 +548,6 @@ export default class viewModelClass {
     if (settings.lines.show_alt_target) {
       this.tableColumns[0].push({ name: "alt_target", label: "Alt. Target" });
     }
-    if (settings.lines.show_specification) {
-      this.tableColumns[0].push({ name: "speclimits_lower", label: "Spec. Lower" },
-                             { name: "speclimits_upper", label: "Spec. Upper" });
-    }
     if (settings.lines.show_trend) {
       this.tableColumns[0].push({ name: "trend_line", label: "Trend Line" });
     }
@@ -597,8 +587,6 @@ export default class viewModelClass {
         ll95: controlLimits?.ll95?.[i],
         ul95: controlLimits?.ul95?.[i],
         ul99: controlLimits?.ul99?.[i],
-        speclimits_lower: controlLimits?.speclimits_lower?.[i],
-        speclimits_upper: controlLimits?.speclimits_upper?.[i],
         trend_line: controlLimits?.trend_line?.[i],
         astpoint: outliers.astpoint[i],
 
@@ -644,9 +632,6 @@ export default class viewModelClass {
     }
     if (settings.lines.show_alt_target) {
       labels.push("alt_targets");
-    }
-    if (settings.lines.show_specification) {
-      labels.push("speclimits_lower", "speclimits_upper");
     }
     if (settings.lines.show_trend) {
       labels.push("trend_line");
@@ -740,12 +725,6 @@ export default class viewModelClass {
       lines_to_truncate = lines_to_truncate.concat(["alt_targets"]);
       if (inputSettings.lines.multiplier_alt_target) {
         lines_to_scale = lines_to_scale.concat(["alt_targets"]);
-      }
-    }
-    if (inputSettings.lines.show_specification) {
-      lines_to_truncate = lines_to_truncate.concat(["speclimits_lower", "speclimits_upper"]);
-      if (inputSettings.lines.multiplier_specification) {
-        lines_to_scale = lines_to_scale.concat(["speclimits_lower", "speclimits_upper"]);
       }
     }
 

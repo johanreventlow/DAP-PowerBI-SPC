@@ -98,15 +98,13 @@ export default class plotPropertiesClass {
       const limitMultiplier: number = inputSettings.y_axis.limit_multiplier;
       const values: number[] = controlLimits.values.filter(d => isValidNumber(d));
       const ul99: number[] = controlLimits?.ul99?.filter(d => isValidNumber(d)) ?? [];
-      const speclimits_upper: number[] = controlLimits?.speclimits_upper?.filter(d => isValidNumber(d)) ?? [];
       const ll99: number[] = controlLimits?.ll99?.filter(d => isValidNumber(d)) ?? [];
-      const speclimits_lower: number[] = controlLimits?.speclimits_lower?.filter(d => isValidNumber(d)) ?? [];
       const alt_targets: number[] = controlLimits.alt_targets?.filter(d => isValidNumber(d)) ?? [];
       const targets: number[] = controlLimits.targets?.filter(d => isValidNumber(d)) ?? [];
 
       const maxValue: number = max(values);
-      const maxValueOrLimit: number = max((values.concat(ul99).concat(speclimits_upper).concat(alt_targets)).filter(d => isValidNumber(d)));
-      const minValueOrLimit: number = min((values.concat(ll99).concat(speclimits_lower).concat(alt_targets)).filter(d => isValidNumber(d)));
+      const maxValueOrLimit: number = max((values.concat(ul99).concat(alt_targets)).filter(d => isValidNumber(d)));
+      const minValueOrLimit: number = min((values.concat(ll99).concat(alt_targets)).filter(d => isValidNumber(d)));
       let maxTarget: number = max(targets);
       if (!isValidNumber(maxTarget)) {
         maxTarget = (maxValueOrLimit - minValueOrLimit) / 2 + minValueOrLimit;

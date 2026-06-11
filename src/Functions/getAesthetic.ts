@@ -9,8 +9,6 @@ const lineNameMap: Record<string, string> = {
   "targets" : "target",
   "values" : "main",
   "alt_targets" : "alt_target",
-  "speclimits_lower" : "specification",
-  "speclimits_upper" : "specification",
   "trend_line" : "trend",
 }
 

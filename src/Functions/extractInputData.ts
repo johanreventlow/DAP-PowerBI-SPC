@@ -31,8 +31,6 @@ export type dataObject = {
   anyLabels: boolean;
   warningMessage: string;
   alt_targets?: number[];
-  speclimits_lower?: number[];
-  speclimits_upper?: number[];
   validationStatus: ValidationT;
 }
 
@@ -53,8 +51,6 @@ function invalidInputData(inputValidStatus: ValidationT): dataObject {
     anyLabels: false,
     warningMessage: inputValidStatus.error!,
     alt_targets: [],
-    speclimits_lower: [],
-    speclimits_upper: [],
     validationStatus: inputValidStatus
   }
 }
@@ -78,8 +74,6 @@ export default function extractInputData(inputView: DataViewCategorical,
   let labels_cond = extractConditionalFormatting<settingsValueType["labels"]>(inputView, "labels", inputSettings, idxs)?.values as settingsValueType["labels"][];
 
   let alt_targets: (number | undefined)[] | undefined = inputSettings.lines.show_alt_target ? lines_cond.map(d => d.alt_target) : undefined;
-  let speclimits_lower: (number | undefined)[] | undefined = inputSettings.lines.show_specification ? lines_cond.map(d => d.specification_lower) : undefined;
-  let speclimits_upper: (number | undefined)[] | undefined = inputSettings.lines.show_specification ? lines_cond.map(d => d.specification_upper) : undefined;
 
   let spcSettings: settingsValueType["spc"][] = extractConditionalFormatting<settingsValueType["spc"]>(inputView, "spc", inputSettings, idxs)?.values as settingsValueType["spc"][];
   const inputValidStatus: ValidationT = validateInputData(keys, numerators, denominators, xbar_sds, derivedSettings.chart_type_props, idxs);
@@ -163,8 +157,6 @@ export default function extractInputData(inputView: DataViewCategorical,
     label_formatting: extractValues(labels_cond, valid_ids),
     warningMessage: removalMessages.length > 0 ? removalMessages.join("\n") : "",
     alt_targets: valid_alt_targets,
-    speclimits_lower: isNullOrUndefined(speclimits_lower) ? speclimits_lower : extractValues(speclimits_lower, valid_ids),
-    speclimits_upper: isNullOrUndefined(speclimits_upper) ? speclimits_upper : extractValues(speclimits_upper, valid_ids),
     validationStatus: inputValidStatus
   }
 }

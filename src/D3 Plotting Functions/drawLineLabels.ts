@@ -16,8 +16,6 @@ const outsideMap: Record<string, string> = {
   "ll95" : "below",
   "ul95" : "above",
   "ul99" : "above",
-  "speclimits_lower" : "below",
-  "speclimits_upper" : "above"
 }
 
 const insideMap: Record<string, string> = {
@@ -25,8 +23,6 @@ const insideMap: Record<string, string> = {
   "ll95" : "above",
   "ul95" : "below",
   "ul99" : "below",
-  "speclimits_lower" : "above",
-  "speclimits_upper" : "below"
 }
 
 type lineLabelType = {

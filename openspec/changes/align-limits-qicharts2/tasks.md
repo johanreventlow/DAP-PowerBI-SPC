@@ -26,9 +26,9 @@ Settings + capabilities ændres ALTID synkront i samme commit.
 
 ## 4. Commit 4 — fjern Specification Limits
 
-- [ ] 4.1 `linesSettings.ts`: "Specification Limits"-gruppen ud; capabilities synkront
-- [ ] 4.2 Plumbing: `extractInputData`, `controlLimitsObject.speclimits_*`, `summaryTableRowData.speclimits_*`, drawLines-line-keys, tooltips
-- [ ] 4.3 Verifikation + commit
+- [x] 4.1 `linesSettings.ts`: "Specification Limits"-gruppen ud; capabilities synkront
+- [x] 4.2 Plumbing: `extractInputData`, `controlLimitsObject.speclimits_*`, `summaryTableRowData.speclimits_*`, drawLines-line-keys, tooltips
+- [x] 4.3 Verifikation + commit
 
 ## 5. Commit 5 — fjern trend-linje (regression)
 
