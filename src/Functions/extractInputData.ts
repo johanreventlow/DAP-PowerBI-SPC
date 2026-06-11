@@ -102,7 +102,7 @@ export default function extractInputData(inputView: DataViewCategorical,
         );
       }
     } else {
-      removalMessages.push(`${groupVarName} ${keys![idx]} removed due to: ${inputValidStatus.messages[idx]}.`)
+      removalMessages.push(`${groupVarName} ${keys![idx]} fjernet pga.: ${inputValidStatus.messages[idx]}.`)
     }
   })
 

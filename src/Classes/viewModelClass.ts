@@ -421,17 +421,17 @@ export default class viewModelClass {
     this.indicatorVarNames.forEach(indicator_name => {
       tableColumnsDef.push({ name: indicator_name, label: indicator_name });
     })
-    tableColumnsDef.push({ name: "latest_date", label: "Latest Date" });
+    tableColumnsDef.push({ name: "latest_date", label: "Seneste dato" });
 
     const lineSettings = this.inputSettings.settings[0].lines;
     if (lineSettings.show_main) {
-      tableColumnsDef.push({ name: "value", label: "Value" });
+      tableColumnsDef.push({ name: "value", label: "Værdi" });
     }
     if (this.inputSettings.settings[0].spc.ttip_show_numerator) {
-      tableColumnsDef.push({ name: "numerator", label: "Numerator" });
+      tableColumnsDef.push({ name: "numerator", label: "Tæller" });
     }
     if (this.inputSettings.settings[0].spc.ttip_show_denominator) {
-      tableColumnsDef.push({ name: "denominator", label: "Denominator" });
+      tableColumnsDef.push({ name: "denominator", label: "Nævner" });
     }
     if (lineSettings.show_target) {
       tableColumnsDef.push({ name: "target", label: lineSettings.ttip_label_target });
@@ -523,37 +523,37 @@ export default class viewModelClass {
     this.tickLabels = new Array<{ x: number; label: string; }>();
     this.tableColumns[0] = new Array<{ name: string; label: string; }>();
 
-    this.tableColumns[0].push({ name: "date", label: "Date" });
-    this.tableColumns[0].push({ name: "value", label: "Value" });
+    this.tableColumns[0].push({ name: "date", label: "Dato" });
+    this.tableColumns[0].push({ name: "value", label: "Værdi" });
 
     if (!controlLimits) {
       return;
     }
 
     if (!isNullOrUndefined(controlLimits.numerators)) {
-      this.tableColumns[0].push({ name: "numerator", label: "Numerator" });
+      this.tableColumns[0].push({ name: "numerator", label: "Tæller" });
     }
     if (!isNullOrUndefined(controlLimits.denominators)) {
-      this.tableColumns[0].push({ name: "denominator", label: "Denominator" });
+      this.tableColumns[0].push({ name: "denominator", label: "Nævner" });
     }
     if (settings.lines.show_target) {
-      this.tableColumns[0].push({ name: "target", label: "Target" });
+      this.tableColumns[0].push({ name: "target", label: "Centerlinje" });
     }
     if (settings.lines.show_alt_target) {
-      this.tableColumns[0].push({ name: "alt_target", label: "Alt. Target" });
+      this.tableColumns[0].push({ name: "alt_target", label: "Mål" });
     }
     if (derivedSettings.chart_type_props.has_control_limits) {
       if (settings.lines.show_99) {
-        this.tableColumns[0].push({ name: "ll99", label: "LL 99%" },
-                               { name: "ul99", label: "UL 99%" });
+        this.tableColumns[0].push({ name: "ll99", label: "Nedre 99%" },
+                               { name: "ul99", label: "Øvre 99%" });
       }
       if (settings.lines.show_95) {
-        this.tableColumns[0].push({ name: "ll95", label: "LL 95%" }, { name: "ul95", label: "UL 95%" });
+        this.tableColumns[0].push({ name: "ll95", label: "Nedre 95%" }, { name: "ul95", label: "Øvre 95%" });
       }
     }
 
     if (settings.outliers.astronomical) {
-      this.tableColumns[0].push({ name: "astpoint", label: "Ast. Point" });
+      this.tableColumns[0].push({ name: "astpoint", label: "Uden for grænser" });
     }
 
     for (let i: number = 0; i < controlLimits.keys.length; i++) {

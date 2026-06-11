@@ -29,40 +29,40 @@ function validateInputDataImpl(key: string | undefined,
 
   const rtn = { message: "", type: ValidationFailTypes.Valid };
   if (isNullOrUndefined(key)) {
-    rtn.message = "Date missing";
+    rtn.message = "Dato mangler";
     rtn.type = ValidationFailTypes.DateMissing;
   }
 
   if (isNullOrUndefined(numerator)) {
-    rtn.message = "Numerator missing";
+    rtn.message = "Tæller mangler";
     rtn.type = ValidationFailTypes.NumeratorMissing;
   } else {
     if (isNaN(numerator)) {
-      rtn.message = "Numerator is not a number";
+      rtn.message = "Tæller er ikke et tal";
       rtn.type = ValidationFailTypes.NumeratorNaN;
     }
 
     if (chart_type_props.numerator_non_negative && numerator < 0) {
-      rtn.message = "Numerator negative";
+      rtn.message = "Tæller er negativ";
       rtn.type = ValidationFailTypes.NumeratorNegative;
     }
   }
 
   if (check_denom) {
     if (isNullOrUndefined(denominator)) {
-      rtn.message = "Denominator missing";
+      rtn.message = "Nævner mangler";
       rtn.type = ValidationFailTypes.DenominatorMissing;
     } else if (isNaN(denominator)) {
-      rtn.message = "Denominator is not a number";
+      rtn.message = "Nævner er ikke et tal";
       rtn.type = ValidationFailTypes.DenominatorNaN;
     } else if (denominator < 0) {
-      rtn.message = "Denominator negative";
+      rtn.message = "Nævner er negativ";
       rtn.type = ValidationFailTypes.DenominatorNegative;
     } else if (chart_type_props.numerator_leq_denominator && !isNullOrUndefined(numerator) && denominator < numerator) {
-      rtn.message = "Denominator < numerator";
+      rtn.message = "Nævner < tæller";
       rtn.type = ValidationFailTypes.DenominatorLessThanNumerator;
     } else if (chart_type_props.denominator_gt_one && denominator <= 1) {
-      rtn.message = "Denominator <= 1"
+      rtn.message = "Nævner <= 1"
       rtn.type = ValidationFailTypes.DenominatorLessThanOne
     }
   }
@@ -116,7 +116,7 @@ export default function validateInputData(keys: (string | undefined)[],
     const allInvalid: boolean = all_status.every(d => d !== ValidationFailTypes.Valid);
     if (allInvalid) {
       validationRtn.status = 1; // All data invalid
-      validationRtn.error = "No valid data found!";
+      validationRtn.error = "Ingen gyldige data fundet!";
       return validationRtn;
     }
   }

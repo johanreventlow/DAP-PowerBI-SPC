@@ -4,15 +4,15 @@ const valueNames: Record<string, string> = {
   "i": "Observation",
   "i_m": "Observation",
   "i_mm": "Observation",
-  "c": "Count",
-  "t": "Time",
-  "xbar": "Group Mean",
-  "s": "Group SD",
-  "g": "Non-Events",
+  "c": "Antal",
+  "t": "Tid",
+  "xbar": "Gruppegennemsnit",
+  "s": "Gruppe-SD",
+  "g": "Enheder uden hændelse",
   "run": "Observation",
-  "mr": "Moving Range",
-  "p": "Proportion",
-  "pp": "Proportion",
+  "mr": "Glidende interval",
+  "p": "Andel",
+  "pp": "Andel",
   "u": "Rate",
   "up": "Rate"
 }
@@ -67,7 +67,7 @@ export default class derivedSettingsClass {
       integer_num_den: ["c", "p", "pp"].includes(chartType),
       value_name: valueNames[chartType],
       x_axis_use_date: !(["g", "t"].includes(chartType)),
-      date_name: !(["g", "t"].includes(chartType)) ? "Date" : "Event",
+      date_name: !(["g", "t"].includes(chartType)) ? "Dato" : "Hændelse",
       denominator_gt_one: ["xbar", "s"].includes(chartType)
     }
 

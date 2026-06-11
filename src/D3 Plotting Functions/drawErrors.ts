@@ -14,8 +14,8 @@ export default function drawErrors(selection: svgBaseType,
 
   if (type !== "") {
     const preamble: Record<string, string> = {
-      "internal": "Internal Error! Please file a bug report with the following text:",
-      "settings": "Invalid settings provided for all observations! First error:"
+      "internal": "Intern fejl! Indsend gerne en fejlrapport med følgende tekst:",
+      "settings": "Ugyldige indstillinger for alle observationer! Første fejl:"
     }
     errMessageSVG.append('text')
                 .attr("x",options.viewport.width / 2)

@@ -92,10 +92,10 @@ export default function buildTooltip(table_row: summaryTableRowData,
     const patterns: string[] = new Array<string>();
     if (table_row.astpoint !== "none") {
       // Note if flagged according to non-default limit
-      patterns.push("Astronomical Point")
+      patterns.push("Punkt uden for kontrolgrænser")
     }
     tooltip.push({
-      displayName: "Pattern(s)",
+      displayName: "Signal(er)",
       value: patterns.join("\n")
     })
   }

@@ -18,7 +18,7 @@ export default function validateDataViewColumns(inputDV: powerbi.DataView[], inp
                    ?.some(d => d.source?.roles?.numerators) ?? false;
 
   if (!numeratorsPresent) {
-    return "No Numerators passed!";
+    return "Ingen værdier/tællere angivet!";
   }
 
   let needs_denominator: boolean = false;

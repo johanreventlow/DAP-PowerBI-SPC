@@ -10,10 +10,10 @@
 
 ## 2. Commit 2 — øvrige bruger-flader
 
-- [ ] 2.1 capabilities.json dataRoles displayNames
-- [ ] 2.2 viewModel tabel-kolonne-labels + buildTooltip faste tekster + derivedSettings dynamiske navne
-- [ ] 2.3 Validerings-/fejlbeskeder (validateInputData, extractInputData, validateDataViewColumns, drawErrors)
-- [ ] 2.4 Verifikation grøn → commit
+- [x] 2.1 capabilities.json dataRoles displayNames
+- [x] 2.2 viewModel tabel-kolonne-labels + buildTooltip faste tekster + derivedSettings dynamiske navne
+- [x] 2.3 Validerings-/fejlbeskeder (validateInputData, extractInputData, validateDataViewColumns, drawErrors)
+- [x] 2.4 Verifikation grøn → commit
 
 ## 3. Commit 3 — afslutning
 
