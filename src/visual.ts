@@ -9,7 +9,6 @@ import drawYAxis from "./D3 Plotting Functions/drawYAxis";
 import drawTooltipLine from "./D3 Plotting Functions/drawTooltipLine";
 import drawLines from "./D3 Plotting Functions/drawLines";
 import drawDots from "./D3 Plotting Functions/drawDots";
-import drawIcons from "./D3 Plotting Functions/drawIcons";
 import addContextMenu from "./D3 Plotting Functions/addContextMenu";
 import drawErrors from "./D3 Plotting Functions/drawErrors";
 import initialiseSVG from "./D3 Plotting Functions/initialiseSVG";
@@ -114,7 +113,6 @@ export class Visual implements powerbi.extensibility.IVisual {
             .call(drawLines, this)
             .call(drawLineLabels, this)
             .call(drawDots, this)
-            .call(drawIcons, this)
             .call(addContextMenu, this)
             .call(drawDownloadButton, this)
             .call(drawValueLabels, this);

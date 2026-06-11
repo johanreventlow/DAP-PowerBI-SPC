@@ -192,35 +192,6 @@
         }
       }
     },
-    "nhs_icons" : {
-      "properties": {
-        "show_variation_icons": {
-          "type" : { "bool" : true }
-        },
-        "flag_last_point": {
-          "type" : { "bool" : true }
-        },
-        "variation_icons_locations": {
-          "type": {
-            "enumeration" : [ ]
-          }
-        },
-        "variation_icons_scaling":{
-          "type": { "numeric": true }
-        },
-        "show_assurance_icons": {
-          "type" : { "bool" : true }
-        },
-        "assurance_icons_locations": {
-          "type": {
-            "enumeration" : [ ]
-          }
-        },
-        "assurance_icons_scaling":{
-          "type": { "numeric": true }
-        }
-      }
-    },
     "canvas": {
       "properties": {
         "show_errors": {
@@ -897,14 +868,6 @@
         },
         "table_opacity_unselected": {
           "type": { "numeric": true }
-        },
-        "table_variation_filter": {
-          "type": { "enumeration" : [ ] }
-        },
-        "table_assurance_filter": {
-          "type": {
-            "enumeration" : [ ]
-          }
         },
         "table_text_overflow": {
           "type": { "enumeration" : [ ] }

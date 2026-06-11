@@ -1,7 +1,5 @@
 import type { plotData, plotDataGrouped, summaryTableRowData } from "../Classes/viewModelClass";
 import type { divBaseType, Visual } from "../visual";
-import initialiseIconSVG from "./initialiseIconSVG";
-import * as nhsIcons from "./NHS Icons"
 import * as d3 from "./D3 Modules";
 import type { settingsValueType } from "../settings";
 import identitySelected from "../Functions/identitySelected";
@@ -125,7 +123,7 @@ function drawOuterBorder(selection: divBaseType, tableSettings: settingsValueTyp
 }
 
 function drawTableCells(selection: divBaseType, cols: { name: string; label: string; }[],
-                        inputSettings: settingsValueType, showGrouped: boolean) {
+                        inputSettings: settingsValueType) {
   const tableCells = selection.select(".table-body")
             .selectAll('tr')
             .selectAll('td')
@@ -134,34 +132,15 @@ function drawTableCells(selection: divBaseType, cols: { name: string; label: str
             }))
             .join('td');
 
-  const draw_icons: boolean = inputSettings.nhs_icons.show_variation_icons || inputSettings.nhs_icons.show_assurance_icons;
-  const thisSelDims = (tableCells.node() as SVGGElement).getBoundingClientRect()
-
   tableCells.each(function(d) {
     const currNode = d3.select(this);
     const parentNode = d3.select(currNode.property("parentNode"));
     const rowData = parentNode.datum() as plotData;
-    if (showGrouped && draw_icons && (d.column === "variation" || d.column === "assurance")) {
-      // Only attempt to draw icon if one is specified
-      if (d.value !== "none") {
-        const scaling = inputSettings.nhs_icons[`${d.column}_icons_scaling`];
-        currNode
-            .append("svg")
-            .attr("width", `${thisSelDims.width * 0.5 * scaling}px`)
-            .attr("viewBox", "0 0 378 378")
-            .classed("rowsvg", true)
-            .call(initialiseIconSVG, d.value as string)
-            .selectAll(".icongroup")
-            .selectAll(`.${d.value}`)
-            .call(nhsIcons[d.value as keyof typeof nhsIcons]);
-      }
-    } else {
-      const value: string = typeof d.value === "number"
-        ? d.value.toFixed(inputSettings.spc.sig_figs)
-        : (d.value ?? "");
+    const value: string = typeof d.value === "number"
+      ? d.value.toFixed(inputSettings.spc.sig_figs)
+      : (d.value ?? "");
 
-      currNode.text(value).classed("cell-text", true);
-    }
+    currNode.text(value).classed("cell-text", true);
     const tableAesthetics: settingsValueType["summary_table"]
       = ("table_body_bg_colour" in rowData.aesthetics)
                               ? rowData.aesthetics as any
@@ -213,7 +192,7 @@ export default function drawSummaryTable(selection: divBaseType, visualObj: Visu
             .call(drawTableRows, visualObj, plotPoints, tableSettings, maxWidth);
 
   if (plotPoints.length > 0) {
-    selection.call(drawTableCells, cols, visualObj.viewModel.inputSettings.settings[0], visualObj.viewModel.showGrouped)
+    selection.call(drawTableCells, cols, visualObj.viewModel.inputSettings.settings[0])
   }
 
   selection.call(drawOuterBorder, tableSettings);

@@ -14,8 +14,6 @@ import rep from "../Functions/rep";
 import type { dataObject } from "../Functions/extractInputData";
 import extractInputData from "../Functions/extractInputData";
 import isNullOrUndefined from "../Functions/isNullOrUndefined";
-import variationIconsToDraw from "../Outlier Flagging/variationIconsToDraw";
-import assuranceIconToDraw from "../Outlier Flagging/assuranceIconToDraw";
 import validateDataViewColumns from "../Functions/validateDataViewColumns";
 import valueFormatter from "../Functions/valueFormatter";
 import calculateTrendLine from "../Functions/calculateTrendLine";
@@ -85,8 +83,6 @@ export type summaryTableRowDataGrouped = {
   lcl68: number;
   lcl95: number;
   lcl99: number;
-  variation: string;
-  assurance: string;
 }
 
 export type plotData = {
@@ -488,13 +484,6 @@ export default class viewModelClass {
         })
       }
     })
-    const nhsIconSettings: settingsValueType["nhs_icons"] = this.inputSettings.settings[0].nhs_icons;
-    if (nhsIconSettings.show_variation_icons) {
-      tableColumnsDef.push({ name: "variation", label: "Variation" });
-    }
-    if (nhsIconSettings.show_assurance_icons) {
-      tableColumnsDef.push({ name: "assurance", label: "Assurance" });
-    }
     const anyTooltips: boolean = this.inputData.some(d => d?.tooltips?.some(t => t.length > 0));
 
     if (anyTooltips) {
@@ -510,48 +499,11 @@ export default class viewModelClass {
         continue;
       }
       const formatValues = valueFormatter(this.inputSettings.settings[i], this.inputSettings.derivedSettings[i]);
-      const varIconFilter: string = this.inputSettings.settings[i].summary_table.table_variation_filter;
-      const assIconFilter: string = this.inputSettings.settings[i].summary_table.table_assurance_filter;
       const limits: controlLimitsObject = this.controlLimits[i];
       if (!limits) {
         continue;
       }
-      const outliers: outliersObject = this.outliers[i];
       const lastIndex: number = limits.keys.length - 1;
-      const varIcons: string[] = variationIconsToDraw(outliers, this.inputSettings.settings[i]);
-      if (varIconFilter !== "all") {
-        if (varIconFilter === "improvement" && !(["improvementHigh", "improvementLow"].includes(varIcons[0]))) {
-          continue;
-        }
-        if (varIconFilter === "deterioration" && !(["concernHigh", "concernLow"].includes(varIcons[0]))) {
-          continue;
-        }
-        if (varIconFilter === "neutral" && !(["neutralHigh", "neutralLow"].includes(varIcons[0]))) {
-          continue;
-        }
-        if (varIconFilter === "common" && varIcons[0] !== "commonCause") {
-          continue;
-        }
-        if (varIconFilter === "special" && varIcons[0] === "commonCause") {
-          continue;
-        }
-      }
-      const assIcon: string = assuranceIconToDraw(limits, this.inputSettings.settings[i],
-                                                      this.inputSettings.derivedSettings[i]);
-      if (assIconFilter !== "all") {
-        if (assIconFilter === "any" && assIcon === "inconsistent") {
-          continue;
-        }
-        if (assIconFilter === "pass" && assIcon !== "consistentPass") {
-          continue;
-        }
-        if (assIconFilter === "fail" && assIcon !== "consistentFail") {
-          continue;
-        }
-        if (assIconFilter === "inconsistent" && assIcon !== "inconsistent") {
-          continue;
-        }
-      }
       const table_row_entries: [string, string | number][] = new Array<[string, string | number]>();
       this.indicatorVarNames.forEach((indicator_name, idx) => {
         table_row_entries.push([indicator_name, this.groupNames[i][idx]]);
@@ -568,8 +520,6 @@ export default class viewModelClass {
       table_row_entries.push(["lcl68", formatValues(limits.ll68?.[lastIndex], "value")]);
       table_row_entries.push(["lcl95", formatValues(limits.ll95?.[lastIndex], "value")]);
       table_row_entries.push(["lcl99", formatValues(limits.ll99?.[lastIndex], "value")]);
-      table_row_entries.push(["variation", varIcons[0]]);
-      table_row_entries.push(["assurance", assIcon]);
 
       if (anyTooltips && !isNullOrUndefined(this.inputData[i].tooltips)) {
         this.inputData[i].tooltips![lastIndex].forEach(tooltip => {

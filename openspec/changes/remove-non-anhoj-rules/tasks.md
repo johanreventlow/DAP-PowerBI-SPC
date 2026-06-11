@@ -5,12 +5,12 @@ hvert nummereret afsnit = ét atomisk commit, grønt på tsc + vitest.
 
 ## 1. Commit 1 — fjern NHS-ikonsystemet
 
-- [ ] 1.1 Slet `src/D3 Plotting Functions/drawIcons.ts`, `initialiseIconSVG.ts`, `NHS Icons/`-mappen; ryd referencer i `src/visual.ts`/`drawSummaryTable.ts`
-- [ ] 1.2 Slet `src/Outlier Flagging/variationIconsToDraw.ts` + `assuranceIconToDraw.ts`; ryd `index.ts`-exports + viewModel-imports/-kald (`summaryTableRowDataGrouped.variation/assurance` m.m.)
-- [ ] 1.3 Slet `src/Settings Model/nhsIconsSettings.ts`; fjern `nhs_icons` fra `settings.ts`-modellen + ikon-logik i `settingsClass.ts`; fjern `table_variation_filter`/`table_assurance_filter` fra `summaryTableSettings.ts`
-- [ ] 1.4 Fjern `nhs_icons`-objekt + ikon-filter-properties fra `capabilities.json` (synkront med 1.3)
-- [ ] 1.5 Slet `variationIconsToDraw.test.ts` + `assuranceIconToDraw.test.ts`; opdatér berørte initialisation-/formattingModel-tests
-- [ ] 1.6 Verifikation: `tsc --noEmit` rent + `npm test` grøn → commit
+- [x] 1.1 Slet `src/D3 Plotting Functions/drawIcons.ts`, `initialiseIconSVG.ts`, `NHS Icons/`-mappen; ryd referencer i `src/visual.ts`/`drawSummaryTable.ts`
+- [x] 1.2 Slet `src/Outlier Flagging/variationIconsToDraw.ts` + `assuranceIconToDraw.ts`; ryd `index.ts`-exports + viewModel-imports/-kald (`summaryTableRowDataGrouped.variation/assurance` m.m.)
+- [x] 1.3 Slet `src/Settings Model/nhsIconsSettings.ts`; fjern `nhs_icons` fra `settings.ts`-modellen + ikon-logik i `settingsClass.ts`; fjern `table_variation_filter`/`table_assurance_filter` fra `summaryTableSettings.ts`
+- [x] 1.4 Fjern `nhs_icons`-objekt + ikon-filter-properties fra `capabilities.json` (synkront med 1.3)
+- [x] 1.5 Slet `variationIconsToDraw.test.ts` + `assuranceIconToDraw.test.ts`; opdatér berørte initialisation-/formattingModel-tests
+- [x] 1.6 Verifikation: `tsc --noEmit` rent + `npm test` grøn → commit
 
 ## 2. Commit 2 — fjern shift/trend/twoInThree-reglerne
 
