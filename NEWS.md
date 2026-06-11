@@ -1,5 +1,31 @@
 # NEWS
 
+## (development) — Limit-flade alignet til qicharts2
+
+### Breaking changes
+
+* **68%-grænser (1σ) fjernet helt** — beregning, linjer, settings,
+  tooltips og tabel-kolonner. qicharts2 har intet 1σ-koncept.
+* **95%-grænser (2σ) er nu opt-in med default FRA** — matcher qicharts2's
+  `show.95 = FALSE`. Genaktivér under Lines → 95% Limits.
+* **Astronomical flagger altid mod 3σ** — `astronomical_limit`-dropdown
+  (1σ/2σ/Specification) fjernet; matcher qicharts2's `sigma.signal`.
+* **Én farve for astronomical-punkter** — retningssemantikken
+  (`process_flag_type`, `improvement_direction` og fire retningsfarver)
+  er fjernet; alle flagede punkter farves med `ast_colour`, ens for
+  punkter over og under grænserne.
+* **Specification-grænser fjernet** — findes ikke i qicharts2.
+* **Trend-linje (regression) fjernet** — findes ikke i qicharts2.
+
+Gemte settings for fjernede properties ignoreres af Power BI ved load.
+
+### Interne ændringer
+
+* `controlLimitsObject` uden ll68/ul68/speclimits/trend_line;
+  `checkFlagDirection` + `calculateTrendLine` slettet.
+* Outlier Settings = Astronomical Points + Anhoej Rules; Lines-grupper
+  = Main, Target, 95% Limits, 99% Limits.
+
 ## (development) — F2 Fjernelse af ikke-Anhøj-regler
 
 ### Breaking changes

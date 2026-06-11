@@ -38,7 +38,7 @@ Settings + capabilities ændres ALTID synkront i samme commit.
 
 ## 6. Commit 6 — docs + afsluttende verifikation
 
-- [ ] 6.1 NEWS-entry (Breaking changes med migration-hints)
-- [ ] 6.2 Grep-sweep: ingen rester af `_68`, `ll68/ul68`, `speclimit`, `specification`, `trend_line`, `checkFlagDirection`, `improvement_direction`, `process_flag_type`, `astronomical_limit`
-- [ ] 6.3 `pbiviz package` bygger; version-bump
+- [x] 6.1 NEWS-entry (Breaking changes med migration-hints)
+- [x] 6.2 Grep-sweep: ingen rester af `_68`, `ll68/ul68`, `speclimit`, `specification`, `trend_line`, `checkFlagDirection`, `improvement_direction`, `process_flag_type`, `astronomical_limit`
+- [x] 6.3 `pbiviz package` bygger; version-bump
 - [ ] 6.4 **[MANUELT TRIN]** Power BI: Lines-grupper = Main/Target/95/99 (95 default fra); Outlier-grupper = Astronomical + Anhoej; én ast-farve
