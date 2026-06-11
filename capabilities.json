@@ -669,14 +669,6 @@
         }
       }
     },
-    "download_options" : {
-      "displayName" : "Download Options",
-      "properties": {
-        "show_button": {
-          "type" : { "bool" : true }
-        }
-      }
-    },
     "labels" : {
       "displayName" : "Value Label Options",
       "properties" : {

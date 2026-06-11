@@ -1,6 +1,6 @@
 {
   "name": "visual",
-  "version": "1.7.4.33",
+  "version": "1.7.4.34",
   "scripts": {
     "pbiviz": "pbiviz",
     "start": "pbiviz start",

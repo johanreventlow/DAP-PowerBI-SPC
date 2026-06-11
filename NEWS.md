@@ -4,6 +4,9 @@
 
 ### Breaking changes
 
+* **Download-knappen fjernet helt** inkl. settings-kort — eksportvej
+  uønsket i klinisk kontekst.
+
 * **95%-kontrolgrænser (2σ) fjernet helt** — også som opt-in (beslutning
   revideret): beregning, linjer, settings, tooltips og tabel-kolonner.
   Visualen viser kun centerline + 3σ-kontrolgrænser.
@@ -18,6 +21,9 @@
 ## (development) — Dansk brugerflade
 
 ### Nye features
+
+* **Dansk decimalmarkør**: alle viste tal (tooltips, oversigtstabel,
+  Y-akse) bruger komma i stedet for punktum.
 
 * **Hele den bruger-vendte flade er oversat til dansk**: formatting-panel
   (kort, grupper, indstillinger, dropdown-labels), felt-brønde,

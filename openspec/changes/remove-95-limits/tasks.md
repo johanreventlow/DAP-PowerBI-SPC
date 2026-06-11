@@ -9,5 +9,5 @@
 
 ## 2. Afslutning
 
-- [ ] 2.1 NEWS + bump + build
+- [x] 2.1 NEWS + bump + build
 - [ ] 2.2 **[MANUELT TRIN]** Power BI: Linjer-kortet uden 95%-gruppe

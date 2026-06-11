@@ -15,7 +15,6 @@ import initialiseSVG from "./D3 Plotting Functions/initialiseSVG";
 import drawSummaryTable from "./D3 Plotting Functions/drawSummaryTable";
 import drawValueLabels from "./D3 Plotting Functions/drawValueLabels";
 import drawLineLabels from "./D3 Plotting Functions/drawLineLabels";
-import drawDownloadButton from "./D3 Plotting Functions/drawDownloadButton";
 import drawAnhojStats from "./D3 Plotting Functions/drawAnhojStats";
 import drawLimitBand from "./D3 Plotting Functions/drawLimitBand";
 import plotPropertiesClass from "./Classes/plotPropertiesClass";
@@ -118,7 +117,6 @@ export class Visual implements powerbi.extensibility.IVisual {
             .call(drawDots, this)
             .call(drawAnhojStats, this)
             .call(addContextMenu, this)
-            .call(drawDownloadButton, this)
             .call(drawValueLabels, this);
   }
 
