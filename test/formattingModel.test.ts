@@ -43,4 +43,9 @@ describe("FormattingModel — Anhoej Rules group", () => {
             expect(slice.control?.properties?.descriptor?.objectName).toBe("outliers");
         });
     });
+
+    it("outliers card contains exactly General, Astronomical Points and Anhoej Rules (F2)", () => {
+        const groupNames = (outliersCard?.groups ?? []).map(g => g.displayName);
+        expect(groupNames).toEqual(["General", "Astronomical Points", "Anhoej Rules"]);
+    });
 });

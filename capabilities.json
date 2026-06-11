@@ -125,65 +125,6 @@
         "ast_colour_neutral_high":{
           "type": { "fill": { "solid": { "color": true } } }
         },
-        "shift": {
-          "type" : { "bool" : true }
-        },
-        "shift_n": {
-          "type" : { "numeric": true }
-        },
-        "shift_colour_improvement":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "shift_colour_deterioration":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "shift_colour_neutral_low":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "shift_colour_neutral_high":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "trend": {
-          "type" : { "bool" : true }
-        },
-        "trend_n": {
-          "type" : { "numeric": true }
-        },
-        "trend_colour_improvement":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "trend_colour_deterioration":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "trend_colour_neutral_low":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "trend_colour_neutral_high":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "two_in_three": {
-          "type" : { "bool" : true }
-        },
-        "two_in_three_highlight_series": {
-          "type" : { "bool" : true }
-        },
-        "two_in_three_limit": {
-          "type": {
-            "enumeration" : [ ]
-          }
-        },
-        "twointhree_colour_improvement":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "twointhree_colour_deterioration":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "twointhree_colour_neutral_low":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "twointhree_colour_neutral_high":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
         "anhoj_long_run": {
           "type" : { "bool" : true }
         },

@@ -1,5 +1,33 @@
 # NEWS
 
+## (development) — F2 Fjernelse af ikke-Anhøj-regler
+
+### Breaking changes
+
+* **`shift`-reglen fjernet** (fast-n, default 7 punkter samme side):
+  qicharts2 har ingen fast-n-regel — Anhøj long-run med dynamisk tærskel
+  ER den danske shift-detektion. Migration: aktivér "Dash Centerline on
+  Long Run" under Anhøj Rules.
+* **`trend`- og `twoInThree`-reglerne fjernet**: Walker-Evans-regler uden
+  modstykke i qicharts2/dansk praksis. Ingen erstatning.
+* **NHS variation/assurance-ikoner fjernet** inkl. settings-kort,
+  SVG-assets, summary-table-ikon-kolonner og -filtre. Anhøj-signalet
+  formidles via stiplet centerline.
+* `astronomical` (punkter udenfor kontrolgrænser) **beholdt** — matcher
+  qicharts2's `sigma.signal` (verificeret empirisk). Afviger fra
+  oprindelig faseplan, som ville fjerne astronomical og beholde shift;
+  begge ændringer begrundet i qicharts2-parity.
+
+Gemte settings for fjernede properties ignoreres af Power BI ved load —
+ingen migration af eksisterende rapporter nødvendig.
+
+### Interne ændringer
+
+* `outliersObject` reduceret til `{ astpoint, per_group_signals }`;
+  direction-mapping forenklet til kun astronomical.
+* Outlier-settings-panelet viser nu præcis tre grupper: General,
+  Astronomical Points, Anhoej Rules.
+
 ## (development) — F1 Anhøj-regler
 
 ### Nye features

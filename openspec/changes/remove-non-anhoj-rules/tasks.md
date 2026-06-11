@@ -22,14 +22,14 @@ hvert nummereret afsnit = ét atomisk commit, grønt på tsc + vitest.
 
 ## 3. Commit 3 — settings/capabilities-oprydning + docs
 
-- [ ] 3.1 Fjern Shifts/Trends/Two-In-Three-grupper fra `outliersSettings.ts`; verificér General + Astronomical Points + Anhoej Rules består
-- [ ] 3.2 Fjern tilsvarende properties fra `capabilities.json` (synkront med 3.1)
-- [ ] 3.3 Opdatér formattingModel-test: outliers-kort indeholder præcis 3 grupper
-- [ ] 3.4 NEWS-entry (F2, Breaking changes-sektion med migration-hints) + CLAUDE.md-faseplan opdateret (F2-scope: astronomical beholdt, shift fjernet — afvigelse fra oprindelig plan begrundet med qicharts2-parity)
-- [ ] 3.5 Verifikation: `tsc --noEmit` + `npm test` + `pbiviz package` bygger → commit
+- [x] 3.1 Fjern Shifts/Trends/Two-In-Three-grupper fra `outliersSettings.ts`; verificér General + Astronomical Points + Anhoej Rules består
+- [x] 3.2 Fjern tilsvarende properties fra `capabilities.json` (synkront med 3.1)
+- [x] 3.3 Opdatér formattingModel-test: outliers-kort indeholder præcis 3 grupper
+- [x] 3.4 NEWS-entry (F2, Breaking changes-sektion med migration-hints) + CLAUDE.md-faseplan opdateret (F2-scope: astronomical beholdt, shift fjernet — afvigelse fra oprindelig plan begrundet med qicharts2-parity)
+- [x] 3.5 Verifikation: `tsc --noEmit` + `npm test` + `pbiviz package` bygger → commit
 
 ## 4. Afsluttende verifikation
 
-- [ ] 4.1 Grep-sweep: ingen resterende referencer til `nhs_icons`, `variation`, `assurance`, `shift` (regel), `trend` (regel), `two_in_three`, `twointhree` i `src/` (fraset `calculateTrendLine`/`trend_line` = regressionslinjen)
-- [ ] 4.2 Manuel panel-sanity via formattingModel-test-output (Power BI-verifikation følger F1-gate på Windows — se add-anhoj-rules 7.2/8.4/10.4)
+- [x] 4.1 Grep-sweep: ingen resterende referencer til `nhs_icons`, `variation`, `assurance`, `shift` (regel), `trend` (regel), `two_in_three`, `twointhree` i `src/` (fraset `calculateTrendLine`/`trend_line` = regressionslinjen)
+- [x] 4.2 Manuel panel-sanity via formattingModel-test-output (Power BI-verifikation følger F1-gate på Windows — se add-anhoj-rules 7.2/8.4/10.4)
 - [ ] 4.3 **[MANUELT TRIN]** Windows: importér ny `.pbiviz`, verificér 3 settings-grupper + astronomical + Anhøj-dashing virker

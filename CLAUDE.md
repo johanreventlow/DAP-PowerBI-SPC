@@ -38,12 +38,16 @@ Fase 2 (fjernelser) divergerer bevidst fra upstream.
 
 | Fase | Beskrivelse | Status |
 |------|-------------|--------|
-| F0 | Build virker (Mac) | TODO |
-| F1 | Tilføj Anhøj-regler additivt + sammenligningstest | TODO |
-| F2 | Fjern `astronomical`, `trend`, `twoInThree`, NHS-ikoner | TODO |
+| F0 | Build virker (Mac) | DONE |
+| F1 | Tilføj Anhøj-regler additivt + sammenligningstest | DONE (kode; Power BI-verifikation afventer Windows) |
+| F2 | Fjern `shift`, `trend`, `twoInThree`, NHS-ikoner — `astronomical` BEHOLDT (= qicharts2 `sigma.signal`) | DONE (kode) |
 | F3 | Rebrand + dokumentation | TODO |
 
-Detaljer: `docs/spc-anhoj-context.md` §6.
+Detaljer: `docs/spc-anhoj-context.md` §6. **F2-scope revideret 2026-06-11**
+(empirisk qicharts2-verifikation): oprindelig plan ville fjerne
+`astronomical` og beholde `shift` — begge vendt om, da qicharts2 HAR
+sigma-signal og IKKE har fast-n shift. Se
+`openspec/changes/remove-non-anhoj-rules/`.
 
 ### Centrale integrationspunkter
 
