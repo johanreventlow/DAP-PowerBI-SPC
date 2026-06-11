@@ -44,6 +44,19 @@
 - [x] 6.3 I post-loop ved `checkFlagDirection`-mapping: skip `anhoj_long_run`, `global_signals`, `per_group_signals`
 - [x] 6.4 I point-aesthetic-iteration: tilføj Anhøj-gren der pre-mapper `"upper"`/`"lower"` → `"neutral_high"`/`"neutral_low"` før `getAesthetic`-call
 
+## 6b. Revision 2026-06-11 — per-punkt-flagging fjernet
+
+Empirisk qicharts2-review + beslutning fra Johan: Anhøj-metoden flagger ikke
+enkeltpunkter (NHS-praksis, ikke dansk). Runs-analysen er ét seriesignal per
+data-gruppe → stiplet centerline. Spec-deltas opdateret tilsvarende.
+
+- [x] 6b.1 `anhojLongRun` konverteret til boolean seriesignal (som `anhojFewCrossings`); 6.4-grenen fjernet
+- [x] 6b.2 `outliersObject.anhoj_long_run` (string[]) + dot-colour-mapping fjernet fra viewModel
+- [x] 6b.3 `createOutlierColours("anhoj_long_run")` fjernet fra settings.ts + 4 colour-properties fra capabilities.json (synkront)
+- [x] 6b.4 `computeSides`: non-finite guard (paritet med R NA-drop) + forenklet returtype
+- [x] 6b.5 Tests omskrevet til boolean-kontrakt; formattingModel-test asserter præcis 2 slices
+- [x] 6b.6 Fixture-generator: qic_cross_check fejlede tavst (ugyldigt `plot.chart`-argument) — fjernet tryCatch, tilføjet hård assert, fixtures regenereret med populerede checks
+
 ## 7. Settings — ny "Anhøj Rules"-blok
 
 - [x] 7.1 I `src/settings.ts`, tilføj ny settingsgroup efter "Two-In-Three" med toggles + `createOutlierColours("anhoj_long_run", defaultColours)`
@@ -67,7 +80,8 @@
 - [x] 10.2 `tsc --noEmit` rent for src/ + test/ (node_modules eslint-types-konflikt er pre-existing, ikke fra denne change)
 - [x] 10.3 `pbiviz package` bygger uden fejl
 - [ ] 10.4 **[MANUELT TRIN]** Import `.pbiviz` i Power BI Service, manuel test med fixture-data
-- [ ] 10.5 **[MANUELT TRIN]** Verificér: Anhøj-toggles tændes → flags vises korrekt + centerline stiplet ved signal
+- [ ] 10.5 **[MANUELT TRIN]** Verificér: Anhøj-toggles tændes → centerline stiplet ved signal (ingen punkt-flags, jf. 6b)
+- [x] 10.6 Empirisk premiss-review 2026-06-11: formler + qbinom + signal-semantik verificeret mod levende qicharts2 0.8.1 (R 4.6.0) — 14/14 fixtures match `qic()`, qbinom 0 mismatches på use-case-sporet (254 punkter)
 
 ## 11. Documentation
 
