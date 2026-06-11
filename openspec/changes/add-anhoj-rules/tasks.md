@@ -66,7 +66,7 @@ data-gruppe → stiplet centerline. Spec-deltas opdateret tilsvarende.
 
 - [x] 8.1 I `initialiseGroupedLines`: per-segment `group_signal_dashed` baseret på `groupStartEndIndexes`-lookup mod `per_group_signals`
 - [x] 8.2 I `drawLines.ts:59`: overrid `stroke-dasharray` til `"4 2"` hvis `currLine === "targets" && d.group_signal_dashed`
-- [ ] 8.3 **[DEFERRED]** Multi-group karma-test kræver mock af fuld viewModel; manuel verifikation prioriteret
+- [x] 8.3 Multi-group karma-test: `test/Classes/test-flagOutliersMultiGroup.ts` låst op 2026-06-11 — boolean-kontrakten (jf. 6b) gjorde fuld viewModel-mock unødvendig; flagOutliers testes direkte med stub-inputs + qicharts2-fixtures. Visuel segment-dashing dækkes fortsat af 8.4
 - [ ] 8.4 **[MANUELT TRIN]** Manuel verifikation i Power BI Service med multi-group fixture
 
 ## 9. Sammenligningstest mod eksisterende `shift`-regel
