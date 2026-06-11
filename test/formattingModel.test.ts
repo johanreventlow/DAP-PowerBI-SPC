@@ -25,7 +25,7 @@ describe("FormattingModel — Anhoej Rules group", () => {
         expect(anhoejGroup).toBeTruthy();
     });
 
-    it("Anhoej Rules group contains exactly the two toggles (no colour pickers)", () => {
+    it("Anhoej Rules group contains dash toggles plus stats-display settings", () => {
         const anhoejGroup = outliersCard?.groups.find(g => g.displayName === "Anhoej Rules");
         const sliceProps: string[] = (anhoejGroup?.slices ?? []).map((s: any) => {
             return s.control?.properties?.descriptor?.propertyName;
@@ -33,8 +33,13 @@ describe("FormattingModel — Anhoej Rules group", () => {
 
         expect(sliceProps).toContain("anhoj_long_run");
         expect(sliceProps).toContain("anhoj_few_crossings");
-        // Per-point flagging removed (qicharts2 parity) — colour pickers gone
-        expect(sliceProps.length).toBe(2);
+        expect(sliceProps).toContain("show_anhoj_stats");
+        expect(sliceProps).toContain("anhoj_stats_label_run");
+        expect(sliceProps).toContain("anhoj_stats_label_crossings");
+        expect(sliceProps).toContain("anhoj_stats_font");
+        expect(sliceProps).toContain("anhoj_stats_size");
+        expect(sliceProps).toContain("anhoj_stats_colour");
+        expect(sliceProps.length).toBe(8);
     });
 
     it("Anhoej slice descriptors target the outliers object", () => {

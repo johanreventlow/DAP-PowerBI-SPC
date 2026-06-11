@@ -9,11 +9,11 @@
 
 ## 2. Commit 2 — settings + rendering
 
-- [ ] 2.1 `outliersSettings.ts`: show_anhoj_stats + font/size/colour + 2 label-tekster; `capabilities.json` synkront
-- [ ] 2.2 Ny `drawAnhojStats.ts`: tekstblok per fase (2 tspans), x = fasens midtpunkt, y = top-offset; fjern ved toggle fra/grouped mode/degenereret fase
-- [ ] 2.3 `visual.ts`: tilføj `.call(drawAnhojStats, this)`
-- [ ] 2.4 formattingModel-test: Anhoej-gruppens slices opdateret
-- [ ] 2.5 tsc + vitest grøn → commit
+- [x] 2.1 `outliersSettings.ts`: show_anhoj_stats + font/size/colour + 2 label-tekster; `capabilities.json` synkront
+- [x] 2.2 Ny `drawAnhojStats.ts`: tekstblok per fase (2 tspans), x = fasens midtpunkt, y = top-offset; fjern ved toggle fra/grouped mode/degenereret fase
+- [x] 2.3 `visual.ts`: tilføj `.call(drawAnhojStats, this)`
+- [x] 2.4 formattingModel-test: Anhoej-gruppens slices opdateret
+- [x] 2.5 tsc + vitest grøn → commit
 
 ## 3. Commit 3 — docs + build
 

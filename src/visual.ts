@@ -16,6 +16,7 @@ import drawSummaryTable from "./D3 Plotting Functions/drawSummaryTable";
 import drawValueLabels from "./D3 Plotting Functions/drawValueLabels";
 import drawLineLabels from "./D3 Plotting Functions/drawLineLabels";
 import drawDownloadButton from "./D3 Plotting Functions/drawDownloadButton";
+import drawAnhojStats from "./D3 Plotting Functions/drawAnhojStats";
 import plotPropertiesClass from "./Classes/plotPropertiesClass";
 import viewModelClass, { type plotData, type viewModelValidationT } from "./Classes/viewModelClass";
 import type { lineData, plotDataGrouped } from "./Classes/viewModelClass";
@@ -113,6 +114,7 @@ export class Visual implements powerbi.extensibility.IVisual {
             .call(drawLines, this)
             .call(drawLineLabels, this)
             .call(drawDots, this)
+            .call(drawAnhojStats, this)
             .call(addContextMenu, this)
             .call(drawDownloadButton, this)
             .call(drawValueLabels, this);

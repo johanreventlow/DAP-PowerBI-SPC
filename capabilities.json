@@ -110,6 +110,24 @@
         },
         "anhoj_few_crossings": {
           "type" : { "bool" : true }
+        },
+        "show_anhoj_stats": {
+          "type" : { "bool" : true }
+        },
+        "anhoj_stats_label_run": {
+          "type" : { "text": true }
+        },
+        "anhoj_stats_label_crossings": {
+          "type" : { "text": true }
+        },
+        "anhoj_stats_font": {
+          "type": { "formatting": { "fontFamily": true } }
+        },
+        "anhoj_stats_size": {
+          "type": { "formatting": { "fontSize": true } }
+        },
+        "anhoj_stats_colour":{
+          "type": { "fill": { "solid": { "color": true } } }
         }
       }
     },
