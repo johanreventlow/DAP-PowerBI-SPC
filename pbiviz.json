@@ -1,8 +1,8 @@
 {
   "visual":{
-    "name":"PBISPC",
+    "name":"BFHSPC",
     "displayName":"SPC Charts",
-    "guid":"PBISPC",
+    "guid":"BFHSPC",
     "visualClassName":"Visual",
     "version":"1.7.4.29",
     "description":"A PowerBI custom visual for SPC charts",
