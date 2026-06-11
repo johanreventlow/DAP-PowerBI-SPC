@@ -18,11 +18,11 @@ Settings + capabilities ændres ALTID synkront i samme commit.
 
 ## 3. Commit 3 — astronomical: fast 3σ + én farve, direction-mapping ud
 
-- [ ] 3.1 `outliersSettings.ts`: fjern `astronomical_limit` + "General"-gruppen (process_flag_type, improvement_direction); erstat 4 colour-pickers med én `ast_colour`; capabilities synkront
-- [ ] 3.2 `flagOutliers`: kald `astronomical(values, ll99, ul99)` direkte (limit_map/ast_specification ud); fjern direction-mapping-loop
-- [ ] 3.3 Slet `checkFlagDirection.ts` + test; dot-farvning læser `settings.outliers.ast_colour` direkte (getAesthetic-flag-mapping ud)
-- [ ] 3.4 Opdatér `flagOutliersMultiGroup.test.ts`-stub + formattingModel-asserts (2 outlier-grupper)
-- [ ] 3.5 Verifikation + commit
+- [x] 3.1 `outliersSettings.ts`: fjern `astronomical_limit` + "General"-gruppen (process_flag_type, improvement_direction); erstat 4 colour-pickers med én `ast_colour`; capabilities synkront
+- [x] 3.2 `flagOutliers`: kald `astronomical(values, ll99, ul99)` direkte (limit_map/ast_specification ud); fjern direction-mapping-loop
+- [x] 3.3 Slet `checkFlagDirection.ts` + test; dot-farvning læser `settings.outliers.ast_colour` direkte (getAesthetic-flag-mapping ud)
+- [x] 3.4 Opdatér `flagOutliersMultiGroup.test.ts`-stub + formattingModel-asserts (2 outlier-grupper)
+- [x] 3.5 Verifikation + commit
 
 ## 4. Commit 4 — fjern Specification Limits
 

@@ -8,8 +8,6 @@ import settingsClass from "./settingsClass";
 import { type settingsValueType } from "../settings";
 import type derivedSettingsClass from "./derivedSettingsClass";
 import buildTooltip from "../Functions/buildTooltip";
-import getAesthetic from "../Functions/getAesthetic";
-import checkFlagDirection from "../Outlier Flagging/checkFlagDirection";
 import rep from "../Functions/rep";
 import type { dataObject } from "../Functions/extractInputData";
 import extractInputData from "../Functions/extractInputData";
@@ -584,10 +582,9 @@ export default class viewModelClass {
         aesthetics.colour = this.colourPalette.foregroundColour;
       }
       if (outliers.astpoint[i] !== "none") {
-        aesthetics.colour = getAesthetic(outliers.astpoint[i], "outliers",
-                                  "ast_colour", settings) as string;
-        aesthetics.colour_outline = getAesthetic(outliers.astpoint[i], "outliers",
-                                  "ast_colour", settings) as string;
+        // Én farve for alle astronomical-punkter uanset retning (qicharts2-paritet)
+        aesthetics.colour = settings.outliers.ast_colour;
+        aesthetics.colour_outline = settings.outliers.ast_colour;
       }
       const table_row: summaryTableRowData = {
         date: controlLimits.keys[i].label,
@@ -783,9 +780,6 @@ export default class viewModelClass {
 
   flagOutliers(controlLimits: controlLimitsObject, groupStartEndIndexes: number[][],
                 inputSettings: settingsValueType, derivedSettings: derivedSettingsClass): outliersObject {
-    const process_flag_type: string = inputSettings.outliers.process_flag_type;
-    const improvement_direction: string = inputSettings.outliers.improvement_direction;
-    const ast_specification: boolean = inputSettings.outliers.astronomical_limit === "Specification";
     const perGroupSignals: { long_run: boolean; few_crossings: boolean }[] = [];
     const outliers: outliersObject = {
       astpoint: rep("none", controlLimits.values.length),
@@ -798,19 +792,11 @@ export default class viewModelClass {
       const group_targets: number[] = controlLimits.targets.slice(start, end) as number[];
       const group_signal = { long_run: false, few_crossings: false };
 
-      if (derivedSettings.chart_type_props.has_control_limits || ast_specification) {
-        const limit_map: Record<string, string> = {
-          "1 Sigma": "68",
-          "2 Sigma": "95",
-          "3 Sigma": "99",
-          "Specification": "",
-        };
+      // Astronomical evalueres altid mod 3σ (ll99/ul99) — qicharts2 sigma.signal
+      if (derivedSettings.chart_type_props.has_control_limits) {
         if (inputSettings.outliers.astronomical) {
-          const ast_limit: string = limit_map[inputSettings.outliers.astronomical_limit];
-          const ll_prefix: string = ast_specification ? "speclimits_lower" : "ll";
-          const ul_prefix: string = ast_specification ? "speclimits_upper" : "ul";
-          const lower_limits: number[] = controlLimits[`${ll_prefix}${ast_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
-          const upper_limits: number[] = controlLimits[`${ul_prefix}${ast_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
+          const lower_limits: number[] = controlLimits.ll99!.slice(start, end) as number[];
+          const upper_limits: number[] = controlLimits.ul99!.slice(start, end) as number[];
           astronomical(group_values, lower_limits, upper_limits)
             .forEach((flag, idx) => outliers.astpoint[start + idx] = flag)
         }
@@ -822,13 +808,6 @@ export default class viewModelClass {
         group_signal.few_crossings = anhojFewCrossings(group_values, group_targets);
       }
       perGroupSignals.push(group_signal);
-    }
-    // Anhøj rules are series-level signals (dashed centerline) and have
-    // no per-point flags to direction-map; only astronomical flags are
-    // mapped through improvement_direction.
-    for (let i = 0; i < outliers.astpoint.length; i++) {
-      outliers.astpoint[i] = checkFlagDirection(outliers.astpoint[i],
-                                  { process_flag_type, improvement_direction });
     }
     return outliers;
   }

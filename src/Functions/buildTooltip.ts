@@ -26,7 +26,6 @@ export default function buildTooltip(table_row: summaryTableRowData,
                                       inputSettings: settingsValueType,
                                       derivedSettings: derivedSettingsClass): VisualTooltipDataItem[] {
 
-  const ast_limit: string = inputSettings.outliers.astronomical_limit;
   const formatValues = valueFormatter(inputSettings, derivedSettings);
 
   const tooltip: VisualTooltipDataItem[] = new Array<VisualTooltipDataItem>();
@@ -113,11 +112,7 @@ export default function buildTooltip(table_row: summaryTableRowData,
     const patterns: string[] = new Array<string>();
     if (table_row.astpoint !== "none") {
       // Note if flagged according to non-default limit
-      let flag_text: string = "Astronomical Point";
-      if (ast_limit !== "3 Sigma") {
-        flag_text = `${flag_text} (${ast_limit})`;
-      }
-      patterns.push(flag_text)
+      patterns.push("Astronomical Point")
     }
     tooltip.push({
       displayName: "Pattern(s)",
