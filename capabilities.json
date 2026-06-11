@@ -183,6 +183,12 @@
         },
         "twointhree_colour_neutral_high":{
           "type": { "fill": { "solid": { "color": true } } }
+        },
+        "anhoj_long_run": {
+          "type" : { "bool" : true }
+        },
+        "anhoj_few_crossings": {
+          "type" : { "bool" : true }
         }
       }
     },

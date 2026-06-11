@@ -24,6 +24,8 @@ import astronomical from "../Outlier Flagging/astronomical";
 import trend from "../Outlier Flagging/trend";
 import twoInThree from "../Outlier Flagging/twoInThree";
 import shift from "../Outlier Flagging/shift";
+import anhojLongRun from "../Outlier Flagging/anhojLongRun";
+import anhojFewCrossings from "../Outlier Flagging/anhojFewCrossings";
 import { lineNameMap } from "../Functions/getAesthetic";
 import isValidNumber from "../Functions/isValidNumber";
 import { default as updateOptionsUndefined, UpdateOptionsValidTypes } from "../Functions/updateOptionsUndefined";
@@ -42,6 +44,10 @@ export type lineData = {
   line_value: number | undefined;
   group: string;
   aesthetics: settingsValueType["lines"];
+  // Per-segment Anhøj signal flag. When true and group === "targets", the
+  // centerline segment is rendered dashed to indicate non-random variation
+  // in this segment's data group.
+  group_signal_dashed?: boolean;
 }
 
 export type summaryTableRowData = {
@@ -144,6 +150,9 @@ export type outliersObject = {
   trend: string[];
   two_in_three: string[];
   shift: string[];
+  // One entry per data-group (baseline-split). Order matches
+  // groupStartEndIndexes for the same indicator.
+  per_group_signals: { long_run: boolean; few_crossings: boolean }[];
 }
 
 export type colourPaletteType = {
@@ -763,7 +772,29 @@ export default class viewModelClass {
 
     const nLimits = controlLimits.keys.length;
 
+    // Per-group Anhøj signal state, used to dash only the centerline
+    // segments whose data-group has a signal. Falls back to all-false
+    // when Anhøj rules are disabled or the chart has no groups recorded.
+    const groupBounds: number[][] = this.groupStartEndIndexes[0] ?? [];
+    const perGroupSignals = this.outliers[0]?.per_group_signals ?? [];
+    // Pre-compute dashed flag per data-group; index by group walked in
+    // sync with i below (groups are contiguous, monotonic in i).
+    const dashedByGroup: boolean[] = groupBounds.map((_, g) => {
+      const sig = perGroupSignals[g];
+      return sig ? (sig.long_run || sig.few_crossings) : false;
+    });
+    let currentGroupIdx: number = 0;
+
     for (let i: number = 0; i < nLimits; i++) {
+      // groupBounds entries are [start, end) — advance cursor when i
+      // crosses into the next group.
+      while (currentGroupIdx < groupBounds.length
+             && i >= groupBounds[currentGroupIdx][1]) {
+        currentGroupIdx++;
+      }
+      const groupSignalDashed: boolean = currentGroupIdx < dashedByGroup.length
+                                          ? dashedByGroup[currentGroupIdx]
+                                          : false;
       const isRebaselinePoint: boolean = this.splitIndexes.includes(i - 1) || (inputData.groupingIndexes?.includes(i - 1) ?? false);
       let isNewAltTarget: boolean = false;
       if (i > 0 && settings.lines.show_alt_target && !isNullOrUndefined(controlLimits.alt_targets)) {
@@ -780,7 +811,8 @@ export default class viewModelClass {
             x: controlLimits.keys[i].x,
             line_value: (!join_rebaselines && (is_alt_target || is_rebaseline)) ? undefined : controlLimits[label as Exclude<keyof controlLimitsObject, "keys">]?.[i],
             group: label,
-            aesthetics: inputData.line_formatting[i]
+            aesthetics: inputData.line_formatting[i],
+            group_signal_dashed: groupSignalDashed
           })
         }
 
@@ -788,7 +820,8 @@ export default class viewModelClass {
           x: controlLimits.keys[i].x,
           line_value: controlLimits[label as Exclude<keyof controlLimitsObject, "keys">]?.[i],
           group: label,
-          aesthetics: inputData.line_formatting[i]
+          aesthetics: inputData.line_formatting[i],
+          group_signal_dashed: groupSignalDashed
         })
       })
     }
@@ -857,17 +890,20 @@ export default class viewModelClass {
     const shift_n: number = inputSettings.outliers.shift_n;
     const ast_specification: boolean = inputSettings.outliers.astronomical_limit === "Specification";
     const two_in_three_specification: boolean = inputSettings.outliers.two_in_three_limit === "Specification";
-    const outliers = {
+    const perGroupSignals: { long_run: boolean; few_crossings: boolean }[] = [];
+    const outliers: outliersObject = {
       astpoint: rep("none", controlLimits.values.length),
       two_in_three: rep("none", controlLimits.values.length),
       trend: rep("none", controlLimits.values.length),
-      shift: rep("none", controlLimits.values.length)
+      shift: rep("none", controlLimits.values.length),
+      per_group_signals: perGroupSignals
     }
     for (let i: number = 0; i < groupStartEndIndexes.length; i++) {
       const start: number = groupStartEndIndexes[i][0];
       const end: number = groupStartEndIndexes[i][1];
       const group_values: number[] = controlLimits.values.slice(start, end);
       const group_targets: number[] = controlLimits.targets.slice(start, end) as number[];
+      const group_signal = { long_run: false, few_crossings: false };
 
       if (derivedSettings.chart_type_props.has_control_limits || ast_specification || two_in_three_specification) {
         const limit_map: Record<string, string> = {
@@ -904,13 +940,26 @@ export default class viewModelClass {
         shift(group_values, group_targets, shift_n)
           .forEach((flag, idx) => outliers.shift[start + idx] = flag)
       }
-    }
-    Object.keys(outliers).forEach(key => {
-      for (let i = 0; i < outliers[key as keyof outliersObject].length; i++) {
-        outliers[key as keyof outliersObject][i] = checkFlagDirection(outliers[key as keyof outliersObject][i],
-                                                                      { process_flag_type, improvement_direction });
+      if (inputSettings.outliers.anhoj_long_run) {
+        group_signal.long_run = anhojLongRun(group_values, group_targets);
       }
-    })
+      if (inputSettings.outliers.anhoj_few_crossings) {
+        group_signal.few_crossings = anhojFewCrossings(group_values, group_targets);
+      }
+      perGroupSignals.push(group_signal);
+    }
+    // Anhøj rules are series-level signals (dashed centerline) and have
+    // no per-point flags to direction-map. The legacy point-flagging
+    // rules still go through improvement_direction mapping.
+    const directionMappedKeys: ReadonlyArray<keyof outliersObject>
+      = ["astpoint", "trend", "two_in_three", "shift"];
+    directionMappedKeys.forEach(key => {
+      const arr = outliers[key] as string[];
+      for (let i = 0; i < arr.length; i++) {
+        arr[i] = checkFlagDirection(arr[i],
+                                    { process_flag_type, improvement_direction });
+      }
+    });
     return outliers;
   }
 }
