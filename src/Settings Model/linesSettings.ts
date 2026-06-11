@@ -118,27 +118,7 @@ const linesSettings = {
       plot_label_colour_99: colourOption("Value Colour", "standard"),
       plot_label_prefix_99: textOption("Value Prefix", "")
     },
-    "Trend": {
-      show_trend: toggleOption("Show Trend", false),
-      width_trend: numberOption("Line Width", 1.5, { min: 0, max: 100 }),
-      type_trend: lineTypeOption("Line Type", "10 0"),
-      colour_trend: colourOption("Line Colour", "common_cause"),
-      opacity_trend: numberOption("Default Opacity", 1, { min: 0, max: 1 }),
-      opacity_unselected_trend: numberOption("Opacity if Any Selected", 0.2, { min: 0, max: 1 }),
-      join_rebaselines_trend: toggleOption("Connect Rebaselined Limits", false),
-      ttip_show_trend: toggleOption("Show value in tooltip", true),
-      ttip_label_trend: textOption("Tooltip Label", "Centerline"),
-      plot_label_show_trend: toggleOption("Show Value on Plot", false),
-      plot_label_show_all_trend: toggleOption("Show Value at all Re-Baselines", false),
-      plot_label_show_n_trend: numberOption("Show Value at Last N Re-Baselines", 1, { min: 1 }),
-      plot_label_position_trend: lineLabelPositionOption(),
-      plot_label_vpad_trend: numberOption("Value Vertical Padding", 0),
-      plot_label_hpad_trend: numberOption("Value Horizontal Padding", 10),
-      plot_label_font_trend: fontOption("Value Font"),
-      plot_label_size_trend: fontSizeOption("Value Font Size"),
-      plot_label_colour_trend: colourOption("Value Colour", "standard"),
-      plot_label_prefix_trend: textOption("Value Prefix", "")
-    }
+
   }
 };
 

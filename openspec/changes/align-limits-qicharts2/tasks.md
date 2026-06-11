@@ -32,9 +32,9 @@ Settings + capabilities ændres ALTID synkront i samme commit.
 
 ## 5. Commit 5 — fjern trend-linje (regression)
 
-- [ ] 5.1 `linesSettings.ts`: "Trend"-gruppen ud; capabilities synkront
-- [ ] 5.2 Slet `calculateTrendLine.ts` + test; fjern `trend_line`-felt + kald i `calculateLimits` + tooltip/tabel-referencer
-- [ ] 5.3 Verifikation + commit
+- [x] 5.1 `linesSettings.ts`: "Trend"-gruppen ud; capabilities synkront
+- [x] 5.2 Slet `calculateTrendLine.ts` + test; fjern `trend_line`-felt + kald i `calculateLimits` + tooltip/tabel-referencer
+- [x] 5.3 Verifikation + commit
 
 ## 6. Commit 6 — docs + afsluttende verifikation
 

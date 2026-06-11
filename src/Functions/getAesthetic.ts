@@ -9,7 +9,6 @@ const lineNameMap: Record<string, string> = {
   "targets" : "target",
   "values" : "main",
   "alt_targets" : "alt_target",
-  "trend_line" : "trend",
 }
 
 export default function getAesthetic(type: string, group: string, aesthetic: string, inputSettings: settingsValueType): string | number {
