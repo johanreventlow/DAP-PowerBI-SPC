@@ -32,4 +32,4 @@ hvert nummereret afsnit = ét atomisk commit, grønt på tsc + vitest.
 
 - [x] 4.1 Grep-sweep: ingen resterende referencer til `nhs_icons`, `variation`, `assurance`, `shift` (regel), `trend` (regel), `two_in_three`, `twointhree` i `src/` (fraset `calculateTrendLine`/`trend_line` = regressionslinjen)
 - [x] 4.2 Manuel panel-sanity via formattingModel-test-output (Power BI-verifikation følger F1-gate på Windows — se add-anhoj-rules 7.2/8.4/10.4)
-- [ ] 4.3 **[MANUELT TRIN]** Windows: importér ny `.pbiviz`, verificér 3 settings-grupper + astronomical + Anhøj-dashing virker
+- [x] 4.3 **[MANUELT TRIN]** Windows: importér ny `.pbiviz`, verificér 3 settings-grupper + astronomical + Anhøj-dashing virker

@@ -60,14 +60,14 @@ data-gruppe → stiplet centerline. Spec-deltas opdateret tilsvarende.
 ## 7. Settings — ny "Anhøj Rules"-blok
 
 - [x] 7.1 I `src/settings.ts`, tilføj ny settingsgroup efter "Two-In-Three" med toggles + `createOutlierColours("anhoj_long_run", defaultColours)`
-- [ ] 7.2 **[MANUELT TRIN]** Verificér Power BI formatting-panel viser nye toggles (kræver Power BI Service/Desktop)
+- [x] 7.2 **[MANUELT TRIN]** Verificér Power BI formatting-panel viser nye toggles (kræver Power BI Service/Desktop)
 
 ## 8. Centerline-rendering — stiplet per data-gruppe
 
 - [x] 8.1 I `initialiseGroupedLines`: per-segment `group_signal_dashed` baseret på `groupStartEndIndexes`-lookup mod `per_group_signals`
 - [x] 8.2 I `drawLines.ts:59`: overrid `stroke-dasharray` til `"4 2"` hvis `currLine === "targets" && d.group_signal_dashed`
 - [x] 8.3 Multi-group karma-test: `test/Classes/test-flagOutliersMultiGroup.ts` låst op 2026-06-11 — boolean-kontrakten (jf. 6b) gjorde fuld viewModel-mock unødvendig; flagOutliers testes direkte med stub-inputs + qicharts2-fixtures. Visuel segment-dashing dækkes fortsat af 8.4
-- [ ] 8.4 **[MANUELT TRIN]** Manuel verifikation i Power BI Service med multi-group fixture
+- [x] 8.4 **[MANUELT TRIN]** Manuel verifikation i Power BI Service med multi-group fixture
 
 ## 9. Sammenligningstest mod eksisterende `shift`-regel
 
@@ -79,11 +79,13 @@ data-gruppe → stiplet centerline. Spec-deltas opdateret tilsvarende.
 - [x] 10.1 `npm test` — 274/274 tests bestået (40 nye + 234 eksisterende)
 - [x] 10.2 `tsc --noEmit` rent for src/ + test/ (node_modules eslint-types-konflikt er pre-existing, ikke fra denne change)
 - [x] 10.3 `pbiviz package` bygger uden fejl
-- [ ] 10.4 **[MANUELT TRIN]** Import `.pbiviz` i Power BI Service, manuel test med fixture-data
-- [ ] 10.5 **[MANUELT TRIN]** Verificér: Anhøj-toggles tændes → centerline stiplet ved signal (ingen punkt-flags, jf. 6b)
+- [x] 10.4 **[MANUELT TRIN]** Import `.pbiviz` i Power BI Service, manuel test med fixture-data
+- [x] 10.5 **[MANUELT TRIN]** Verificér: Anhøj-toggles tændes → centerline stiplet ved signal (ingen punkt-flags, jf. 6b)
 - [x] 10.6 Empirisk premiss-review 2026-06-11: formler + qbinom + signal-semantik verificeret mod levende qicharts2 0.8.1 (R 4.6.0) — 14/14 fixtures match `qic()`, qbinom 0 mismatches på use-case-sporet (254 punkter)
 
 ## 11. Documentation
 
 - [x] 11.1 NEWS-entry under `(development)` med Anhøj-features + qicharts2-reference
 - [x] 11.2 Tilføj kort kommentar-blok over `flagOutliers` der peger på Anhøj-grenen
+
+> Power BI-verifikation udført af Johan 2026-06-11 (Service, GUID BFHSPC, build 1.7.4.29): panel + toggles + stiplet centerline bekræftet.
