@@ -3,10 +3,10 @@ import settingsClass from "../src/Classes/settingsClass";
 import buildDataView from "./helpers/buildDataView";
 
 // Proves the FormattingModel produced by settingsClass.getFormattingModel()
-// includes the Anhoej Rules group with both toggles. If this passes but
+// includes the Anhøj-regler group with both toggles. If this passes but
 // the group is still missing in Power BI Desktop, the bug is host-side
 // (cache, version skew, model rejection) — not in the bundle.
-describe("FormattingModel — Anhoej Rules group", () => {
+describe("FormattingModel — Anhøj-regler group", () => {
     const settings = new settingsClass();
     const dataView = buildDataView({
         key: ["A", "B", "C", "D", "E"],
@@ -20,13 +20,13 @@ describe("FormattingModel — Anhoej Rules group", () => {
         expect(outliersCard).toBeTruthy();
     });
 
-    it("outliers card contains an Anhoej Rules group", () => {
-        const anhoejGroup = outliersCard?.groups.find(g => g.displayName === "Anhoej Rules");
+    it("outliers card contains an Anhøj-regler group", () => {
+        const anhoejGroup = outliersCard?.groups.find(g => g.displayName === "Anhøj-regler");
         expect(anhoejGroup).toBeTruthy();
     });
 
-    it("Anhoej Rules group contains dash toggles plus stats-display settings", () => {
-        const anhoejGroup = outliersCard?.groups.find(g => g.displayName === "Anhoej Rules");
+    it("Anhøj-regler group contains dash toggles plus stats-display settings", () => {
+        const anhoejGroup = outliersCard?.groups.find(g => g.displayName === "Anhøj-regler");
         const sliceProps: string[] = (anhoejGroup?.slices ?? []).map((s: any) => {
             return s.control?.properties?.descriptor?.propertyName;
         });
@@ -43,14 +43,14 @@ describe("FormattingModel — Anhoej Rules group", () => {
     });
 
     it("Anhoej slice descriptors target the outliers object", () => {
-        const anhoejGroup = outliersCard?.groups.find(g => g.displayName === "Anhoej Rules");
+        const anhoejGroup = outliersCard?.groups.find(g => g.displayName === "Anhøj-regler");
         (anhoejGroup?.slices ?? []).forEach((slice: any) => {
             expect(slice.control?.properties?.descriptor?.objectName).toBe("outliers");
         });
     });
 
-    it("outliers card contains exactly Astronomical Points and Anhoej Rules", () => {
+    it("outliers card contains exactly the two Danish outlier groups", () => {
         const groupNames = (outliersCard?.groups ?? []).map(g => g.displayName);
-        expect(groupNames).toEqual(["Astronomical Points", "Anhoej Rules"]);
+        expect(groupNames).toEqual(["Punkter uden for kontrolgrænser", "Anhøj-regler"]);
     });
 });

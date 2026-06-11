@@ -1,15 +1,15 @@
 import { paddingOption, toggleOption } from "./common";
 
 const canvasSettings = {
-  description: "Canvas Settings",
-  displayName: "Canvas Settings",
+  description: "Plotområde",
+  displayName: "Plotområde",
   settingsGroups: {
     "all": {
-      show_errors: toggleOption("Show Errors on Canvas", true),
-      lower_padding: paddingOption("Padding Below Plot (pixels):"),
-      upper_padding: paddingOption("Padding Above Plot (pixels):"),
-      left_padding: paddingOption("Padding Left of Plot (pixels):"),
-      right_padding: paddingOption("Padding Right of Plot (pixels):")
+      show_errors: toggleOption("Vis fejlbeskeder på diagrammet", true),
+      lower_padding: paddingOption("Margen under plot (px):"),
+      upper_padding: paddingOption("Margen over plot (px):"),
+      left_padding: paddingOption("Margen til venstre (px):"),
+      right_padding: paddingOption("Margen til højre (px):")
     }
   }
 };

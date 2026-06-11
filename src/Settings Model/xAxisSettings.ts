@@ -4,28 +4,28 @@ import {
 } from "./common";
 
 const xAxisSettings = {
-  description: "X Axis Settings",
-  displayName: "X Axis Settings",
+  description: "X-akse",
+  displayName: "X-akse",
   settingsGroups: {
-    "Axis": {
-      xlimit_show: toggleOption("Show X Axis", true),
-      xlimit_colour: colourOption("Axis Colour", "standard"),
-      xlimit_l: numberOption("Lower Limit", undefined),
-      xlimit_u: numberOption("Upper Limit", undefined)
+    "Akse": {
+      xlimit_show: toggleOption("Vis X-akse", true),
+      xlimit_colour: colourOption("Aksefarve", "standard"),
+      xlimit_l: numberOption("Nedre grænse", undefined),
+      xlimit_u: numberOption("Øvre grænse", undefined)
     },
-    "Ticks": {
-      xlimit_ticks: toggleOption("Draw Ticks", true),
-      xlimit_tick_count: numberOption("Maximum Ticks", 10, { min: 0, max: 100 }),
-      xlimit_tick_font: fontOption("Tick Font"),
-      xlimit_tick_size: fontSizeOption("Tick Font Size"),
-      xlimit_tick_colour: colourOption("Tick Font Colour", "standard"),
-      xlimit_tick_rotation: numberOption("Tick Rotation (Degrees)", -35, { min: -360, max: 360 })
+    "Aksemærker": {
+      xlimit_ticks: toggleOption("Vis aksemærker", true),
+      xlimit_tick_count: numberOption("Maks. antal mærker", 10, { min: 0, max: 100 }),
+      xlimit_tick_font: fontOption("Skrifttype"),
+      xlimit_tick_size: fontSizeOption("Skriftstørrelse"),
+      xlimit_tick_colour: colourOption("Skriftfarve", "standard"),
+      xlimit_tick_rotation: numberOption("Rotation (grader)", -35, { min: -360, max: 360 })
     },
-    "Label": {
-      xlimit_label: textOption("Label", ""),
-      xlimit_label_font: fontOption("Label Font"),
-      xlimit_label_size: fontSizeOption("Label Font Size"),
-      xlimit_label_colour: colourOption("Label Font Colour", "standard")
+    "Aksetitel": {
+      xlimit_label: textOption("Aksetitel", ""),
+      xlimit_label_font: fontOption("Skrifttype"),
+      xlimit_label_size: fontSizeOption("Skriftstørrelse"),
+      xlimit_label_colour: colourOption("Skriftfarve", "standard")
     }
   }
 };

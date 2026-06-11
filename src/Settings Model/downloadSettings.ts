@@ -1,11 +1,11 @@
 import { toggleOption } from "./common";
 
 const downloadSettings = {
-  description: "Download Options",
-  displayName: "Download Options",
+  description: "Download",
+  displayName: "Download",
   settingsGroups: {
     "all": {
-      show_button: toggleOption("Show Download Button", false)
+      show_button: toggleOption("Vis download-knap", false)
     }
   }
 };

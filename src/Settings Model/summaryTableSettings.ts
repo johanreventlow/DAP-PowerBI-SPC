@@ -6,52 +6,52 @@ import {
 } from "./common";
 
 const summaryTableSettings = {
-  description: "Summary Table Settings",
-  displayName: "Summary Table Settings",
+  description: "Oversigtstabel",
+  displayName: "Oversigtstabel",
   settingsGroups: {
-    "General": {
-      show_table: toggleOption("Show Summary Table", false),
-      table_text_overflow: dropdownOption("Text Overflow Handling", "ellipsis", ["ellipsis", "clip", "none"], "sentence"),
-      table_opacity: numberOption("Default Opacity", 1, { min: 0, max: 1 }),
-      table_opacity_selected: numberOption("Opacity if Selected", 1, { min: 0, max: 1 }),
-      table_opacity_unselected: numberOption("Opacity if Unselected", 0.2, { min: 0, max: 1 }),
-      table_outer_border_style: borderStyleOption("Outer Border Style"),
-      table_outer_border_width: borderWidthOption("Outer Border Width"),
-      table_outer_border_colour: colourOption("Outer Border Colour", "standard"),
-      table_outer_border_top: toggleOption("Outer Border Top", true),
-      table_outer_border_bottom: toggleOption("Outer Border Bottom", true),
-      table_outer_border_left: toggleOption("Outer Border Left", true),
-      table_outer_border_right: toggleOption("Outer Border Right", true)
+    "Generelt": {
+      show_table: toggleOption("Vis oversigtstabel", false),
+      table_text_overflow: dropdownOption("Tekstoverløb", "ellipsis", ["ellipsis", "clip", "none"], "none", ["Udeladelsesprikker (…)", "Klip", "Ingen"]),
+      table_opacity: numberOption("Gennemsigtighed", 1, { min: 0, max: 1 }),
+      table_opacity_selected: numberOption("Gennemsigtighed (valgt)", 1, { min: 0, max: 1 }),
+      table_opacity_unselected: numberOption("Gennemsigtighed (fravalgt)", 0.2, { min: 0, max: 1 }),
+      table_outer_border_style: borderStyleOption("Ydre rammestil"),
+      table_outer_border_width: borderWidthOption("Ydre rammetykkelse"),
+      table_outer_border_colour: colourOption("Ydre rammefarve", "standard"),
+      table_outer_border_top: toggleOption("Ramme i top", true),
+      table_outer_border_bottom: toggleOption("Ramme i bund", true),
+      table_outer_border_left: toggleOption("Ramme til venstre", true),
+      table_outer_border_right: toggleOption("Ramme til højre", true)
     },
-    "Header": {
-      table_header_font: fontOption("Header Font"),
-      table_header_size: fontSizeOption("Header Font Size"),
-      table_header_text_align: alignmentOption("Text Alignment"),
-      table_header_font_weight: fontWeightOption("Header Font Weight"),
-      table_header_text_transform: textTransformOption("Header Text Transform"),
-      table_header_text_padding: numberOption("Padding Around Text", 1, { min: 0, max: 100 }),
-      table_header_colour: colourOption("Header Font Colour", "standard"),
-      table_header_bg_colour: colourOption("Header Background Colour", "lightgray"),
-      table_header_border_style: borderStyleOption("Header Border Style"),
-      table_header_border_width: borderWidthOption("Header Border Width"),
-      table_header_border_colour: colourOption("Header Border Colour", "standard"),
-      table_header_border_bottom: toggleOption("Bottom Border", true),
-      table_header_border_inner: toggleOption("Inner Borders", true)
+    "Overskrift": {
+      table_header_font: fontOption("Skrifttype"),
+      table_header_size: fontSizeOption("Skriftstørrelse"),
+      table_header_text_align: alignmentOption("Justering"),
+      table_header_font_weight: fontWeightOption("Skriftvægt"),
+      table_header_text_transform: textTransformOption("Teksttransform"),
+      table_header_text_padding: numberOption("Tekstafstand", 1, { min: 0, max: 100 }),
+      table_header_colour: colourOption("Skriftfarve", "standard"),
+      table_header_bg_colour: colourOption("Baggrundsfarve", "lightgray"),
+      table_header_border_style: borderStyleOption("Rammestil"),
+      table_header_border_width: borderWidthOption("Rammetykkelse"),
+      table_header_border_colour: colourOption("Rammefarve", "standard"),
+      table_header_border_bottom: toggleOption("Bundramme", true),
+      table_header_border_inner: toggleOption("Indre rammer", true)
     },
-    "Body": {
-      table_body_font: fontOption("Body Font"),
-      table_body_size: fontSizeOption("Body Font Size"),
-      table_body_text_align: alignmentOption("Text Alignment"),
-      table_body_font_weight: fontWeightOption("Font Weight"),
-      table_body_text_transform: textTransformOption("Text Transform"),
-      table_body_text_padding: numberOption("Padding Around Text", 1, { min: 0, max: 100 }),
-      table_body_colour: colourOption("Body Font Colour", "standard"),
-      table_body_bg_colour: colourOption("Body Background Colour", "white"),
-      table_body_border_style: borderStyleOption("Body Border Style"),
-      table_body_border_width: borderWidthOption("Body Border Width"),
-      table_body_border_colour: colourOption("Body Border Colour", "standard"),
-      table_body_border_top_bottom: toggleOption("Top/Bottom Borders", true),
-      table_body_border_left_right: toggleOption("Left/Right Borders", true)
+    "Indhold": {
+      table_body_font: fontOption("Skrifttype"),
+      table_body_size: fontSizeOption("Skriftstørrelse"),
+      table_body_text_align: alignmentOption("Justering"),
+      table_body_font_weight: fontWeightOption("Skriftvægt"),
+      table_body_text_transform: textTransformOption("Teksttransform"),
+      table_body_text_padding: numberOption("Tekstafstand", 1, { min: 0, max: 100 }),
+      table_body_colour: colourOption("Skriftfarve", "standard"),
+      table_body_bg_colour: colourOption("Baggrundsfarve", "white"),
+      table_body_border_style: borderStyleOption("Rammestil"),
+      table_body_border_width: borderWidthOption("Rammetykkelse"),
+      table_body_border_colour: colourOption("Rammefarve", "standard"),
+      table_body_border_top_bottom: toggleOption("Vandrette rammer", true),
+      table_body_border_left_right: toggleOption("Lodrette rammer", true)
     }
   }
 };

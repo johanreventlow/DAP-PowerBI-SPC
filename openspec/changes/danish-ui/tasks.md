@@ -2,11 +2,11 @@
 
 ## 1. Commit 1 — Settings Model
 
-- [ ] 1.1 Oversæt alle 12 Settings Model-filer: kort-titler, gruppe-nøgler, option-labels, tooltip-defaults
-- [ ] 1.2 Dropdown-display-labels via `displayNames`-parameter (values urørte); chart-type-listen oversat
-- [ ] 1.3 tsc + vitest (forventede label-assert-fejl rettes i 1.4)
-- [ ] 1.4 Opdatér tests der asserter engelske gruppe-/label-navne
-- [ ] 1.5 Verifikation grøn → commit
+- [x] 1.1 Oversæt alle 12 Settings Model-filer: kort-titler, gruppe-nøgler, option-labels, tooltip-defaults
+- [x] 1.2 Dropdown-display-labels via `displayNames`-parameter (values urørte); chart-type-listen oversat
+- [x] 1.3 tsc + vitest (forventede label-assert-fejl rettes i 1.4)
+- [x] 1.4 Opdatér tests der asserter engelske gruppe-/label-navne
+- [x] 1.5 Verifikation grøn → commit
 
 ## 2. Commit 2 — øvrige bruger-flader
 

@@ -4,30 +4,30 @@ import {
 } from "./common";
 
 const yAxisSettings = {
-  description: "Y Axis Settings",
-  displayName: "Y Axis Settings",
+  description: "Y-akse",
+  displayName: "Y-akse",
   settingsGroups: {
-    "Axis": {
-      ylimit_show: toggleOption("Show Y Axis", true),
-      ylimit_colour: colourOption("Axis Colour", "standard"),
-      limit_multiplier: numberOption("Axis Scaling Factor", 1.5, { min: 0 }),
-      ylimit_sig_figs: numberOption("Tick Decimal Places", undefined, { min: 0, max: 100 }),
-      ylimit_l: numberOption("Lower Limit", undefined),
-      ylimit_u: numberOption("Upper Limit", undefined)
+    "Akse": {
+      ylimit_show: toggleOption("Vis Y-akse", true),
+      ylimit_colour: colourOption("Aksefarve", "standard"),
+      limit_multiplier: numberOption("Skaleringsfaktor", 1.5, { min: 0 }),
+      ylimit_sig_figs: numberOption("Antal decimaler", undefined, { min: 0, max: 100 }),
+      ylimit_l: numberOption("Nedre grænse", undefined),
+      ylimit_u: numberOption("Øvre grænse", undefined)
     },
-    "Ticks": {
-      ylimit_ticks: toggleOption("Draw Ticks", true),
-      ylimit_tick_count: numberOption("Maximum Ticks", 10, { min: 0, max: 100 }),
-      ylimit_tick_font: fontOption("Tick Font"),
-      ylimit_tick_size: fontSizeOption("Tick Font Size"),
-      ylimit_tick_colour: colourOption("Tick Font Colour", "standard"),
-      ylimit_tick_rotation: numberOption("Tick Rotation (Degrees)", 0, { min: -360, max: 360 })
+    "Aksemærker": {
+      ylimit_ticks: toggleOption("Vis aksemærker", true),
+      ylimit_tick_count: numberOption("Maks. antal mærker", 10, { min: 0, max: 100 }),
+      ylimit_tick_font: fontOption("Skrifttype"),
+      ylimit_tick_size: fontSizeOption("Skriftstørrelse"),
+      ylimit_tick_colour: colourOption("Skriftfarve", "standard"),
+      ylimit_tick_rotation: numberOption("Rotation (grader)", 0, { min: -360, max: 360 })
     },
-    "Label": {
-      ylimit_label: textOption("Label", ""),
-      ylimit_label_font: fontOption("Label Font"),
-      ylimit_label_size: fontSizeOption("Label Font Size"),
-      ylimit_label_colour: colourOption("Label Font Colour", "standard")
+    "Aksetitel": {
+      ylimit_label: textOption("Aksetitel", ""),
+      ylimit_label_font: fontOption("Skrifttype"),
+      ylimit_label_size: fontSizeOption("Skriftstørrelse"),
+      ylimit_label_colour: colourOption("Skriftfarve", "standard")
     }
   }
 };

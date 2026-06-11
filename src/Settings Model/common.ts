@@ -155,16 +155,18 @@ function textOption(displayName: string, defaultValue: string) {
 }
 
 function lineLabelPositionOption() {
-  return dropdownOption("Position of Value on Line(s)", "beside",
+  return dropdownOption("Placering af værdi på linjen", "beside",
                         ["outside", "inside", "above", "below", "beside"],
-                        "sentence");
+                        "none",
+                        ["Udenfor", "Indenfor", "Over", "Under", "Ved siden af"]);
 }
 
 function borderStyleOption(displayName: string) {
   return dropdownOption(
     displayName, "solid",
     ["solid", "dotted", "dashed", "double", "groove", "ridge", "inset", "outset", "none"],
-    "sentence"
+    "none",
+    ["Fuldt optrukket", "Prikket", "Stiplet", "Dobbelt", "Rille", "Kant", "Indsænket", "Hævet", "Ingen"]
   )
 }
 
@@ -186,7 +188,8 @@ function fontWeightOption(displayName: string) {
     displayName,
     "normal",
     ["normal", "bold", "bolder", "lighter"],
-    "sentence"
+    "none",
+    ["Normal", "Fed", "Federe", "Tyndere"]
   )
 }
 
@@ -195,7 +198,8 @@ function textTransformOption(displayName: string) {
     displayName,
     "capitalize",
     ["uppercase", "lowercase", "capitalize", "none"],
-    "sentence"
+    "none",
+    ["STORE BOGSTAVER", "små bogstaver", "Stort forbogstav", "Ingen"]
   )
 }
 
