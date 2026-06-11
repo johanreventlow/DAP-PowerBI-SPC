@@ -63,14 +63,32 @@ anhoj_stats <- function(values, centerline = NULL) {
 # ---- Cross-check mod qicharts2's egen runs.analysis (intern) ----
 # qicharts2 har ej eksporteret runs.analysis. Vi sammenligner via qic()-objektet,
 # som indeholder summary-data inkl. longest.run + n.crossings.
+# BEMÆRK: ingen tryCatch — fejler scriptet her, er cross-checket ugyldigt,
+# og fixtures må ikke genereres. (Tidligere version sendte et ugyldigt
+# `plot.chart`-argument og producerede tomme checks i al stilhed.)
 qic_cross_check <- function(values) {
-  q <- suppressMessages(qicharts2::qic(values, chart = "run", plot.chart = FALSE))
-  s <- summary(q)
+  s <- summary(suppressMessages(qicharts2::qic(values, chart = "run")))
   list(
     longest_run   = as.integer(s$longest.run),
     n_crossings   = as.integer(s$n.crossings),
     runs_signal   = as.logical(s$runs.signal)
   )
+}
+
+# Stop hårdt hvis replika og qicharts2 er uenige om en fixture.
+assert_cross_check <- function(name, stats, qcheck) {
+  same_int <- function(a, b) (is.na(a) && is.na(b)) || identical(as.integer(a), as.integer(b))
+  replica_sig <- isTRUE(stats$long_run_signal) || isTRUE(stats$few_crossings_signal)
+  ok <- same_int(stats$longest_run, qcheck$longest_run) &&
+    same_int(stats$n_crossings, qcheck$n_crossings) &&
+    identical(replica_sig, isTRUE(qcheck$runs_signal))
+  if (!ok) {
+    stop(sprintf(
+      "Cross-check FEJLEDE for '%s': replica(lr=%s, cr=%s, sig=%s) vs qicharts2(lr=%s, cr=%s, sig=%s)",
+      name, stats$longest_run, stats$n_crossings, replica_sig,
+      qcheck$longest_run, qcheck$n_crossings, qcheck$runs_signal
+    ), call. = FALSE)
+  }
 }
 
 # ---- Test-cases ----
@@ -132,7 +150,8 @@ cases <- list(
 fixtures <- lapply(names(cases), function(name) {
   vals  <- cases[[name]]
   stats <- anhoj_stats(vals)
-  qcheck <- tryCatch(qic_cross_check(vals), error = function(e) NULL)
+  qcheck <- qic_cross_check(vals)
+  assert_cross_check(name, stats, qcheck)
 
   list(
     name              = name,

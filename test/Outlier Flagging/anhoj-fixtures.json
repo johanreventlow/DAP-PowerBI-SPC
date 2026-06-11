@@ -12,7 +12,11 @@
       "long_run_signal": false,
       "few_crossings_signal": false
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 2,
+      "n_crossings": 15,
+      "runs_signal": false
+    }
   },
   {
     "name": "long_run_only",
@@ -27,7 +31,11 @@
       "long_run_signal": true,
       "few_crossings_signal": true
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 9,
+      "n_crossings": 2,
+      "runs_signal": true
+    }
   },
   {
     "name": "few_crossings_only",
@@ -42,7 +50,11 @@
       "long_run_signal": true,
       "few_crossings_signal": true
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 8,
+      "n_crossings": 1,
+      "runs_signal": true
+    }
   },
   {
     "name": "both_signals",
@@ -57,7 +69,11 @@
       "long_run_signal": true,
       "few_crossings_signal": true
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 8,
+      "n_crossings": 1,
+      "runs_signal": true
+    }
   },
   {
     "name": "on_median_edge",
@@ -72,7 +88,11 @@
       "long_run_signal": false,
       "few_crossings_signal": false
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 2,
+      "n_crossings": 6,
+      "runs_signal": false
+    }
   },
   {
     "name": "minimal_series",
@@ -87,7 +107,11 @@
       "long_run_signal": false,
       "few_crossings_signal": false
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 4,
+      "n_crossings": 1,
+      "runs_signal": false
+    }
   },
   {
     "name": "alternating",
@@ -102,7 +126,11 @@
       "long_run_signal": false,
       "few_crossings_signal": false
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 1,
+      "n_crossings": 15,
+      "runs_signal": false
+    }
   },
   {
     "name": "all_one_side",
@@ -117,7 +145,11 @@
       "long_run_signal": false,
       "few_crossings_signal": false
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 5,
+      "n_crossings": 5,
+      "runs_signal": false
+    }
   },
   {
     "name": "boundary_run_at_max",
@@ -132,7 +164,11 @@
       "long_run_signal": false,
       "few_crossings_signal": false
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 7,
+      "n_crossings": 8,
+      "runs_signal": false
+    }
   },
   {
     "name": "boundary_run_over_max",
@@ -147,7 +183,11 @@
       "long_run_signal": true,
       "few_crossings_signal": false
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 8,
+      "n_crossings": 6,
+      "runs_signal": true
+    }
   },
   {
     "name": "boundary_crossings_at_min",
@@ -162,7 +202,11 @@
       "long_run_signal": false,
       "few_crossings_signal": false
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 4,
+      "n_crossings": 6,
+      "runs_signal": false
+    }
   },
   {
     "name": "boundary_crossings_below_min",
@@ -177,7 +221,11 @@
       "long_run_signal": false,
       "few_crossings_signal": true
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 4,
+      "n_crossings": 5,
+      "runs_signal": true
+    }
   },
   {
     "name": "large_n_normal",
@@ -192,7 +240,11 @@
       "long_run_signal": false,
       "few_crossings_signal": false
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": 2,
+      "n_crossings": 49,
+      "runs_signal": false
+    }
   },
   {
     "name": "all_ties",
@@ -207,6 +259,10 @@
       "long_run_signal": false,
       "few_crossings_signal": false
     },
-    "qicharts2_check": {}
+    "qicharts2_check": {
+      "longest_run": "NA",
+      "n_crossings": "NA",
+      "runs_signal": false
+    }
   }
 ]
