@@ -20,3 +20,7 @@
 - [x] 3.1 Grep-sweep for oversete engelske labels i bruger-vendte filer
 - [x] 3.2 NEWS + version-bump + `pbiviz package`
 - [ ] 3.3 **[MANUELT TRIN]** Power BI: panel/felt-brønde/tooltip/tabel/fejl på dansk; æøå rendres korrekt; gemte settings virker
+
+## 4. Opfølgning 2026-06-11 — dansk talformat
+
+- [x] 4.1 Ny `toFixedComma`-helper; anvendt i valueFormatter (tooltips/tabel), drawSummaryTable og drawYAxis — alle viste tal bruger komma som decimalmarkør

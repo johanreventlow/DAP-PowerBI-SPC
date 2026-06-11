@@ -1,6 +1,7 @@
 import type { settingsValueType } from "../settings";
 import type derivedSettingsClass from "../Classes/derivedSettingsClass";
 import isNullOrUndefined from "./isNullOrUndefined";
+import toFixedComma from "./toFixedComma";
 
 const formatValues = function<T>(value: T, name: string,
                                         inputSettings: settingsValueType,
@@ -14,10 +15,10 @@ const formatValues = function<T>(value: T, name: string,
     case "date":
       return value as string;
     case "integer": {
-      return (value as number).toFixed(derivedSettings.chart_type_props.integer_num_den ? 0 : sig_figs);
+      return toFixedComma(value as number, derivedSettings.chart_type_props.integer_num_den ? 0 : sig_figs);
     }
     default:
-      return (value as number).toFixed(sig_figs) + suffix;
+      return toFixedComma(value as number, sig_figs) + suffix;
   }
 }
 

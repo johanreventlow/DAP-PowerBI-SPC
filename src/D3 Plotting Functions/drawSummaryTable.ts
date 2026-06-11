@@ -1,6 +1,7 @@
 import type { plotData, plotDataGrouped, summaryTableRowData } from "../Classes/viewModelClass";
 import type { divBaseType, Visual } from "../visual";
 import * as d3 from "./D3 Modules";
+import toFixedComma from "../Functions/toFixedComma";
 import type { settingsValueType } from "../settings";
 import identitySelected from "../Functions/identitySelected";
 
@@ -137,7 +138,7 @@ function drawTableCells(selection: divBaseType, cols: { name: string; label: str
     const parentNode = d3.select(currNode.property("parentNode"));
     const rowData = parentNode.datum() as plotData;
     const value: string = typeof d.value === "number"
-      ? d.value.toFixed(inputSettings.spc.sig_figs)
+      ? toFixedComma(d.value, inputSettings.spc.sig_figs)
       : (d.value ?? "");
 
     currNode.text(value).classed("cell-text", true);
