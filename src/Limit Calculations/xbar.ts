@@ -46,7 +46,6 @@ import type { controlLimitsObject, controlLimitsArgs } from "../Classes/viewMode
  *   - values: The subgroup means (plotted on the chart)
  *   - targets: The centreline (grand mean) for each point
  *   - ll99/ul99: Lower/Upper 3-sigma control limits
- *   - ll95/ul95: Lower/Upper 2-sigma warning limits
  *   - count: The sample size for each subgroup
  *
  * @example
@@ -104,8 +103,6 @@ export default function xbarLimits(args: Readonly<controlLimitsArgs>): controlLi
     values: args.numerators,           // The plotted values (subgroup means)
     targets: new Array<number>(n), // Centreline (grand mean)
     ll99: new Array<number>(n),    // Lower 3-sigma limit
-    ll95: new Array<number>(n),    // Lower 2-sigma limit
-    ul95: new Array<number>(n),    // Upper 2-sigma limit
     ul99: new Array<number>(n),    // Upper 3-sigma limit
     count: args.denominators!         // Sample sizes for reference
   }
@@ -119,13 +116,10 @@ export default function xbarLimits(args: Readonly<controlLimitsArgs>): controlLi
     //                  (2) bias correction via c4
     //                  (3) 3-sigma multiplier
     const sigma: number = (a3(count_per_group[i]) * sd) / 3;
-    const twoSigma: number = sigma * 2;
     const threeSigma: number = sigma * 3;
 
     rtn.targets[i] = cl;                      // Centreline (grand mean)
     rtn.ll99![i] = cl - threeSigma;                 // Lower 3-sigma limit
-    rtn.ll95![i] = cl - twoSigma;       // Lower 2-sigma limit
-    rtn.ul95![i] = cl + twoSigma;       // Upper 2-sigma limit
     rtn.ul99![i] = cl + threeSigma;                 // Upper 3-sigma limit
   }
 

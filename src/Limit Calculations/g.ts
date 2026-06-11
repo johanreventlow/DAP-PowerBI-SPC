@@ -42,7 +42,6 @@ import median from "../Functions/median";
  *   - values: The count values (plotted on the chart)
  *   - targets: The median value for each point (used as centreline for display)
  *   - ll99/ul99: Lower/Upper 3-sigma control limits
- *   - ll95/ul95: Lower/Upper 2-sigma warning limits
  *
  * @example
  * // For days between infections [5, 12, 8, 15, 3] with mean ḡ = 8.6:
@@ -89,12 +88,9 @@ export default function gLimits(args: Readonly<controlLimitsArgs>): controlLimit
     values: args.numerators,           // The plotted values (counts)
     targets: new Array<number>(n),     // Centreline (median for display)
     ll99: new Array<number>(n),        // Lower 3-sigma limit
-    ll95: new Array<number>(n),        // Lower 2-sigma limit
-    ul95: new Array<number>(n),        // Upper 2-sigma limit
     ul99: new Array<number>(n)         // Upper 3-sigma limit
   }
 
-  const ul95: number = cl + 2 * sigma;
   const ul99: number = cl + 3 * sigma;
 
   // Calculate control limits for each point
@@ -102,9 +98,7 @@ export default function gLimits(args: Readonly<controlLimitsArgs>): controlLimit
   // Lower limits are 0 because counts cannot be negative
   for (let i = 0; i < n; i++) {
     rtn.targets[i] = median_val;        // Use median as centreline for display
-    rtn.ll95![i] = 0;
     rtn.ll99![i] = 0;
-    rtn.ul95![i] = ul95;       // 2σ upper limit: ḡ + 2σ
     rtn.ul99![i] = ul99;       // UCL: ḡ + 3σ
   }
 

@@ -21,7 +21,6 @@ import isNullOrUndefined from "../Functions/isNullOrUndefined";
  * **Control Limits:**
  * - Upper Control Limit (3σ): $UCL = D_4 \times \overline{MR} = 3.267 \times \overline{MR}$
  * - Lower Control Limit: $LCL = 0$ (moving ranges cannot be negative)
- * - 2σ limits: $\overline{MR} \times \frac{2 \times 3.267}{3} = 2.178 \times \overline{MR}$
  *
  * where $D_4 = 3.267$ is the control chart constant for a moving range of size 2.
  *
@@ -81,15 +80,11 @@ export default function mrLimits(args: Readonly<controlLimitsArgs>): controlLimi
     denominators: useRatio ? args.denominators!.slice(1) : undefined, // Original denominators (if ratio), exclude first
     targets: new Array<number>(n_mr),                           // Centreline (mean moving range)
     ll99: new Array<number>(n_mr),                              // Lower 3σ limit (always 0)
-    ll95: new Array<number>(n_mr),                              // Lower 2σ limit (always 0)
-    ul95: new Array<number>(n_mr),                              // Upper 2σ limit
     ul99: new Array<number>(n_mr)                               // Upper 3σ limit
   }
 
   const sigma: number = 3.267 / 3;
-  const twoSigma: number = 2 * sigma;
   const threeSigma: number = 3 * sigma;
-  const ul95: number = cl * twoSigma;
   const ul99: number = cl * threeSigma;
 
   // Populate arrays with moving ranges and control limits
@@ -102,8 +97,6 @@ export default function mrLimits(args: Readonly<controlLimitsArgs>): controlLimi
     }
     rtn.targets[i] = cl;                        // Centreline: MR̄
     rtn.ll99![i] = 0;                            // LCL: 0
-    rtn.ll95![i] = 0;                            // 2σ lower: 0
-    rtn.ul95![i] = ul95;         // 2σ upper: 2.178 × MR̄
     rtn.ul99![i] = ul99;                   // UCL: 3.267 × MR̄ (D4 constant)
   }
 

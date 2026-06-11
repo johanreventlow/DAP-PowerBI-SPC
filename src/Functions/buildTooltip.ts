@@ -78,7 +78,7 @@ export default function buildTooltip(table_row: summaryTableRowData,
     })
   }
   if (derivedSettings.chart_type_props.has_control_limits) {
-    ["95", "99"].forEach(limit => {
+    ["99"].forEach(limit => {
       if (inputSettings.lines[`ttip_show_${limit}` as LinesKeys] && inputSettings.lines[`show_${limit}` as LinesKeys]) {
         tooltip.push({
           displayName: `${inputSettings.lines[`ttip_label_${limit}_prefix_lower` as LinesKeys]}${inputSettings.lines[`ttip_label_${limit}` as LinesKeys]}`,

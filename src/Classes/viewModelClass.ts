@@ -49,8 +49,6 @@ export type summaryTableRowData = {
   target: number | undefined;
   alt_target: number | undefined;
   ll99: number | undefined;
-  ll95: number | undefined;
-  ul95: number | undefined;
   ul99: number | undefined;
   astpoint: string;
 }
@@ -63,8 +61,6 @@ export type summaryTableRowDataGrouped = {
   target: number;
   alt_target: number;
   ucl99: number;
-  ucl95: number;
-  lcl95: number;
   lcl99: number;
 }
 
@@ -103,8 +99,6 @@ export type controlLimitsObject = {
   denominators?: (number | undefined)[];
   targets: (number | undefined)[];
   ll99?: (number | undefined)[];
-  ll95?: (number | undefined)[];
-  ul95?: (number | undefined)[];
   ul99?: (number | undefined)[];
   count?: (number | undefined)[];
   alt_targets?: (number | undefined)[];
@@ -439,7 +433,7 @@ export default class viewModelClass {
     if (lineSettings.show_alt_target) {
       tableColumnsDef.push({ name: "alt_target", label: lineSettings.ttip_label_alt_target });
     }
-    ["99", "95"].forEach(limit => {
+    ["99"].forEach(limit => {
       if (lineSettings[`show_${limit}` as LineSettingsKeys]) {
         tableColumnsDef.push({
           name: `ucl${limit}`,
@@ -447,7 +441,7 @@ export default class viewModelClass {
         })
       }
     });
-    ["95", "99"].forEach(limit => {
+    ["99"].forEach(limit => {
       if (lineSettings[`show_${limit}` as LineSettingsKeys]) {
         tableColumnsDef.push({
           name: `lcl${limit}`,
@@ -486,8 +480,6 @@ export default class viewModelClass {
       table_row_entries.push(["target", formatValues(limits.targets?.[lastIndex], "value")]);
       table_row_entries.push(["alt_target", formatValues(limits.alt_targets?.[lastIndex], "value")]);
       table_row_entries.push(["ucl99", formatValues(limits.ul99?.[lastIndex], "value")]);
-      table_row_entries.push(["ucl95", formatValues(limits.ul95?.[lastIndex], "value")]);
-      table_row_entries.push(["lcl95", formatValues(limits.ll95?.[lastIndex], "value")]);
       table_row_entries.push(["lcl99", formatValues(limits.ll99?.[lastIndex], "value")]);
 
       if (anyTooltips && !isNullOrUndefined(this.inputData[i].tooltips)) {
@@ -547,9 +539,6 @@ export default class viewModelClass {
         this.tableColumns[0].push({ name: "ll99", label: "Nedre 99%" },
                                { name: "ul99", label: "Øvre 99%" });
       }
-      if (settings.lines.show_95) {
-        this.tableColumns[0].push({ name: "ll95", label: "Nedre 95%" }, { name: "ul95", label: "Øvre 95%" });
-      }
     }
 
     if (settings.outliers.astronomical) {
@@ -575,8 +564,6 @@ export default class viewModelClass {
         target: controlLimits.targets[i],
         alt_target: controlLimits.alt_targets?.[i],
         ll99: controlLimits?.ll99?.[i],
-        ll95: controlLimits?.ll95?.[i],
-        ul95: controlLimits?.ul95?.[i],
         ul99: controlLimits?.ul99?.[i],
         astpoint: outliers.astpoint[i],
 
@@ -626,9 +613,6 @@ export default class viewModelClass {
     if (derivedSettings.chart_type_props.has_control_limits) {
       if (settings.lines.show_99) {
         labels.push("ll99", "ul99");
-      }
-      if (settings.lines.show_95) {
-        labels.push("ll95", "ul95");
       }
     }
 
@@ -704,7 +688,7 @@ export default class viewModelClass {
     let lines_to_scale: Exclude<keyof controlLimitsObject, "keys">[] = ["values", "targets"];
 
     if (derivedSettings.chart_type_props.has_control_limits) {
-      lines_to_scale = lines_to_scale.concat(["ll99", "ll95", "ul95", "ul99"]);
+      lines_to_scale = lines_to_scale.concat(["ll99", "ul99"]);
     }
 
     let lines_to_truncate: Exclude<keyof controlLimitsObject, "keys">[] = lines_to_scale;

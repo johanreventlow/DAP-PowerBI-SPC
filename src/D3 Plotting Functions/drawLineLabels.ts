@@ -13,15 +13,11 @@ const positionOffsetMap: Record<string, number> = {
 
 const outsideMap: Record<string, string> = {
   "ll99" : "below",
-  "ll95" : "below",
-  "ul95" : "above",
   "ul99" : "above",
 }
 
 const insideMap: Record<string, string> = {
   "ll99" : "above",
-  "ll95" : "above",
-  "ul95" : "below",
   "ul99" : "below",
 }
 

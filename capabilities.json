@@ -217,9 +217,6 @@
         "band_opacity_99": {
           "type" : { "numeric": true }
         },
-        "show_95": {
-          "type" : { "bool" : true }
-        },
         "show_main": {
           "type" : { "bool" : true }
         },
@@ -230,9 +227,6 @@
           "type" : { "bool" : true }
         },
         "width_99": {
-          "type": { "numeric": true }
-        },
-        "width_95": {
           "type": { "numeric": true }
         },
         "width_main": {
@@ -247,9 +241,6 @@
         "type_99": {
           "type": { "enumeration" : [ ] }
         },
-        "type_95": {
-          "type": { "enumeration" : [ ] }
-        },
         "type_main": {
           "type": { "enumeration" : [ ] }
         },
@@ -262,9 +253,6 @@
         "colour_99":{
           "type": { "fill": { "solid": { "color": true } } }
         },
-        "colour_95":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
         "colour_main":{
           "type": { "fill": { "solid": { "color": true } } }
         },
@@ -275,9 +263,6 @@
           "type": { "fill": { "solid": { "color": true } } }
         },
         "ttip_show_99": {
-          "type" : { "bool" : true }
-        },
-        "ttip_show_95": {
           "type" : { "bool" : true }
         },
         "ttip_show_target": {
@@ -295,15 +280,6 @@
         "ttip_label_99_prefix_upper": {
           "type": { "text": true }
         },
-        "ttip_label_95": {
-          "type": { "text": true }
-        },
-        "ttip_label_95_prefix_lower": {
-          "type": { "text": true }
-        },
-        "ttip_label_95_prefix_upper": {
-          "type": { "text": true }
-        },
         "ttip_label_target": {
           "type": { "text": true }
         },
@@ -314,12 +290,6 @@
           "type": { "numeric": true }
         },
         "opacity_unselected_99": {
-          "type": { "numeric": true }
-        },
-        "opacity_95": {
-          "type": { "numeric": true }
-        },
-        "opacity_unselected_95": {
           "type": { "numeric": true }
         },
         "opacity_main": {
@@ -349,9 +319,6 @@
         "plot_label_show_99": {
           "type": { "bool": true }
         },
-        "plot_label_show_95": {
-          "type": { "bool": true }
-        },
         "plot_label_show_main": {
           "type": { "bool": true }
         },
@@ -362,9 +329,6 @@
           "type": { "bool": true }
         },
         "plot_label_show_all_99": {
-          "type": { "bool": true }
-        },
-        "plot_label_show_all_95": {
           "type": { "bool": true }
         },
         "plot_label_show_all_main": {
@@ -379,9 +343,6 @@
         "plot_label_show_n_99": {
           "type": { "numeric": true }
         },
-        "plot_label_show_n_95": {
-          "type": { "numeric": true }
-        },
         "plot_label_show_n_main": {
           "type": { "numeric": true }
         },
@@ -392,9 +353,6 @@
           "type": { "numeric": true }
         },
         "plot_label_position_99": {
-          "type": { "enumeration" : [ ] }
-        },
-        "plot_label_position_95": {
           "type": { "enumeration" : [ ] }
         },
         "plot_label_position_main": {
@@ -409,9 +367,6 @@
         "plot_label_vpad_99": {
           "type": { "numeric": true }
         },
-        "plot_label_vpad_95": {
-          "type": { "numeric": true }
-        },
         "plot_label_vpad_main": {
           "type": { "numeric": true }
         },
@@ -422,9 +377,6 @@
           "type": { "numeric": true }
         },
         "plot_label_hpad_99": {
-          "type": { "numeric": true }
-        },
-        "plot_label_hpad_95": {
           "type": { "numeric": true }
         },
         "plot_label_hpad_main": {
@@ -439,9 +391,6 @@
         "plot_label_font_99": {
           "type": { "formatting": { "fontFamily": true } }
         },
-        "plot_label_font_95": {
-          "type": { "formatting": { "fontFamily": true } }
-        },
         "plot_label_font_main": {
           "type": { "formatting": { "fontFamily": true } }
         },
@@ -452,9 +401,6 @@
           "type": { "formatting": { "fontFamily": true } }
         },
         "plot_label_size_99": {
-          "type": { "formatting": { "fontSize": true } }
-        },
-        "plot_label_size_95": {
           "type": { "formatting": { "fontSize": true } }
         },
         "plot_label_size_main": {
@@ -469,9 +415,6 @@
         "plot_label_colour_99":{
           "type": { "fill": { "solid": { "color": true } } }
         },
-        "plot_label_colour_95":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
         "plot_label_colour_main":{
           "type": { "fill": { "solid": { "color": true } } }
         },
@@ -484,9 +427,6 @@
         "plot_label_prefix_99": {
           "type": { "text": true }
         },
-        "plot_label_prefix_95": {
-          "type": { "text": true }
-        },
         "plot_label_prefix_main": {
           "type": { "text": true }
         },
@@ -497,9 +437,6 @@
           "type": { "text": true }
         },
         "join_rebaselines_99": {
-          "type": { "bool": true }
-        },
-        "join_rebaselines_95": {
           "type": { "bool": true }
         },
         "join_rebaselines_main": {
