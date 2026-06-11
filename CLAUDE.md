@@ -1,0 +1,96 @@
+# PowerBI-SPC — Anhøj-version
+
+## Project Overview
+
+**Type:** TypeScript / Power BI Visual
+**Stack:** TypeScript, Power BI Visuals SDK (`powerbi-visuals-api`), D3,
+Karma + Jasmine
+**Build:** `pbiviz package`
+**Origin:** Fork af [AUS-DOH-Safety-and-Quality/PowerBI-SPC](https://github.com/AUS-DOH-Safety-and-Quality/PowerBI-SPC)
+**Licens:** GPL-3.0 (arvet)
+
+**Mål:** Modificér forken til at implementere udelukkende **Anhøj-reglerne**
+(median-centerline + unusually long run + unusually few crossings).
+Reference-implementation: R-pakken `qicharts2`.
+
+**Fuld projektkontekst:** `docs/spc-anhoj-context.md` (gitignoreret —
+intern briefing fra planlægningsfase).
+
+---
+
+## Tier 2 Profil-imports
+
+@~/.claude/rules-profiles/typescript/TYPESCRIPT_STANDARDS.md
+@~/.claude/rules-profiles/typescript/POWERBI_VISUAL_STANDARDS.md
+
+---
+
+## Projekt-specifikke konventioner
+
+### Bevar upstream-kompatibilitet i Fase 1
+
+Tilføj Anhøj-funktionalitet i **nye filer** fremfor at modificere
+eksisterende, hvor muligt. Lettere upstream-merge fra AUS-DOH.
+
+Fase 2 (fjernelser) divergerer bevidst fra upstream.
+
+### Faseplan
+
+| Fase | Beskrivelse | Status |
+|------|-------------|--------|
+| F0 | Build virker (Mac) | TODO |
+| F1 | Tilføj Anhøj-regler additivt + sammenligningstest | TODO |
+| F2 | Fjern `astronomical`, `trend`, `twoInThree`, NHS-ikoner | TODO |
+| F3 | Rebrand + dokumentation | TODO |
+
+Detaljer: `docs/spc-anhoj-context.md` §6.
+
+### Centrale integrationspunkter
+
+- `src/Classes/viewModelClass.ts:833-896` — `flagOutliers` (regel-orchestration)
+- `src/Outlier Flagging/` — ny regel-fil følger samme signatur:
+  `(val: readonly number[], ...) => string[]` af `"upper" | "lower" | "none"`
+- `src/Limit Calculations/run.ts` + `i_mm.ts` — median-centerline-skabeloner
+- `src/settings.ts:259-345` — outlier-settings (Toggle + farver + params)
+
+### Test-strategi
+
+Mac har ej Power BI Desktop → Karma/Jasmine = primær validering.
+Reference-datasæt fra `qicharts2` (R) hardkodes som JSON-fixtures →
+assert mod TypeScript-implementation.
+
+### Anhøj-regler — formler (jf. qicharts2)
+
+```
+longest_run_max  = round(log2(n_useful)) + 3
+n_crossings_min  = qbinom(0.05, n_useful - 1, 0.5)
+```
+
+`n_useful` = observationer ej præcis på medianen. `qbinom` mangler i
+JS — egen impl sandsynligvis enklere (repo har allerede `lgamma`).
+
+---
+
+## Workflow
+
+- **Branches:** `feat/anhoj-*`, `refactor/remove-non-anhoj-*`, `chore/*`
+- **PR-format:** `--draft` default (jf. global GIT_WORKFLOW.md)
+- **OpenSpec:** Brug `/opsx:propose` for non-trivielle ændringer
+  (Anhøj-rule-tilføjelser kvalificerer)
+- **Versioning:** Pre-1.0, `pbiviz.json` + `package.json` versions
+  synkront (jf. POWERBI_VISUAL_STANDARDS.md)
+
+---
+
+## Kodepræferencer (projekt-niveau)
+
+- Write the absolute minimum code required
+- No sweeping changes; no unrelated edits
+- Focus on task at hand
+- Make code precise, modular, testable
+- Don't break existing functionality (Fase 1; Fase 2 fjerner eksplicit)
+- Hvis Johan skal gøre noget manuelt: sig det klart med **[MANUELT TRIN]**
+
+---
+
+**Sidst opdateret:** 2026-05-19
