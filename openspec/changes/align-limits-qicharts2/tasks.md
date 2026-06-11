@@ -5,11 +5,11 @@ Settings + capabilities ændres ALTID synkront i samme commit.
 
 ## 1. Commit 1 — fjern 68%-grænser (1σ)
 
-- [ ] 1.1 `linesSettings.ts`: slet "68% Limits"-gruppen; `capabilities.json`: slet alle `*_68`-properties synkront
-- [ ] 1.2 `Limit Calculations/*.ts` (14 filer): fjern ll68/ul68-beregning; `controlLimitsObject`: fjern ll68/ul68-felter
-- [ ] 1.3 `viewModelClass.ts`: `["68","95","99"]`-loops → `["95","99"]`; tabel-kolonner, truncate/scale-lister, `summaryTableRowData.ll68/ul68` + grouped `ucl68/lcl68`
-- [ ] 1.4 Ryd 68-referencer i `plotPropertiesClass.ts`, `drawLineLabels.ts`, `getAesthetic.ts`, `buildTooltip.ts`, `drawLines`-line-keys
-- [ ] 1.5 Verifikation: tsc rent + vitest grøn → commit
+- [x] 1.1 `linesSettings.ts`: slet "68% Limits"-gruppen; `capabilities.json`: slet alle `*_68`-properties synkront
+- [x] 1.2 `Limit Calculations/*.ts` (14 filer): fjern ll68/ul68-beregning; `controlLimitsObject`: fjern ll68/ul68-felter
+- [x] 1.3 `viewModelClass.ts`: `["68","95","99"]`-loops → `["95","99"]`; tabel-kolonner, truncate/scale-lister, `summaryTableRowData.ll68/ul68` + grouped `ucl68/lcl68`
+- [x] 1.4 Ryd 68-referencer i `plotPropertiesClass.ts`, `drawLineLabels.ts`, `getAesthetic.ts`, `buildTooltip.ts`, `drawLines`-line-keys
+- [x] 1.5 Verifikation: tsc rent + vitest grøn → commit
 
 ## 2. Commit 2 — 95% default fra
 

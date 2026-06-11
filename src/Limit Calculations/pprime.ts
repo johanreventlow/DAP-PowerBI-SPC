@@ -47,7 +47,6 @@ import type { controlLimitsObject, controlLimitsArgs } from "../Classes/viewMode
  *   - targets: The centreline (overall proportion) for each point
  *   - ll99/ul99: Lower/Upper 3-sigma control limits (truncated at 0 and 1)
  *   - ll95/ul95: Lower/Upper 2-sigma warning limits (truncated at 0 and 1)
- *   - ll68/ul68: Lower/Upper 1-sigma limits (truncated at 0 and 1)
  */
 export default function pprimeLimits(args: Readonly<controlLimitsArgs>): controlLimitsObject {
   // Extract input arrays from arguments
@@ -125,8 +124,6 @@ export default function pprimeLimits(args: Readonly<controlLimitsArgs>): control
     targets: new Array<number>(n),                         // Centreline (overall proportion)
     ll99: new Array<number>(n),                            // Lower 3-sigma limit
     ll95: new Array<number>(n),                            // Lower 2-sigma limit
-    ll68: new Array<number>(n),                            // Lower 1-sigma limit
-    ul68: new Array<number>(n),                            // Upper 1-sigma limit
     ul95: new Array<number>(n),                            // Upper 2-sigma limit
     ul99: new Array<number>(n)                             // Upper 3-sigma limit
   }
@@ -142,8 +139,6 @@ export default function pprimeLimits(args: Readonly<controlLimitsArgs>): control
     rtn.targets[i] = cl;                                   // Centreline: p̄
     rtn.ll99![i] = Math.max(0, cl - threeSigma);             // LCL: max(0, p̄ - 3σ)
     rtn.ll95![i] = Math.max(0, cl - twoSigma);             // 2σ lower: max(0, p̄ - 2σ)
-    rtn.ll68![i] = Math.max(0, cl - sigma);             // 1σ lower: max(0, p̄ - σ)
-    rtn.ul68![i] = Math.min(1, cl + sigma);             // 1σ upper: min(1, p̄ + σ)
     rtn.ul95![i] = Math.min(1, cl + twoSigma);             // 2σ upper: min(1, p̄ + 2σ)
     rtn.ul99![i] = Math.min(1, cl + threeSigma);             // UCL: min(1, p̄ + 3σ)
   }

@@ -47,7 +47,6 @@ import type { controlLimitsObject, controlLimitsArgs } from "../Classes/viewMode
  *   - targets: The centreline (grand mean) for each point
  *   - ll99/ul99: Lower/Upper 3-sigma control limits
  *   - ll95/ul95: Lower/Upper 2-sigma warning limits
- *   - ll68/ul68: Lower/Upper 1-sigma limits
  *   - count: The sample size for each subgroup
  *
  * @example
@@ -106,8 +105,6 @@ export default function xbarLimits(args: Readonly<controlLimitsArgs>): controlLi
     targets: new Array<number>(n), // Centreline (grand mean)
     ll99: new Array<number>(n),    // Lower 3-sigma limit
     ll95: new Array<number>(n),    // Lower 2-sigma limit
-    ll68: new Array<number>(n),    // Lower 1-sigma limit
-    ul68: new Array<number>(n),    // Upper 1-sigma limit
     ul95: new Array<number>(n),    // Upper 2-sigma limit
     ul99: new Array<number>(n),    // Upper 3-sigma limit
     count: args.denominators!         // Sample sizes for reference
@@ -128,8 +125,6 @@ export default function xbarLimits(args: Readonly<controlLimitsArgs>): controlLi
     rtn.targets[i] = cl;                      // Centreline (grand mean)
     rtn.ll99![i] = cl - threeSigma;                 // Lower 3-sigma limit
     rtn.ll95![i] = cl - twoSigma;       // Lower 2-sigma limit
-    rtn.ll68![i] = cl - sigma;           // Lower 1-sigma limit
-    rtn.ul68![i] = cl + sigma;           // Upper 1-sigma limit
     rtn.ul95![i] = cl + twoSigma;       // Upper 2-sigma limit
     rtn.ul99![i] = cl + threeSigma;                 // Upper 3-sigma limit
   }

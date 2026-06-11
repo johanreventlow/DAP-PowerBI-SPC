@@ -41,7 +41,6 @@ import type { controlLimitsObject, controlLimitsArgs } from "../Classes/viewMode
  *   - targets: The centreline (overall proportion) for each point
  *   - ll99/ul99: Lower/Upper 3-sigma control limits (varying with sample size)
  *   - ll95/ul95: Lower/Upper 2-sigma warning limits
- *   - ll68/ul68: Lower/Upper 1-sigma limits
  *
  * @example
  * // For 10 defectives out of 100 samples, p̄ = 0.10:
@@ -85,8 +84,6 @@ export default function pLimits(args: Readonly<controlLimitsArgs>): controlLimit
     targets: new Array<number>(n),      // Centreline (overall proportion)
     ll99: new Array<number>(n),         // Lower 3-sigma limit
     ll95: new Array<number>(n),         // Lower 2-sigma limit
-    ll68: new Array<number>(n),         // Lower 1-sigma limit
-    ul68: new Array<number>(n),         // Upper 1-sigma limit
     ul95: new Array<number>(n),         // Upper 2-sigma limit
     ul99: new Array<number>(n)          // Upper 3-sigma limit
   }
@@ -107,10 +104,8 @@ export default function pLimits(args: Readonly<controlLimitsArgs>): controlLimit
     // Lower limits truncated at 0 (proportion cannot be negative)
     rtn.ll99![i] = Math.max(0, cl - threeSigma); // LCL = max(0, p̄ - 3σ)
     rtn.ll95![i] = Math.max(0, cl - twoSigma);   // 2σ lower limit
-    rtn.ll68![i] = Math.max(0, cl - sigma);      // 1σ lower limit
 
     // Upper limits truncated at 1 (proportion cannot exceed 100%)
-    rtn.ul68![i] = Math.min(1, cl + sigma);      // 1σ upper limit
     rtn.ul95![i] = Math.min(1, cl + twoSigma);   // 2σ upper limit
     rtn.ul99![i] = Math.min(1, cl + threeSigma); // UCL = min(1, p̄ + 3σ)
   }

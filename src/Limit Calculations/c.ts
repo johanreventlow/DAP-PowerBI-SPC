@@ -36,7 +36,6 @@ import type { controlLimitsObject, controlLimitsArgs } from "../Classes/viewMode
  *   - targets: The centreline (average count) for each point
  *   - ll99/ul99: Lower/Upper 3-sigma control limits
  *   - ll95/ul95: Lower/Upper 2-sigma warning limits
- *   - ll68/ul68: Lower/Upper 1-sigma limits
  *
  * @example
  * // For counts [5, 8, 3, 6, 4] with mean c̄ = 5.2:
@@ -73,8 +72,6 @@ export default function cLimits(args: Readonly<controlLimitsArgs>): controlLimit
     targets: new Array<number>(n), // Centreline (average count)
     ll99: new Array<number>(n),    // Lower 3-sigma limit
     ll95: new Array<number>(n),    // Lower 2-sigma limit
-    ll68: new Array<number>(n),    // Lower 1-sigma limit
-    ul68: new Array<number>(n),    // Upper 1-sigma limit
     ul95: new Array<number>(n),    // Upper 2-sigma limit
     ul99: new Array<number>(n)     // Upper 3-sigma limit
   }
@@ -83,8 +80,6 @@ export default function cLimits(args: Readonly<controlLimitsArgs>): controlLimit
   const threeSigma: number = 3 * sigma;
   const ll99: number = Math.max(0, cl - threeSigma);
   const ll95: number = Math.max(0, cl - twoSigma);
-  const ll68: number = Math.max(0, cl - sigma);
-  const ul68: number = cl + sigma;
   const ul95: number = cl + twoSigma;
   const ul99: number = cl + threeSigma;
 
@@ -95,8 +90,6 @@ export default function cLimits(args: Readonly<controlLimitsArgs>): controlLimit
     rtn.targets[i] = cl;
     rtn.ll99![i] = ll99; // LCL = max(0, c̄ - 3σ)
     rtn.ll95![i] = ll95; // 2σ lower limit
-    rtn.ll68![i] = ll68; // 1σ lower limit
-    rtn.ul68![i] = ul68;                          // 1σ upper limit
     rtn.ul95![i] = ul95;                          // 2σ upper limit
     rtn.ul99![i] = ul99;                          // UCL = c̄ + 3σ
   }

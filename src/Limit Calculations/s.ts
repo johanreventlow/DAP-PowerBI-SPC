@@ -42,7 +42,6 @@ import type { controlLimitsObject, controlLimitsArgs } from "../Classes/viewMode
  *   - targets: The centreline (pooled standard deviation) for each point
  *   - ll99/ul99: Lower/Upper 3-sigma control limits
  *   - ll95/ul95: Lower/Upper 2-sigma warning limits
- *   - ll68/ul68: Lower/Upper 1-sigma limits
  *
  * @example
  * // For 3 subgroups with SDs [2.0, 1.5, 1.8] and sizes [10, 10, 10]:
@@ -87,8 +86,6 @@ export default function sLimits(args: Readonly<controlLimitsArgs>): controlLimit
     targets: new Array<number>(n), // Centreline (pooled SD)
     ll99: new Array<number>(n),    // Lower 3-sigma limit
     ll95: new Array<number>(n),    // Lower 2-sigma limit
-    ll68: new Array<number>(n),    // Lower 1-sigma limit
-    ul68: new Array<number>(n),    // Upper 1-sigma limit
     ul95: new Array<number>(n),    // Upper 2-sigma limit
     ul99: new Array<number>(n)     // Upper 3-sigma limit
   }
@@ -105,8 +102,6 @@ export default function sLimits(args: Readonly<controlLimitsArgs>): controlLimit
     rtn.targets[i] = cl;
     rtn.ll99![i] = cl - threeSigma;   //cl * b3(count_per_group[i], 3); // 3-sigma lower limit
     rtn.ll95![i] = cl - twoSigma; // 2-sigma lower limit
-    rtn.ll68![i] = cl - sigma; // 1-sigma lower limit
-    rtn.ul68![i] = cl + sigma; // 1-sigma upper limit
     rtn.ul95![i] = cl + twoSigma; // 2-sigma upper limit
     rtn.ul99![i] = cl + threeSigma; // 3-sigma upper limit
   }

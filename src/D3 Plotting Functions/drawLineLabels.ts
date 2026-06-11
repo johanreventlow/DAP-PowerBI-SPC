@@ -14,8 +14,6 @@ const positionOffsetMap: Record<string, number> = {
 const outsideMap: Record<string, string> = {
   "ll99" : "below",
   "ll95" : "below",
-  "ll68" : "below",
-  "ul68" : "above",
   "ul95" : "above",
   "ul99" : "above",
   "speclimits_lower" : "below",
@@ -25,8 +23,6 @@ const outsideMap: Record<string, string> = {
 const insideMap: Record<string, string> = {
   "ll99" : "above",
   "ll95" : "above",
-  "ll68" : "above",
-  "ul68" : "below",
   "ul95" : "below",
   "ul99" : "below",
   "speclimits_lower" : "above",
