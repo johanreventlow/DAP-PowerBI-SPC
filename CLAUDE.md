@@ -4,7 +4,7 @@
 
 **Type:** TypeScript / Power BI Visual
 **Stack:** TypeScript, Power BI Visuals SDK (`powerbi-visuals-api`), D3,
-Karma + Jasmine
+vitest + playwright (upstream migrerede fra Karma/Jasmine i maj 2026)
 **Build:** `pbiviz package`
 **Origin:** Fork af [AUS-DOH-Safety-and-Quality/PowerBI-SPC](https://github.com/AUS-DOH-Safety-and-Quality/PowerBI-SPC)
 **Licens:** GPL-3.0 (arvet)
@@ -39,9 +39,10 @@ Fase 2 (fjernelser) divergerer bevidst fra upstream.
 | Fase | Beskrivelse | Status |
 |------|-------------|--------|
 | F0 | Build virker (Mac) | DONE |
-| F1 | Tilføj Anhøj-regler additivt + sammenligningstest | DONE (kode; Power BI-verifikation afventer Windows) |
-| F2 | Fjern `shift`, `trend`, `twoInThree`, NHS-ikoner — `astronomical` BEHOLDT (= qicharts2 `sigma.signal`) | DONE (kode) |
-| F3 | Rebrand + dokumentation | TODO |
+| F1 | Tilføj Anhøj-regler additivt + sammenligningstest | DONE + Power BI-verificeret 2026-06-11 |
+| F2 | Fjern `shift`, `trend`, `twoInThree`, NHS-ikoner — `astronomical` BEHOLDT | DONE + Power BI-verificeret 2026-06-11 |
+| F2+ | Ekstra features: stats-display, dansk UI, kontrolgrænsebånd, decimalkomma, fjern download | DONE (alle commits på `feat/anhoj-rules-f1`, build 1.7.4.34) |
+| F3 | Rebrand + dokumentation | PARKERET (Johan afventer branding-beslutning) |
 
 Detaljer: `docs/spc-anhoj-context.md` §6. **F2-scope revideret 2026-06-11**
 (empirisk qicharts2-verifikation): oprindelig plan ville fjerne
@@ -49,29 +50,33 @@ Detaljer: `docs/spc-anhoj-context.md` §6. **F2-scope revideret 2026-06-11**
 sigma-signal og IKKE har fast-n shift. Se
 `openspec/changes/remove-non-anhoj-rules/`.
 
+### GUID
+
+`BFHSPC` (skiftet fra `PBISPC` 2026-06-11 — IT har upstream-visuel org-deployet med `PBISPC`).
+GUID er låst fremover: ændring efter udrulning = alle rapporter re-konfigureres.
+
 ### Centrale integrationspunkter
 
-- `src/Classes/viewModelClass.ts:833-896` — `flagOutliers` (regel-orchestration)
-- `src/Outlier Flagging/` — ny regel-fil følger samme signatur:
-  `(val: readonly number[], ...) => string[]` af `"upper" | "lower" | "none"`
-- `src/Limit Calculations/run.ts` + `i_mm.ts` — median-centerline-skabeloner
-- `src/settings.ts:259-345` — outlier-settings (Toggle + farver + params)
+- `src/Classes/viewModelClass.ts` — `flagOutliers` (regel-orchestration) + `per_group_signals`
+- `src/Outlier Flagging/` — `anhojLongRun.ts`, `anhojFewCrossings.ts`, `anhojShared.ts`
+- `src/D3 Plotting Functions/drawAnhojStats.ts` — on-canvas stats-blok
+- `src/Settings Model/outliersSettings.ts` — Anhoej Rules-gruppe
+- `src/D3 Plotting Functions/drawLines.ts` — pre-computed stroke-arrays (inkl. Anhøj-dashing)
 
 ### Test-strategi
 
-Mac har ej Power BI Desktop → Karma/Jasmine = primær validering.
-Reference-datasæt fra `qicharts2` (R) hardkodes som JSON-fixtures →
-assert mod TypeScript-implementation.
+vitest + playwright chromium (`npx playwright install chromium` kræves).
+Testfiler: `*.test.ts` (ikke `test-*.ts` — samles ikke op af vitest).
+Reference-fixtures fra `qicharts2` hardkodet i `test/Outlier Flagging/`.
 
-### Anhøj-regler — formler (jf. qicharts2)
+### Åben bloker: upstream-rebase
 
-```
-longest_run_max  = round(log2(n_useful)) + 3
-n_crossings_min  = qbinom(0.05, n_useful - 1, 0.5)
-```
+`feat/anhoj-rules-f1` har konflikter med `origin/main` (upstream AUS-DOH divergerede — vitest-migration, settings-refaktor til `src/Settings Model/*.ts`, drawLines pre-computed arrays). PR #1 = draft, kan ikke merges. Rebase forsøgt 2026-06-17, afbrudt.
 
-`n_useful` = observationer ej præcis på medianen. `qbinom` mangler i
-JS — egen impl sandsynligvis enklere (repo har allerede `lgamma`).
+**Conflicts i commit `2cc30c2`:**
+- `src/settings.ts` — Anhøj-gruppe skal flyttes til `outliersSettings.ts` (modulær format)
+- `src/Classes/viewModelClass.ts` — 3 steder: type `lineData`, `group_targets`-cast, Anhøj-skip i direction-mapping
+- `src/D3 Plotting Functions/drawLines.ts` — Anhøj-dashing fra `.attr()`-callback → pre-computed `strokeDashArray[i]`
 
 ---
 
@@ -97,4 +102,4 @@ JS — egen impl sandsynligvis enklere (repo har allerede `lgamma`).
 
 ---
 
-**Sidst opdateret:** 2026-05-19
+**Sidst opdateret:** 2026-06-17
