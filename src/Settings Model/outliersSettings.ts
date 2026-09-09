@@ -41,7 +41,7 @@ const outliersSettings = {
       twointhree_colour_neutral_low: colourOption("Neutral (Low) Two-in-Three Colour", "neutral_low"),
       twointhree_colour_neutral_high: colourOption("Neutral (High) Two-in-Three Colour", "neutral_high")
     },
-    "Anhøj Rules": {
+    "Signal Detection": {
       anhoj_long_run: toggleOption("Dash Centerline on Long Run", true),
       anhoj_few_crossings: toggleOption("Dash Centerline on Few Crossings", true)
     }

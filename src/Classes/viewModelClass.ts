@@ -662,6 +662,19 @@ export default class viewModelClass {
       this.tableColumns[0].push({ name: "shift", label: "Shift" });
     }
 
+    // Which period a row belongs to. Bounds are [start, end) and monotonic
+    // in i, so a cursor is enough — the same walk initialiseGroupedLines
+    // uses to decide which centerline segments to dash.
+    const groupBounds: number[][] = this.groupStartEndIndexes[0] ?? [];
+    const perGroupStats: groupStatsObject[] = outliers.per_group_stats ?? [];
+    let statsCursor: number = 0;
+    const statsForRow = (row: number): groupStatsObject | undefined => {
+      while (statsCursor < groupBounds.length && row >= groupBounds[statsCursor][1]) {
+        statsCursor++;
+      }
+      return perGroupStats[statsCursor];
+    };
+
     for (let i: number = 0; i < controlLimits.keys.length; i++) {
       const index: number = controlLimits.keys[i].x;
       const aesthetics: settingsValueType["scatter"] = inputData.scatter_formatting[i];
@@ -725,7 +738,7 @@ export default class viewModelClass {
                       .createSelectionId(),
         highlighted: !isNullOrUndefined(inputData.highlights?.[index]),
         tooltip: buildTooltip(table_row, inputData?.tooltips?.[index],
-                              settings, derivedSettings),
+                              settings, derivedSettings, statsForRow(i)),
         label: {
           text_value: inputData.labels?.[index],
           aesthetics: inputData.label_formatting[index],

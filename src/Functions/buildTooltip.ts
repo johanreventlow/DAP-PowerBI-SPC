@@ -4,7 +4,7 @@ import type { settingsValueType } from "../settings";
 import type derivedSettingsClass from "../Classes/derivedSettingsClass";
 import isNullOrUndefined from "./isNullOrUndefined";
 import valueFormatter from "./valueFormatter";
-import type { summaryTableRowData } from "../Classes/viewModelClass";
+import type { summaryTableRowData, groupStatsObject } from "../Classes/viewModelClass";
 
 type LinesKeys = keyof settingsValueType["lines"];
 
@@ -24,7 +24,8 @@ type LinesKeys = keyof settingsValueType["lines"];
 export default function buildTooltip(table_row: summaryTableRowData,
                                       inputTooltips: powerbi.extensibility.VisualTooltipDataItem[] | undefined,
                                       inputSettings: settingsValueType,
-                                      derivedSettings: derivedSettingsClass): VisualTooltipDataItem[] {
+                                      derivedSettings: derivedSettingsClass,
+                                      spc_stats?: groupStatsObject): VisualTooltipDataItem[] {
 
   const ast_limit: string = inputSettings.outliers.astronomical_limit;
   const two_in_three_limit: string = inputSettings.outliers.two_in_three_limit;
@@ -134,6 +135,41 @@ export default function buildTooltip(table_row: summaryTableRowData,
       displayName: "Pattern(s)",
       value: patterns.join("\n")
     })
+  }
+
+  // The signal counts for this row's period. The panel shows the same
+  // numbers, but auto-hides on a narrow tile — this is then the only way to
+  // reach them. Shown whether or not a signal fired: "4 (7 forventet)" says
+  // how much room is left, which the absence of a dashed line does not.
+  if (inputSettings.signal_panel.ttip_show_signals && !isNullOrUndefined(spc_stats)) {
+    const expected: string = inputSettings.signal_panel.ttip_label_expected;
+    const withExpectation = (actual: number | null, threshold: number | null): string => {
+      return isNullOrUndefined(actual) || isNullOrUndefined(threshold)
+        ? "\u2013"
+        : `${actual} (${threshold} ${expected})`;
+    };
+
+    tooltip.push({
+      displayName: inputSettings.signal_panel.label_longest_run,
+      value: withExpectation(spc_stats!.longest_run, spc_stats!.longest_run_max)
+    });
+    tooltip.push({
+      displayName: inputSettings.signal_panel.label_crossings,
+      value: withExpectation(spc_stats!.n_crossings, spc_stats!.n_crossings_min)
+    });
+    // Only control charts have limits; on a run chart the row is absent.
+    if (!isNullOrUndefined(spc_stats!.n_beyond_limits)) {
+      tooltip.push({
+        displayName: inputSettings.signal_panel.label_beyond_limits,
+        value: withExpectation(spc_stats!.n_beyond_limits, 0)
+      });
+    }
+    if (inputSettings.signal_panel.panel_show_n_useful) {
+      tooltip.push({
+        displayName: inputSettings.signal_panel.label_n_useful,
+        value: `${spc_stats!.n_useful}`
+      });
+    }
   }
 
   if (!isNullOrUndefined(inputTooltips) && inputTooltips.length > 0) {
