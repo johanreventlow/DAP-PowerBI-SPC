@@ -1,5 +1,4 @@
-import qbinom from "../Functions/qbinom";
-import { computeSides } from "./anhojShared";
+import { anhojRunsAnalysis } from "./anhojShared";
 
 /**
  * Anhøj few-crossings rule.
@@ -12,21 +11,13 @@ import { computeSides } from "./anhojShared";
  * This is a series-level signal (not per-point) matching qicharts2's
  * scalar runs.signal contract. The caller decides how to render it
  * (e.g. dashed centerline).
+ *
+ * The counts behind the verdict live in anhojRunsAnalysis; callers that
+ * need to display them should use that directly.
  */
 export default function anhojFewCrossings(
   val: readonly number[],
   centerline: readonly number[]
 ): boolean {
-  const sides: number[] = computeSides(val, centerline);
-  const nUseful: number = sides.length;
-  if (nUseful < 2) {
-    return false;
-  }
-
-  let nCrossings: number = 0;
-  for (let i: number = 1; i < nUseful; i++) {
-    if (sides[i] !== sides[i - 1]) nCrossings++;
-  }
-
-  return nCrossings < qbinom(0.05, nUseful - 1, 0.5);
+  return anhojRunsAnalysis(val, centerline).few_crossings_signal;
 }

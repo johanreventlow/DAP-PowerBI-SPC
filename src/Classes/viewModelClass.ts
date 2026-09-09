@@ -24,8 +24,7 @@ import astronomical from "../Outlier Flagging/astronomical";
 import trend from "../Outlier Flagging/trend";
 import twoInThree from "../Outlier Flagging/twoInThree";
 import shift from "../Outlier Flagging/shift";
-import anhojLongRun from "../Outlier Flagging/anhojLongRun";
-import anhojFewCrossings from "../Outlier Flagging/anhojFewCrossings";
+import { anhojRunsAnalysis, type runsAnalysisObject } from "../Outlier Flagging/anhojShared";
 import { lineNameMap } from "../Functions/getAesthetic";
 import isValidNumber from "../Functions/isValidNumber";
 import { default as updateOptionsUndefined, UpdateOptionsValidTypes } from "../Functions/updateOptionsUndefined";
@@ -145,6 +144,15 @@ export type controlLimitsArgs = {
   subset_points: number[];
 }
 
+// The counts displayed beside the chart, per data-group. Extends the runs
+// analysis with the limit signal, so one object carries every number the
+// signal panel and the tooltip show. n_beyond_limits is null on chart types
+// without control limits (run charts), where the row is not shown at all.
+export type groupStatsObject = runsAnalysisObject & {
+  n_beyond_limits: number | null;
+  beyond_limits_signal: boolean;
+}
+
 export type outliersObject = {
   astpoint: string[];
   trend: string[];
@@ -153,6 +161,7 @@ export type outliersObject = {
   // One entry per data-group (baseline-split). Order matches
   // groupStartEndIndexes for the same indicator.
   per_group_signals: { long_run: boolean; few_crossings: boolean }[];
+  per_group_stats: groupStatsObject[];
 }
 
 export type colourPaletteType = {
@@ -653,6 +662,19 @@ export default class viewModelClass {
       this.tableColumns[0].push({ name: "shift", label: "Shift" });
     }
 
+    // Which period a row belongs to. Bounds are [start, end) and monotonic
+    // in i, so a cursor is enough — the same walk initialiseGroupedLines
+    // uses to decide which centerline segments to dash.
+    const groupBounds: number[][] = this.groupStartEndIndexes[0] ?? [];
+    const perGroupStats: groupStatsObject[] = outliers.per_group_stats ?? [];
+    let statsCursor: number = 0;
+    const statsForRow = (row: number): groupStatsObject | undefined => {
+      while (statsCursor < groupBounds.length && row >= groupBounds[statsCursor][1]) {
+        statsCursor++;
+      }
+      return perGroupStats[statsCursor];
+    };
+
     for (let i: number = 0; i < controlLimits.keys.length; i++) {
       const index: number = controlLimits.keys[i].x;
       const aesthetics: settingsValueType["scatter"] = inputData.scatter_formatting[i];
@@ -716,7 +738,7 @@ export default class viewModelClass {
                       .createSelectionId(),
         highlighted: !isNullOrUndefined(inputData.highlights?.[index]),
         tooltip: buildTooltip(table_row, inputData?.tooltips?.[index],
-                              settings, derivedSettings),
+                              settings, derivedSettings, statsForRow(i)),
         label: {
           text_value: inputData.labels?.[index],
           aesthetics: inputData.label_formatting[index],
@@ -891,12 +913,14 @@ export default class viewModelClass {
     const ast_specification: boolean = inputSettings.outliers.astronomical_limit === "Specification";
     const two_in_three_specification: boolean = inputSettings.outliers.two_in_three_limit === "Specification";
     const perGroupSignals: { long_run: boolean; few_crossings: boolean }[] = [];
+    const perGroupStats: groupStatsObject[] = [];
     const outliers: outliersObject = {
       astpoint: rep("none", controlLimits.values.length),
       two_in_three: rep("none", controlLimits.values.length),
       trend: rep("none", controlLimits.values.length),
       shift: rep("none", controlLimits.values.length),
-      per_group_signals: perGroupSignals
+      per_group_signals: perGroupSignals,
+      per_group_stats: perGroupStats
     }
     for (let i: number = 0; i < groupStartEndIndexes.length; i++) {
       const start: number = groupStartEndIndexes[i][0];
@@ -940,13 +964,38 @@ export default class viewModelClass {
         shift(group_values, group_targets, shift_n)
           .forEach((flag, idx) => outliers.shift[start + idx] = flag)
       }
+      // Computed unconditionally: the toggles decide whether a signal dashes
+      // the centerline, not whether the counts exist. The panel shows the
+      // numbers either way, and one pass replaces two wrapper calls.
+      const runs: runsAnalysisObject = anhojRunsAnalysis(group_values, group_targets);
       if (inputSettings.outliers.anhoj_long_run) {
-        group_signal.long_run = anhojLongRun(group_values, group_targets);
+        group_signal.long_run = runs.long_run_signal;
       }
       if (inputSettings.outliers.anhoj_few_crossings) {
-        group_signal.few_crossings = anhojFewCrossings(group_values, group_targets);
+        group_signal.few_crossings = runs.few_crossings_signal;
       }
       perGroupSignals.push(group_signal);
+
+      // Points beyond the control limits, counted from ll99/ul99 rather than
+      // from the astronomical setting, which may point at spec limits or at
+      // 1/2 sigma. This is qicharts2's sigma.signal: on a control chart the
+      // expected count is 0 regardless of series length.
+      let nBeyondLimits: number | null = null;
+      if (derivedSettings.chart_type_props.has_control_limits
+          && !isNullOrUndefined(controlLimits.ll99)
+          && !isNullOrUndefined(controlLimits.ul99)) {
+        const lower_limits: number[] = controlLimits.ll99!.slice(start, end) as number[];
+        const upper_limits: number[] = controlLimits.ul99!.slice(start, end) as number[];
+        nBeyondLimits = astronomical(group_values, lower_limits, upper_limits)
+          .filter((flag, idx) => flag !== "none" && isValidNumber(group_values[idx]))
+          .length;
+      }
+
+      perGroupStats.push({
+        ...runs,
+        n_beyond_limits: nBeyondLimits,
+        beyond_limits_signal: nBeyondLimits !== null && nBeyondLimits > 0
+      });
     }
     // Anhøj rules are series-level signals (dashed centerline) and have
     // no per-point flags to direction-map. The legacy point-flagging

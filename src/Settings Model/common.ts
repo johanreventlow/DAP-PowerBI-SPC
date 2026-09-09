@@ -22,7 +22,11 @@ const defaultColours: Record<string, string> = {
   limits: "#6495ED",
   standard: "#000000",
   lightgray: "#D3D3D3",
-  white: "#FFFFFF"
+  white: "#FFFFFF",
+  // Signal highlight in the SPC panel: a filled box with reversed text,
+  // matching the direktionsmøde layout. Grey rather than a hue so the
+  // marking survives greyscale printing and colour-vision deficiency.
+  signal_box: "#8C8C8C"
 };
 
 type UndefinedOrNumT<T> = T extends undefined ? undefined | number : T;

@@ -192,6 +192,64 @@
         }
       }
     },
+    "signal_panel": {
+      "properties": {
+        "show_panel": {
+          "type" : { "bool" : true }
+        },
+        "panel_width": {
+          "type" : { "numeric" : true }
+        },
+        "panel_hide_below_width": {
+          "type" : { "numeric" : true }
+        },
+        "panel_periods": {
+          "type" : { "enumeration" : [] }
+        },
+        "panel_show_n_useful": {
+          "type" : { "bool" : true }
+        },
+        "panel_title": {
+          "type" : { "text" : true }
+        },
+        "panel_font_size": {
+          "type" : { "numeric" : true }
+        },
+        "panel_label_size": {
+          "type" : { "numeric" : true }
+        },
+        "panel_signal_colour": {
+          "type" : { "fill": { "solid": { "color": true } } }
+        },
+        "label_expected": {
+          "type" : { "text" : true }
+        },
+        "label_actual": {
+          "type" : { "text" : true }
+        },
+        "label_longest_run": {
+          "type" : { "text" : true }
+        },
+        "label_crossings": {
+          "type" : { "text" : true }
+        },
+        "label_beyond_limits": {
+          "type" : { "text" : true }
+        },
+        "label_n_useful": {
+          "type" : { "text" : true }
+        },
+        "label_period": {
+          "type" : { "text" : true }
+        },
+        "ttip_show_signals": {
+          "type" : { "bool" : true }
+        },
+        "ttip_label_expected": {
+          "type" : { "text" : true }
+        }
+      }
+    },
     "nhs_icons" : {
       "properties": {
         "show_variation_icons": {
