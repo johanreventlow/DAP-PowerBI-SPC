@@ -14,8 +14,9 @@ webpack.statistics*
 # OS generated files
 .DS_Store
 
-# Typedoc generated docs
-docs
+# Intern planlægnings-briefing — må ikke committes (jf. CLAUDE.md).
+# Resten af docs/ er tilsigtet versionsstyret dokumentation.
+docs/spc-anhoj-context.md
 
 # Coverage reports
 coverage
