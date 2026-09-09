@@ -2,7 +2,8 @@ import * as d3 from "./D3 Modules";
 import type { svgBaseType, Visual } from "../visual";
 import type { groupStatsObject } from "../Classes/viewModelClass";
 import type { settingsValueType } from "../settings";
-import { buildSignalPanelBlocks, type signalPanelBlock, type signalPanelRow } from "../Functions/signalPanelRows";
+import { buildSignalPanelBlocks, type signalPanelBlock, type signalPanelRow,
+         type runsRulesEnabled } from "../Functions/signalPanelRows";
 
 type panelGroupType = d3.Selection<SVGGElement, unknown, null, undefined>;
 type textSelectionType = d3.Selection<SVGTextElement, unknown, null, undefined>;
@@ -140,6 +141,9 @@ function drawNumber(group: panelGroupType, text: string, cx: number, cy: number,
   const padY: number = size * 0.12;
   const textNode: SVGTextElement | null = textSel.node();
   group.insert("rect", () => textNode)
+       // Classed so the box can be selected on its own: the panel also holds
+       // the clipPath's rect, which a bare "rect" selector would match.
+       .classed("signal-box", true)
        .attr("x", cx - width / 2 - padX)
        .attr("y", cy - capHeight / 2 - padY)
        .attr("width", width + 2 * padX)
@@ -187,8 +191,14 @@ export default function drawSignalPanel(selection: svgBaseType, visualObj: Visua
   const inputSettings: settingsValueType = visualObj.viewModel.inputSettings.settings[0];
   const settings: settingsValueType["signal_panel"] = inputSettings.signal_panel;
   const perGroupStats: groupStatsObject[] = visualObj.viewModel.outliers[0]?.per_group_stats ?? [];
+  // The same toggles that gate the dashed centerline gate the highlight here,
+  // so the two never disagree about whether a signal fired.
+  const enabled: runsRulesEnabled = {
+    long_run: inputSettings.outliers.anhoj_long_run,
+    few_crossings: inputSettings.outliers.anhoj_few_crossings
+  };
   const blocks: signalPanelBlock[] = visualObj.plotProperties.showSignalPanel
-    ? buildSignalPanelBlocks(perGroupStats, settings)
+    ? buildSignalPanelBlocks(perGroupStats, settings, enabled)
     : [];
 
   if (blocks.length === 0) {
@@ -240,10 +250,24 @@ export default function drawSignalPanel(selection: svgBaseType, visualObj: Visua
     headless: visualObj.viewModel.headless
   };
 
-  // The number columns must hold both the largest number and the column
-  // header above it; the label column takes whatever is left.
+  // The number columns must hold the widest number actually shown, the box
+  // drawn around it when it signals, and the column header above it; the
+  // label column takes whatever is left. Sizing from the settings alone was
+  // not enough: a long series pushes the usable-observation count to four or
+  // five digits, which then overflowed the reserved strip. The overflow check
+  // in visual.ts reacts by doubling end_padding and redrawing, which at tile
+  // widths just above the hide threshold leaves the plot with an inverted
+  // x-range.
   const headerChars: number = Math.max(settings.label_expected.length, settings.label_actual.length);
+  const digits: number = blocks.reduce((widest: number, block: signalPanelBlock) => {
+    return block.rows.reduce((rowWidest: number, row: signalPanelRow) => {
+      return Math.max(rowWidest, row.expected.length, row.actual.length);
+    }, widest);
+  }, 1);
+  // CHAR_WIDTH over-estimates digits, and the extra half-em covers the
+  // signal box's padding on both sides.
   const columnWidth: number = Math.max(style.numberSize * 2,
+                                       digits * style.numberSize * CHAR_WIDTH + style.numberSize * 0.5,
                                        headerChars * style.labelSize * CHAR_WIDTH + 4);
   const columns: panelColumns = {
     left: left,

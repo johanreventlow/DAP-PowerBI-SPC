@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { splitPanelLabel, buildSignalPanelRows, buildSignalPanelBlocks } from "../../src/Functions/signalPanelRows";
+import { splitPanelLabel, buildSignalPanelRows, buildSignalPanelBlocks,
+         type runsRulesEnabled } from "../../src/Functions/signalPanelRows";
 import type { groupStatsObject } from "../../src/Classes/viewModelClass";
 import type { settingsValueType } from "../../src/settings";
 import settingsModel from "../../src/settings";
@@ -28,6 +29,10 @@ function statsWith(overrides: Partial<groupStatsObject> = {}): groupStatsObject 
   };
 }
 
+// Both runs rules on unless a test says otherwise: whether a rule is enabled
+// is a separate concern from the row contents, with its own tests below.
+const BOTH_ON: runsRulesEnabled = { long_run: true, few_crossings: true };
+
 describe("splitPanelLabel", () => {
   it("breaks in front of a parenthesised qualifier and upper-cases", () => {
     expect(splitPanelLabel("Serielængde (maksimum)")).toEqual(["SERIELÆNGDE", "(MAKSIMUM)"]);
@@ -47,7 +52,7 @@ describe("splitPanelLabel", () => {
 
 describe("buildSignalPanelRows", () => {
   it("lists the two runs rules with their thresholds and signal state", () => {
-    const rows = buildSignalPanelRows(statsWith(), panelSettingsWith({ panel_show_n_useful: false }));
+    const rows = buildSignalPanelRows(statsWith(), panelSettingsWith({ panel_show_n_useful: false }), BOTH_ON);
 
     expect(rows.length).toBe(2);
     expect(rows[0]).toEqual({
@@ -59,11 +64,11 @@ describe("buildSignalPanelRows", () => {
   });
 
   it("adds the limits row only when the chart has control limits", () => {
-    const withoutLimits = buildSignalPanelRows(statsWith(), panelSettingsWith());
+    const withoutLimits = buildSignalPanelRows(statsWith(), panelSettingsWith(), BOTH_ON);
     expect(withoutLimits.map(r => r.label[0])).not.toContain("OBS. UDEN FOR");
 
     const withLimits = buildSignalPanelRows(
-      statsWith({ n_beyond_limits: 1, beyond_limits_signal: true }), panelSettingsWith()
+      statsWith({ n_beyond_limits: 1, beyond_limits_signal: true }), panelSettingsWith(), BOTH_ON
     );
     const limitsRow = withLimits[2];
     expect(limitsRow.label).toEqual(["OBS. UDEN FOR", "KONTROLGRÆNSE"]);
@@ -73,7 +78,7 @@ describe("buildSignalPanelRows", () => {
   });
 
   it("shows the usable-observation count with a dash for the expectation", () => {
-    const rows = buildSignalPanelRows(statsWith(), panelSettingsWith({ panel_show_n_useful: true }));
+    const rows = buildSignalPanelRows(statsWith(), panelSettingsWith({ panel_show_n_useful: true }), BOTH_ON);
     const last = rows[rows.length - 1];
     expect(last.label).toEqual(["ANTAL BRUGBARE", "OBS."]);
     expect(last.expected).toBe("–");
@@ -86,7 +91,7 @@ describe("buildSignalPanelRows", () => {
       n_useful: 1, longest_run: null, n_crossings: null,
       longest_run_max: null, n_crossings_min: null,
       long_run_signal: false, few_crossings_signal: false
-    }), panelSettingsWith());
+    }), panelSettingsWith(), BOTH_ON);
     expect(rows[0].expected).toBe("–");
     expect(rows[0].actual).toBe("–");
     expect(rows[0].signal).toBe(false);
@@ -102,18 +107,18 @@ describe("buildSignalPanelBlocks", () => {
   ];
 
   it("returns nothing without periods", () => {
-    expect(buildSignalPanelBlocks([], panelSettingsWith())).toEqual([]);
+    expect(buildSignalPanelBlocks([], panelSettingsWith(), BOTH_ON)).toEqual([]);
   });
 
   it("shows only the newest period, unheaded when it is the only one", () => {
-    const single = buildSignalPanelBlocks([periods[2]], panelSettingsWith({ panel_periods: "newest" }));
+    const single = buildSignalPanelBlocks([periods[2]], panelSettingsWith({ panel_periods: "newest" }), BOTH_ON);
     expect(single.length).toBe(1);
     expect(single[0].heading).toBeNull();
     expect(single[0].rows[0].actual).toBe("9");
   });
 
   it("heads the newest period with its number when there are several", () => {
-    const blocks = buildSignalPanelBlocks(periods, panelSettingsWith({ panel_periods: "newest" }));
+    const blocks = buildSignalPanelBlocks(periods, panelSettingsWith({ panel_periods: "newest" }), BOTH_ON);
     expect(blocks.length).toBe(1);
     expect(blocks[0].heading).toBe("PERIODE 3");
     expect(blocks[0].rows[0].actual).toBe("9");
@@ -121,14 +126,14 @@ describe("buildSignalPanelBlocks", () => {
   });
 
   it("stacks every period, oldest first, with all", () => {
-    const blocks = buildSignalPanelBlocks(periods, panelSettingsWith({ panel_periods: "all" }));
+    const blocks = buildSignalPanelBlocks(periods, panelSettingsWith({ panel_periods: "all" }), BOTH_ON);
     expect(blocks.map(b => b.heading)).toEqual(["PERIODE 1", "PERIODE 2", "PERIODE 3"]);
     expect(blocks.map(b => b.rows[0].actual)).toEqual(["3", "4", "9"]);
     expect(blocks.map(b => b.rows[0].signal)).toEqual([false, false, true]);
   });
 
   it("uses the configured period prefix", () => {
-    const blocks = buildSignalPanelBlocks(periods, panelSettingsWith({ label_period: "Period" }));
+    const blocks = buildSignalPanelBlocks(periods, panelSettingsWith({ label_period: "Period" }), BOTH_ON);
     expect(blocks[0].heading).toBe("PERIOD 3");
   });
 });

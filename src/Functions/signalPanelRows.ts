@@ -15,6 +15,18 @@ export type signalPanelRow = {
 };
 
 /**
+ * Which runs rules the user has left switched on. The statistics are computed
+ * regardless — the panel shows the counts either way — but a highlight is a
+ * flag, and a user who switched a rule off asked not to be flagged. The
+ * centerline dashing is gated on the same toggles, so gating here keeps the
+ * two surfaces from contradicting each other.
+ */
+export type runsRulesEnabled = {
+  long_run: boolean;
+  few_crossings: boolean;
+};
+
+/**
  * The rows for one period, with an optional period heading above them.
  */
 export type signalPanelBlock = {
@@ -81,19 +93,20 @@ export function splitPanelLabel(label: string): string[] {
  * @param settings - The signal_panel settings group
  */
 export function buildSignalPanelRows(stats: groupStatsObject,
-                                     settings: settingsValueType["signal_panel"]): signalPanelRow[] {
+                                     settings: settingsValueType["signal_panel"],
+                                     enabled: runsRulesEnabled): signalPanelRow[] {
   const rows: signalPanelRow[] = [
     {
       label: splitPanelLabel(settings.label_longest_run),
       expected: formatCount(stats.longest_run_max),
       actual: formatCount(stats.longest_run),
-      signal: stats.long_run_signal
+      signal: stats.long_run_signal && enabled.long_run
     },
     {
       label: splitPanelLabel(settings.label_crossings),
       expected: formatCount(stats.n_crossings_min),
       actual: formatCount(stats.n_crossings),
-      signal: stats.few_crossings_signal
+      signal: stats.few_crossings_signal && enabled.few_crossings
     }
   ];
   // Only control charts have limits; on a run chart the row is absent
@@ -129,7 +142,8 @@ export function buildSignalPanelRows(stats: groupStatsObject,
  * @param settings - The signal_panel settings group
  */
 export function buildSignalPanelBlocks(perGroupStats: readonly groupStatsObject[],
-                                       settings: settingsValueType["signal_panel"]): signalPanelBlock[] {
+                                       settings: settingsValueType["signal_panel"],
+                                       enabled: runsRulesEnabled): signalPanelBlock[] {
   const nPeriods: number = perGroupStats.length;
   if (nPeriods === 0) {
     return [];
@@ -140,13 +154,13 @@ export function buildSignalPanelBlocks(perGroupStats: readonly groupStatsObject[
 
   if (settings.panel_periods === "all") {
     return perGroupStats.map((stats: groupStatsObject, idx: number) => {
-      return { heading: periodHeading(idx), rows: buildSignalPanelRows(stats, settings) };
+      return { heading: periodHeading(idx), rows: buildSignalPanelRows(stats, settings, enabled) };
     });
   }
 
   const lastIdx: number = nPeriods - 1;
   return [{
     heading: nPeriods > 1 ? periodHeading(lastIdx) : null,
-    rows: buildSignalPanelRows(perGroupStats[lastIdx], settings)
+    rows: buildSignalPanelRows(perGroupStats[lastIdx], settings, enabled)
   }];
 }

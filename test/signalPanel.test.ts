@@ -66,7 +66,7 @@ describe("Signal panel", () => {
 
     const stats = visual.viewModel.outliers[0].per_group_stats[1];
     expect(stats.few_crossings_signal).toBe(true);
-    expect(svg().querySelectorAll(".signal-panel rect").length).toBeGreaterThan(0);
+    expect(svg().querySelectorAll(".signal-panel .signal-box").length).toBeGreaterThan(0);
   });
 
   it("stacks every period when asked for all", () => {
@@ -113,6 +113,109 @@ describe("Signal panel", () => {
 
     const wideSvg = wideVisual.svg.node() as SVGSVGElement;
     const panel = wideSvg.querySelector(".signal-panel") as SVGGElement;
+    const bbox = panel.getBBox();
+    expect(bbox.x + bbox.width).toBeLessThanOrEqual(800);
+  });
+
+  it("dashes the centerline, and only in the period that signalled", () => {
+    // The dashed centerline is the visual's whole point, and nothing else
+    // asserted it: it could be removed, or drawn for the wrong period, with
+    // every other test still green.
+    render(visual, 800, 500);
+
+    const stats = visual.viewModel.outliers[0].per_group_stats;
+    const signalling: boolean[] = stats.map(s => s.long_run_signal || s.few_crossings_signal);
+    // The fixture is built so exactly one of the two periods signals.
+    expect(signalling.filter(Boolean).length).toBe(1);
+    const signallingPeriod: number = signalling.indexOf(true);
+
+    // Every centerline segment carries the flag of the period it belongs to.
+    // This is what drawLines reads, and an off-by-one in the period cursor
+    // would dash the first point of the wrong period without changing counts.
+    const bounds = visual.viewModel.groupStartEndIndexes[0];
+    const targets = visual.viewModel.groupedLines.find(g => g[0] === "targets")![1];
+    expect(targets.length).toBeGreaterThan(0);
+
+    const keyToPeriod = (x: number): number => {
+      const idx: number = visual.viewModel.controlLimits[0].keys.findIndex(k => k.x === x);
+      return bounds.findIndex(b => idx >= b[0] && idx < b[1]);
+    };
+    targets.forEach(segment => {
+      const period: number = keyToPeriod(segment.x);
+      if (period < 0) return;
+      expect(segment.group_signal_dashed).toBe(period === signallingPeriod);
+    });
+
+    // ... and it reaches the DOM as an actual dashed stroke.
+    const dashed = svg().querySelectorAll(".targets-linegroup [stroke-dasharray='4 2']");
+    expect(dashed.length).toBeGreaterThan(0);
+  });
+
+  it("stops highlighting a signal when its rule is switched off", () => {
+    // The centerline stops dashing when a rule is disabled, because the
+    // dashing reads the toggle-gated per_group_signals. The panel must agree:
+    // a highlighted box is a flag, and a user who switched the rule off asked
+    // not to be flagged. Disagreeing surfaces are worse than either choice.
+    const off = JSON.parse(JSON.stringify(defaultSettings));
+    off.spc.chart_type = "c";
+    off.outliers.anhoj_long_run = false;
+    off.outliers.anhoj_few_crossings = false;
+
+    const offVisual = new Visual({
+      element: testDom("500", "800"),
+      host: createVisualHost({})
+    });
+    offVisual.update({
+      dataViews: [ buildDataView({ key: keys, numerators: numerators, groupings: groupings }, off) ],
+      viewport: { width: 800, height: 500 },
+      type: 2 /*powerbi.VisualUpdateType.Data*/
+    });
+
+    // The underlying statistics still say a rule breached — that is the point
+    // of showing the counts even with the rules off.
+    const stats = offVisual.viewModel.outliers[0].per_group_stats;
+    expect(stats.some(s => s.long_run_signal || s.few_crossings_signal)).toBe(true);
+
+    // ... but nothing on screen may claim a signal.
+    const offSvg = offVisual.svg.node() as SVGSVGElement;
+    const panel = offSvg.querySelector(".signal-panel") as SVGGElement;
+    expect(panel).toBeTruthy();
+    expect(panel.querySelectorAll(".signal-box").length).toBe(0);
+
+    const dashed = offSvg.querySelectorAll(".targets-linegroup [stroke-dasharray='4 2']");
+    expect(dashed.length).toBe(0);
+  });
+
+  it("sizes the number columns from the digits, not only from the settings", () => {
+    // The column width was derived from the header text and the font size
+    // alone, so a large number size overflowed the reserved strip. The
+    // overflow check in visual.ts then doubles end_padding and redraws —
+    // and at tile widths just above the hide threshold that leaves the plot
+    // with an inverted x-range. An earlier version of this test used the
+    // default font size, where four digits happen to fit, and so proved
+    // nothing.
+    const longKeys: string[] = Array.from({ length: 1200 }, (_, i) => `d${i}`);
+    const longValues: number[] = Array.from({ length: 1200 }, (_, i) => (i % 7) + 10);
+    const bigVisual = new Visual({
+      element: testDom("500", "800"),
+      host: createVisualHost({})
+    });
+    const big = settingsWith({ panel_font_size: 40 });
+    bigVisual.update({
+      dataViews: [ buildDataView({ key: longKeys, numerators: longValues }, big) ],
+      viewport: { width: 800, height: 500 },
+      type: 2 /*powerbi.VisualUpdateType.Data*/
+    });
+
+    expect(bigVisual.viewModel.outliers[0].per_group_stats[0].n_useful).toBeGreaterThan(999);
+
+    const settings = bigVisual.viewModel.inputSettings.settings[0];
+    const reserved: number = settings.canvas.right_padding + settings.signal_panel.panel_width;
+    // Equality: a doubled padding is exactly the failure this guards.
+    expect(bigVisual.plotProperties.xAxis.end_padding).toBe(reserved);
+
+    const bigSvg = bigVisual.svg.node() as SVGSVGElement;
+    const panel = bigSvg.querySelector(".signal-panel") as SVGGElement;
     const bbox = panel.getBBox();
     expect(bbox.x + bbox.width).toBeLessThanOrEqual(800);
   });
