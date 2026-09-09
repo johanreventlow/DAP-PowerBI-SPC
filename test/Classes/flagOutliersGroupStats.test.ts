@@ -30,9 +30,13 @@ function settingsWith(overrides: Record<string, unknown> = {}): settingsValueTyp
   } as unknown as settingsValueType;
 }
 
-function derivedWith(hasControlLimits: boolean): derivedSettingsClass {
+function derivedWith(hasControlLimits: boolean, chartType: string = "i"): derivedSettingsClass {
   return {
-    chart_type_props: { has_control_limits: hasControlLimits }
+    chart_type_props: {
+      has_control_limits: hasControlLimits,
+      name: chartType,
+      runs_analysis_applies: chartType !== "mr"
+    }
   } as unknown as derivedSettingsClass;
 }
 
@@ -144,5 +148,84 @@ describe("flagOutliers — per-group statistics", () => {
 
     expect(outliers.per_group_stats[0].longest_run).toBe(fx.stats.longest_run);
     expect(outliers.per_group_signals[0]).toEqual({ long_run: false, few_crossings: false });
+  });
+});
+
+describe("flagOutliers — degenerate limits", () => {
+  // A constant series on an I-chart with the default outliers_in_limits=false
+  // screens every moving range out of its own average: all MR are 0, the
+  // screening bound is 0, nothing is below it, and the average becomes 0/0.
+  // The limits are then NaN, and `between` reports NaN-bounded values as
+  // outside — so a series with no variation at all was counted as entirely
+  // out of control, in 25px digits.
+  const values: number[] = new Array<number>(10).fill(42);
+  const targets: number[] = new Array<number>(10).fill(42);
+  const groups: number[][] = [[0, 10]];
+  const nan: number[] = new Array<number>(10).fill(NaN);
+
+  it("counts nothing beyond limits that are not real numbers", () => {
+    const vm = new viewModelClass();
+    const outliers = vm.flagOutliers(
+      { values, targets, ll99: nan, ul99: nan } as never,
+      groups, settingsWith(), derivedWith(true)
+    );
+
+    expect(outliers.per_group_stats[0].n_beyond_limits).toBe(0);
+    expect(outliers.per_group_stats[0].beyond_limits_signal).toBe(false);
+  });
+
+  it("still counts against limits that are real", () => {
+    const mixed: number[] = [...new Array<number>(5).fill(NaN), ...new Array<number>(5).fill(41)];
+    const vm = new viewModelClass();
+    const outliers = vm.flagOutliers(
+      { values, targets, ll99: new Array<number>(10).fill(0), ul99: mixed } as never,
+      groups, settingsWith(), derivedWith(true)
+    );
+
+    // Only the five points with a real upper limit of 41 can breach it.
+    expect(outliers.per_group_stats[0].n_beyond_limits).toBe(5);
+  });
+});
+
+describe("flagOutliers — moving-range charts", () => {
+  // qicharts2 forces runs.signal FALSE for chart == 'mr'. Consecutive moving
+  // ranges share a data point, so they are autocorrelated by construction and
+  // the runs analysis assumption of independence does not hold. The counts are
+  // still computed and shown; only the verdict is withheld.
+  const fx = anhojFixtures.find(f => f.name === "long_run_only")!;
+  const targets: number[] = fx.values.map(() => fx.centerline_median);
+  const groups: number[][] = [[0, fx.values.length]];
+
+  it("withholds the runs signals", () => {
+    const vm = new viewModelClass();
+    const outliers = vm.flagOutliers(
+      { values: fx.values, targets } as never,
+      groups, settingsWith(), derivedWith(false, "mr")
+    );
+
+    expect(outliers.per_group_signals[0]).toEqual({ long_run: false, few_crossings: false });
+    expect(outliers.per_group_stats[0].long_run_signal).toBe(false);
+    expect(outliers.per_group_stats[0].few_crossings_signal).toBe(false);
+  });
+
+  it("still reports the counts, so the panel can show them", () => {
+    const vm = new viewModelClass();
+    const outliers = vm.flagOutliers(
+      { values: fx.values, targets } as never,
+      groups, settingsWith(), derivedWith(false, "mr")
+    );
+
+    expect(outliers.per_group_stats[0].longest_run).toBe(fx.stats.longest_run);
+    expect(outliers.per_group_stats[0].n_crossings).toBe(fx.stats.n_crossings);
+  });
+
+  it("does not withhold them on other chart types", () => {
+    const vm = new viewModelClass();
+    const outliers = vm.flagOutliers(
+      { values: fx.values, targets } as never,
+      groups, settingsWith(), derivedWith(false, "i")
+    );
+
+    expect(outliers.per_group_signals[0].long_run).toBe(true);
   });
 });

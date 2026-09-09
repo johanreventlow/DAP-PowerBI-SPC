@@ -27,6 +27,7 @@ export default class derivedSettingsClass {
     numerator_non_negative: boolean,
     numerator_leq_denominator: boolean,
     has_control_limits: boolean,
+    runs_analysis_applies: boolean,
     needs_sd: boolean,
     integer_num_den: boolean,
     value_name: string,
@@ -63,6 +64,10 @@ export default class derivedSettingsClass {
       numerator_non_negative: ["p", "pp", "u", "up", "s", "c", "g", "t"].includes(chartType),
       numerator_leq_denominator: ["p", "pp"].includes(chartType),
       has_control_limits: !(["run"].includes(chartType)),
+      // Moving ranges share a data point with their neighbour and are
+      // autocorrelated by construction, so a runs analysis of them is not
+      // meaningful. qicharts2 suppresses the runs signal for these charts.
+      runs_analysis_applies: !(["mr"].includes(chartType)),
       needs_sd: ["xbar"].includes(chartType),
       integer_num_den: ["c", "p", "pp"].includes(chartType),
       value_name: valueNames[chartType],
