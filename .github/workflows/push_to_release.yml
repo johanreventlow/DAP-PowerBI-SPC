@@ -19,9 +19,15 @@ jobs:
 
     - name: Label visuals as 'Development'
       run: |
-        sed -i 's/"name":"PBISPC"/"name":"PBISPC_DEV"/g' pbiviz.json
-        sed -i 's/"displayName":"SPC Charts"/"displayName":"SPC Charts (Dev)"/g' pbiviz.json
-        sed -i 's/"guid":"PBISPC"/"guid":"PBISPC_DEV"/g' pbiviz.json
+        set -euo pipefail
+        # Fail loudly rather than shipping a dev build under the production
+        # guid if these ever drift out of sync with pbiviz.json again.
+        grep -q '"name":"PBISPCRoest"' pbiviz.json
+        grep -q '"displayName":"SPC RØST"' pbiviz.json
+        grep -q '"guid":"PBISPCRoest"' pbiviz.json
+        sed -i 's/"name":"PBISPCRoest"/"name":"PBISPCRoestDEV"/g' pbiviz.json
+        sed -i 's/"displayName":"SPC RØST"/"displayName":"SPC RØST (Dev)"/g' pbiviz.json
+        sed -i 's/"guid":"PBISPCRoest"/"guid":"PBISPCRoestDEV"/g' pbiviz.json
       shell: bash
 
     - name: Build
