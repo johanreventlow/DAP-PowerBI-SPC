@@ -1,13 +1,13 @@
 {
   "visual":{
-    "name":"PBISPCRoest",
-    "displayName":"SPC RØST",
-    "guid":"PBISPCRoest",
+    "name":"DAPSPC",
+    "displayName":"DAP SPC",
+    "guid":"DAPSPC",
     "visualClassName":"Visual",
     "version":"1.8.0.0",
-    "description":"SPC-diagrammer med Anhøj-regler (long run og few crossings) til Region Øst",
-    "supportUrl":"https://github.com/johanreventlow/PowerBI-SPC/issues",
-    "gitHubUrl":"https://github.com/johanreventlow/PowerBI-SPC"
+    "description":"Statistisk proceskontrol: SPC-diagrammer med automatisk signaldetektion",
+    "supportUrl":"https://github.com/johanreventlow/DAP-PowerBI-SPC/issues",
+    "gitHubUrl":"https://github.com/johanreventlow/DAP-PowerBI-SPC"
   },
   "apiVersion":"5.1.0",
   "author":{

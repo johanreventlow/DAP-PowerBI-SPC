@@ -1,8 +1,8 @@
 # NEWS
 
-## 1.8.0.0 — SPC RØST
+## 1.8.0.0 — DAP SPC
 
-Første udgivelse under det nye navn. Visualen har eget GUID (`PBISPCRoest`) og
+Første udgivelse under det nye navn. Visualen har eget GUID (`DAPSPC`) og
 kan derfor installeres side om side med den oprindelige AUS-DOH-visual.
 
 ### Nye features
