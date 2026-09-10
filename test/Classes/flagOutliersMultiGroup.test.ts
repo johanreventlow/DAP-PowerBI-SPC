@@ -27,13 +27,6 @@ describe("flagOutliers — multi-group Anhøj signals", () => {
             improvement_direction: "increase",
             astronomical: false,
             astronomical_limit: "3 Sigma",
-            two_in_three: false,
-            two_in_three_highlight_series: false,
-            two_in_three_limit: "2 Sigma",
-            trend: false,
-            trend_n: 5,
-            shift: false,
-            shift_n: 7,
             anhoj_long_run: true,
             anhoj_few_crossings: true
         }

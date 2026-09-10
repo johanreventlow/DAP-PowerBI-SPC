@@ -126,20 +126,6 @@ export default function extractInputData(inputView: DataViewCategorical,
   }
 
   const valid_alt_targets: number[] | undefined = isNullOrUndefined(alt_targets) ? undefined : extractValues(alt_targets, valid_ids);
-  if (inputSettings.nhs_icons.show_assurance_icons) {
-    const alt_targets_length: number = valid_alt_targets?.length ?? 0;
-    if (alt_targets_length > 0) {
-      const last_target: number | undefined = valid_alt_targets?.[alt_targets_length - 1];
-      if (isNullOrUndefined(last_target)) {
-        removalMessages.push("NHS Assurance icon requires a valid alt. target at last observation.")
-      }
-    }
-
-    if (!derivedSettings.chart_type_props.has_control_limits) {
-      removalMessages.push("NHS Assurance icon requires chart with control limits.")
-    }
-  }
-
   const curr_highlights = isNullOrUndefined(highlights) ? undefined : extractValues(highlights, valid_ids);
   const num_points_subset: number | undefined = spcSettings[0].num_points_subset;
   let subset_points: number[];

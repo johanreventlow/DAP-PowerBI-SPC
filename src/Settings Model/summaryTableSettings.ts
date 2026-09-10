@@ -11,18 +11,6 @@ const summaryTableSettings = {
   settingsGroups: {
     "General": {
       show_table: toggleOption("Show Summary Table", false),
-      table_variation_filter: dropdownOption(
-        "Filter by Variation Type", "all",
-        ["all", "common", "special", "improvement", "deterioration", "neutral"], "none",
-        [
-          "All", "Common Cause", "Special Cause - Any", "Special Cause - Improvement",
-          "Special Cause - Deterioration", "Special Cause - Neutral"
-        ]
-      ),
-      table_assurance_filter: dropdownOption(
-        "Filter by Assurance Type", "all", ["all", "any", "pass", "fail", "inconsistent"], "none",
-        ["All", "Consistent - Any", "Consistent Pass", "Consistent Fail", "Inconsistent"]
-      ),
       table_text_overflow: dropdownOption("Text Overflow Handling", "ellipsis", ["ellipsis", "clip", "none"], "sentence"),
       table_opacity: numberOption("Default Opacity", 1, { min: 0, max: 1 }),
       table_opacity_selected: numberOption("Opacity if Selected", 1, { min: 0, max: 1 }),
