@@ -43,7 +43,7 @@ property, der kun fjernes ét af stederne, fejler tavst — det har kostet tid f
 - [x] Fjern `trend_line` fra `viewModelClass.ts` (`summaryTableRowData`,
       linje-opsætning) og fra `buildTooltip.ts`, `getAesthetic.ts`
 - [x] ~~Fjern `trend_line`-dataroller~~ — `trend_line` var beregnet, ikke en datarolle
-- [ ] Fjern properties fra `capabilities.json`
+- [x] Fjern properties fra `capabilities.json` (19 stk.)
 
 ### 1.4 Skjul `i_m` og `i_mm`
 
