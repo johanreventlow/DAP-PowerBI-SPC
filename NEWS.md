@@ -32,6 +32,16 @@ slås op uden at være bundet ind i versionsnummeret.
 * **Signaltal i tooltip**: samme tal som panelet, tilgængelige ved hover uden
   at panelet fylder i layoutet.
 * Begge Anhøj-regler er nu slået **til** som default.
+* **Dansk brugerflade**: formateringsruden, tooltips, oversigtstabellen,
+  feltbrøndene og alle fejlbeskeder er oversat. Tal vises med decimalkomma.
+* **Kontrolgrænse-bånd** (Linjer → 99%-kontrolgrænser): området mellem de to
+  3σ-grænser kan udfyldes som en flade, der aflæses lettere end to streger
+  alene. **Default fra** — en tilvalgt læsehjælp, ikke en ændring af
+  `qicharts2`'s udtryk. Ét bånd per fase; ved et faseskift ændrer grænserne
+  sig i et spring, og en sammenhængende flade ville ikke svare til nogen af
+  faserne.
+* **Nyt ikon** i visualiseringsruden: en serie med et fremhævet langt stræk på
+  samme side af centerlinen — det, visualen er lavet for at opdage.
 
 ### Fjernet
 
@@ -50,6 +60,29 @@ uden for kontrolgrænserne).
 
 `astronomical` er bevaret.
 
+Grænsefladen er derudover skåret ned til centerlinje og 3σ, så det viste
+svarer til det, metoden faktisk bygger på:
+
+* **95%- og 68%-kontrolgrænser** (2σ og 1σ). `qicharts2` kender ét sæt
+  grænser; 1σ har intet modstykke overhovedet, og 2σ vises ikke som default
+  (`show.95 = FALSE`). To sæt grænser inviterer til at aflæse 2σ som et
+  signal, hvilket hverken metoden eller `qicharts2` understøtter.
+* **Valget af hvilken grænse `astronomical` måler imod.** Den måler nu altid
+  mod 3σ, som `qicharts2`'s `sigma.signal`. En rapport med indstillingen gemt
+  som `1 Sigma` eller `2 Sigma` flager derfor andre punkter end før.
+* **Retningsfarverne.** Et punkt uden for kontrolgrænsen fik tidligere farve
+  efter, om afvigelsen var en forbedring eller en forværring. Den vurdering
+  hører ikke til i `sigma.signal`, som kun kender inden for og uden for. De
+  fire farvevælgere er erstattet af én.
+* **Specifikationsgrænser** og **trendlinjen** (regressionsoverlay) — begge
+  uden modstykke i `qicharts2`. Trend*linjen* er ikke trend*reglen*; navnene
+  ligner hinanden, men det er to forskellige ting, og begge er væk nu.
+* **Download-knappen**, som gemte grafen som billede. Power BI har selv den
+  funktion.
+* **`i_m` og `i_mm`** er skjult i chart-type-listen. Beregningerne er urørte,
+  så en rapport, der allerede bruger dem, renderer som før — de tilbydes bare
+  ikke længere som et nyt valg.
+
 **Opgradering:** rapporter, der brugte de fjernede indstillinger, mister dem i
 formateringsruden. Selve dataene og de øvrige indstillinger er upåvirkede.
 
@@ -62,6 +95,9 @@ formateringsruden. Selve dataene og de øvrige indstillinger er upåvirkede.
   detekteres korrekt.
 * Signalpanelets kolonnebredde skaleres nu efter det faktiske antal cifre, så
   store observationstal ikke løber ud over panelet ved høj skriftstørrelse.
+* 1σ-rækken i tooltip kunne aldrig vises: koden slog `show_65` og
+  `ttip_show_65` op, hvor indstillingerne hedder `_68`. En tastefejl arvet fra
+  upstream. Moot her, hvor 1σ er fjernet, men den findes stadig opstrøms.
 
 ### Interne ændringer
 

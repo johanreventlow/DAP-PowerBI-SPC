@@ -162,8 +162,15 @@ Reference for terminologien: `arkiv/f1-2026-06-17` har fladen oversat.
 
 ## Afslutning
 
-- [ ] `NEWS.md`-entry, der samler alle fem trin
-- [ ] `README.md`: opdatér afsnittene om hvad forken tilføjer og har fjernet
+> **Udført 2026-09-10.** De fem trin er foldet ind i den eksisterende
+> `1.0.0.0`-sektion i `NEWS.md` frem for at få deres egen — versionen er ikke
+> udgivet endnu, og en læser af release-noter er ikke tjent med at vide, hvilket
+> internt trin en ændring kom fra. Spec-delta'erne er lagt ind i
+> `openspec/specs/`, og changen er arkiveret sammen med de fire, den absorberede.
+
+- [x] `NEWS.md`-entry, der samler alle fem trin
+- [x] `README.md`: opdatér afsnittene om hvad forken tilføjer og har fjernet
+- [x] Fold spec-delta'erne ind i `openspec/specs/` og arkivér changen
 - [ ] **[MANUELT TRIN]** Verificér i Power BI Desktop — visualen er stadig
       aldrig set i en rigtig rude
 - [ ] **[MANUELT TRIN]** Skær `v1.0.0.0` når alle fem trin er inde
