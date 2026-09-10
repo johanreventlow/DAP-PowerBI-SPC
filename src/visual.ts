@@ -7,6 +7,7 @@ import * as d3 from "./D3 Plotting Functions/D3 Modules";
 import drawXAxis from "./D3 Plotting Functions/drawXAxis";
 import drawYAxis from "./D3 Plotting Functions/drawYAxis";
 import drawTooltipLine from "./D3 Plotting Functions/drawTooltipLine";
+import drawLimitBand from "./D3 Plotting Functions/drawLimitBand";
 import drawLines from "./D3 Plotting Functions/drawLines";
 import drawDots from "./D3 Plotting Functions/drawDots";
 import addContextMenu from "./D3 Plotting Functions/addContextMenu";
@@ -117,6 +118,7 @@ export class Visual implements powerbi.extensibility.IVisual {
     this.svg.call(drawXAxis, this)
             .call(drawYAxis, this)
             .call(drawTooltipLine, this)
+            .call(drawLimitBand, this)
             .call(drawLines, this)
             .call(drawLineLabels, this)
             .call(drawDots, this)
