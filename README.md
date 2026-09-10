@@ -18,6 +18,10 @@ regelsættet ned til det, `qicharts2` rapporterer.
   centerlinen er under `qbinom(0.05, n - 1, 0.5)`.
 * **Signalpanel** — tallene bag signalerne vist permanent ved siden af grafen:
   faktisk værdi over for forventet, per periode.
+* **Dansk brugerflade** — formateringsrude, tooltips, oversigtstabel og
+  fejlbeskeder er på dansk, og tal vises med decimalkomma.
+* **Kontrolgrænse-bånd** — området mellem 3σ-grænserne kan udfyldes som en
+  flade. Default fra.
 
 Begge regler er seriesignaler, ikke punktmarkeringer. Det er en bevidst forskel
 fra NHS-praksis og svarer til, hvordan `qicharts2` rapporterer `runs.signal`.
@@ -33,10 +37,16 @@ regler — `trend`, `twoInThree` og `shift` — hører til NHS' *making data
 count*-metode og er fjernet sammen med NHS' variations- og sikkerhedsikoner.
 
 Markeringen af punkter uden for kontrolgrænserne er bevaret; det er
-`sigma.signal`.
+`sigma.signal`. Den måler altid mod 3σ og skelner kun mellem inden for og uden
+for — ikke mellem forbedring og forværring, som ikke er en del af signalet.
 
-Kommer du fra AUS-DOH-visualen og bruger de regler eller ikoner, er det den
-væsentlige forskel at kende.
+Grænsefladen følger med: 95%- og 68%-grænserne (2σ og 1σ) er fjernet, så det
+viste svarer til det, metoden bygger på. Det samme gælder specifikations-
+grænser, trendlinjen (regressionsoverlayet, ikke trend*reglen*) og
+download-knappen, som Power BI selv har.
+
+Kommer du fra AUS-DOH-visualen og bruger de regler, grænser eller ikoner, er
+det den væsentlige forskel at kende.
 
 ## Chart-typer
 

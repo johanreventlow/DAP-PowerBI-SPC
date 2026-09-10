@@ -71,17 +71,19 @@ per_group_signals: {
 }[]
 ```
 
-Signalerne MUST beregnes per gruppe — ej chart-wide aggregeret — og må ej være afhængige af `improvement_direction` eller `process_flag_type` settings (Anhøj-signaler er retningsneutrale).
+Signalerne MUST beregnes per gruppe — ej chart-wide aggregeret. Anhøj-signaler er retningsneutrale.
 
 #### Scenario: Begge signaler kan være sande samtidigt
 
 - **WHEN** gruppen har både long-run og few-crossings (typisk korreleret)
 - **THEN** begge felter er `true`
 
-#### Scenario: Signaler bypasser direction-mapping
+#### Scenario: Signalerne er retningsneutrale
 
-- **WHEN** `improvement_direction` er `"increase"` eller `"decrease"`
-- **THEN** signal-feltværdier ændres ikke
+- **WHEN** en gruppes signal beregnes
+- **THEN** afhænger værdien alene af serien og centerlinjen. Visualen har
+  intet retningsbegreb — `improvement_direction` og `process_flag_type`
+  findes ikke
 
 ### Requirement: Outlier-regelsæt (qicharts2-parity)
 
@@ -91,8 +93,10 @@ Astronomical-flagging SHALL altid evalueres mod 3σ-grænserne (ll99/ul99) — i
 
 #### Scenario: Kun qicharts2-regler eksponeres
 
-- **WHEN** formatting-panelets Outlier Settings inspiceres
-- **THEN** indeholder det grupperne Astronomical Points og Anhoej Rules — ingen General-, Shifts-, Trends- eller Two-In-Three-grupper
+- **WHEN** formateringsrudens Signaler-kort inspiceres
+- **THEN** indeholder det grupperne "Punkter uden for kontrolgrænser" og
+  "Signaldetektion" — ingen generel-, shift-, trend- eller
+  two-in-three-gruppe
 
 #### Scenario: Astronomical altid 3σ
 
@@ -109,3 +113,37 @@ Astronomical-flagging SHALL altid evalueres mod 3σ-grænserne (ll99/ul99) — i
 - **WHEN** `flagOutliers` kører på en serie der ville have udløst fast-n shift (7 punkter samme side), trend eller two-in-three
 - **THEN** produceres ingen flags for disse mønstre; kun astronomical + Anhøj-signaler beregnes
 
+### Requirement: Beyond-Control-Limit Flagging
+
+Visualen SKAL markere observationer, der ligger uden for 3σ-kontrolgrænserne,
+når `astronomical` er slået til.
+
+En observation ligger uden for grænserne, når `value > ul99` eller
+`value < ll99`. Grænser, der ikke er reelle tal, tæller ikke som brud — en
+manglende grænse er fravær af en grænse, ikke en overtrådt grænse.
+
+Markeringen SKAL være den samme uanset om observationen ligger over eller
+under, og SKAL bruge farven i `ast_colour`.
+
+Visualen MÅ IKKE udlede, om afvigelsen er ønsket eller uønsket. Om et signal
+er godt eller skidt afhænger af indikatoren og den kliniske kontekst — det er
+en vurdering, klinikeren foretager, ikke en indstilling i værktøjet.
+
+#### Scenario: Observation over øvre kontrolgrænse
+
+- **GIVEN** et diagram med kontrolgrænser og `astronomical` slået til
+- **WHEN** en observation ligger over `ul99`
+- **THEN** markeres observationen med `ast_colour`
+
+#### Scenario: Observation under nedre kontrolgrænse
+
+- **GIVEN** samme opsætning
+- **WHEN** en observation ligger under `ll99`
+- **THEN** markeres observationen med `ast_colour` — samme farve som ved brud
+  opad
+
+#### Scenario: Grænserne er ikke reelle tal
+
+- **GIVEN** en konstant serie på et i-chart, hvor grænseberegningen giver NaN
+- **WHEN** flagging køres
+- **THEN** markeres ingen observationer
