@@ -57,12 +57,6 @@ export default function buildTooltip(table_row: summaryTableRowData,
       value: formatValues(table_row.denominator, "integer")
     })
   }
-  if (inputSettings.lines.ttip_show_trend && inputSettings.lines.show_trend) {
-    tooltip.push({
-      displayName: inputSettings.lines.ttip_label_trend,
-      value: formatValues(table_row.trend_line, "value")
-    })
-  }
   if (derivedSettings.chart_type_props.has_control_limits) {
     ["99", "95", "65"].forEach(limit => {
       if (inputSettings.lines[`ttip_show_${limit}` as LinesKeys] && inputSettings.lines[`show_${limit}` as LinesKeys]) {
