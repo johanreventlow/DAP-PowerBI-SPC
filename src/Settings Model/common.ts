@@ -14,10 +14,11 @@ const FormattingComponent = {
 type FormattingComponentKeys = keyof typeof FormattingComponent;
 
 const defaultColours: Record<string, string> = {
-  improvement: "#00B0F0",
-  deterioration: "#E46C0A",
-  neutral_low: "#490092",
-  neutral_high: "#490092",
+  // Observationer uden for kontrolgrænserne. Én farve, ens over og under:
+  // qicharts2's sigma.signal er en ren boolean per punkt og fortolker ikke,
+  // om afvigelsen er ønsket. Lilla frem for rød/grøn, netop for ikke at
+  // antyde en vurdering.
+  beyond_limit: "#490092",
   common_cause: "#A6A6A6",
   limits: "#6495ED",
   standard: "#000000",
