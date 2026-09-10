@@ -5,6 +5,11 @@ const spcSettings = {
   displayName: "Data Settings",
   settingsGroups: {
     "all": {
+      // i_m og i_mm tilbydes ikke længere i dropdownen — ingen af dem findes
+      // i qicharts2 — men de bliver i `valid`, så en rapport, hvor chart_type
+      // allerede er gemt som en af dem, stadig renderer i stedet for at falde
+      // tilbage til default med en fejlbesked.
+      // Se openspec/changes/complete-qicharts2-alignment.
       chart_type: dropdownOption(
         "Chart Type", "i",
         ["run", "i", "i_m", "i_mm", "mr", "p", "pp", "u", "up", "c", "xbar", "s", "g", "t"], "none",
@@ -23,7 +28,8 @@ const spcSettings = {
           "s - Sample SDs",
           "g - Number of Non-Events Between Events",
           "t - Time Between Events"
-        ]
+        ],
+        ["i_m", "i_mm"]
       ),
       outliers_in_limits: toggleOption("Keep Outliers in Limit Calcs.", false),
       multiplier: numberOption("Multiplier", 1, { min: 0 }),
