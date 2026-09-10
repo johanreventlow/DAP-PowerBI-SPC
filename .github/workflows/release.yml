@@ -45,14 +45,11 @@ jobs:
         echo "Releasing version ${tag_version}"
       shell: bash
 
-    - name: Install PBI visual Tools
-      run: npm install -g powerbi-visuals-tools@6.2.0
-
     - name: Install Package Dependencies
       run: npm ci
 
     - name: Run linter
-      run: pbiviz lint
+      run: npx pbiviz lint
 
     - name: Run unit tests
       run: |
@@ -60,7 +57,7 @@ jobs:
         npm run test
 
     - name: Build package
-      run: pbiviz package
+      run: npx pbiviz package
 
     - name: Extract release notes
       run: |

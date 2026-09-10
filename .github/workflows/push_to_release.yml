@@ -32,9 +32,8 @@ jobs:
 
     - name: Build
       run: |
-        npm install
-        npm install -g powerbi-visuals-tools@6.2.0
-        pbiviz package
+        npm ci
+        npx pbiviz package
 
     - name : "Create Release"
       uses: "marvinpinto/action-automatic-releases@latest"
