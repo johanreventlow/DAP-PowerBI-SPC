@@ -1,5 +1,6 @@
 import * as d3 from "./D3 Modules";
 import isNullOrUndefined from "../Functions/isNullOrUndefined";
+import toFixedComma from "../Functions/toFixedComma";
 import type { axisProperties } from "../Classes/plotPropertiesClass";
 import type { svgBaseType, Visual } from "../visual";
 
@@ -35,8 +36,8 @@ export default function drawYAxis(selection: svgBaseType, visualObj: Visual) {
       yAxis.tickFormat(
         (d: number) => {
           return derivedSettings.percentLabels
-            ? d.valueOf().toFixed(sig_figs) + "%"
-            : d.valueOf().toFixed(sig_figs);
+            ? toFixedComma(d.valueOf(), sig_figs) + "%"
+            : toFixedComma(d.valueOf(), sig_figs);
         }
       );
     }

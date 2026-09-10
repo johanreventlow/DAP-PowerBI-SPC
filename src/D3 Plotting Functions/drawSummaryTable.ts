@@ -3,6 +3,7 @@ import type { divBaseType, Visual } from "../visual";
 import * as d3 from "./D3 Modules";
 import type { settingsValueType } from "../settings";
 import identitySelected from "../Functions/identitySelected";
+import toFixedComma from "../Functions/toFixedComma";
 
 function drawTableHeaders(selection: divBaseType, cols: { name: string; label: string; }[],
                           tableSettings: settingsValueType["summary_table"], maxWidth: number) {
@@ -137,7 +138,7 @@ function drawTableCells(selection: divBaseType, cols: { name: string; label: str
     const parentNode = d3.select(currNode.property("parentNode"));
     const rowData = parentNode.datum() as plotData;
     const value: string = typeof d.value === "number"
-      ? d.value.toFixed(inputSettings.spc.sig_figs)
+      ? toFixedComma(d.value, inputSettings.spc.sig_figs)
       : (d.value ?? "");
 
     currNode.text(value).classed("cell-text", true);

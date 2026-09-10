@@ -86,8 +86,8 @@ export default function buildTooltip(table_row: summaryTableRowData,
   // runs rules are series-level and appear as counts below.
   if (table_row.astpoint !== "none") {
     tooltip.push({
-      displayName: "Pattern(s)",
-      value: "Beyond control limit"
+      displayName: "Signal",
+      value: "Uden for kontrolgrænse"
     })
   }
 

@@ -66,10 +66,10 @@ export default function
           let message: string = "";
           if (valid instanceof Array) {
             if (!valid.includes(extractedSetting as string)) {
-              message = `${extractedSetting} is not a valid value for ${settingName}. Valid values are: ${valid.join(", ")}`
+              message = `${extractedSetting} er ikke en gyldig værdi for ${settingName}. Gyldige værdier: ${valid.join(", ")}`
             }
           } else if ((!isNullOrUndefined(valid?.minValue) || !isNullOrUndefined(valid?.maxValue)) && !between(extractedSetting, valid?.minValue?.value, valid?.maxValue?.value)) {
-            message = `${extractedSetting} is not a valid value for ${settingName}. Valid values are between ${valid?.minValue?.value} and ${valid?.maxValue?.value}`
+            message = `${extractedSetting} er ikke en gyldig værdi for ${settingName}. Gyldige værdier ligger mellem ${valid?.minValue?.value} og ${valid?.maxValue?.value}`
           }
           if (message !== "") {
             extractedSetting = defaultSetting;

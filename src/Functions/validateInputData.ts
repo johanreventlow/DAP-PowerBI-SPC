@@ -29,53 +29,53 @@ function validateInputDataImpl(key: string | undefined,
 
   const rtn = { message: "", type: ValidationFailTypes.Valid };
   if (isNullOrUndefined(key)) {
-    rtn.message = "Date missing";
+    rtn.message = "Dato mangler";
     rtn.type = ValidationFailTypes.DateMissing;
   }
 
   if (isNullOrUndefined(numerator)) {
-    rtn.message = "Numerator missing";
+    rtn.message = "Tæller mangler";
     rtn.type = ValidationFailTypes.NumeratorMissing;
   } else {
     if (isNaN(numerator)) {
-      rtn.message = "Numerator is not a number";
+      rtn.message = "Tæller er ikke et tal";
       rtn.type = ValidationFailTypes.NumeratorNaN;
     }
 
     if (chart_type_props.numerator_non_negative && numerator < 0) {
-      rtn.message = "Numerator negative";
+      rtn.message = "Tæller er negativ";
       rtn.type = ValidationFailTypes.NumeratorNegative;
     }
   }
 
   if (check_denom) {
     if (isNullOrUndefined(denominator)) {
-      rtn.message = "Denominator missing";
+      rtn.message = "Nævner mangler";
       rtn.type = ValidationFailTypes.DenominatorMissing;
     } else if (isNaN(denominator)) {
-      rtn.message = "Denominator is not a number";
+      rtn.message = "Nævner er ikke et tal";
       rtn.type = ValidationFailTypes.DenominatorNaN;
     } else if (denominator < 0) {
-      rtn.message = "Denominator negative";
+      rtn.message = "Nævner er negativ";
       rtn.type = ValidationFailTypes.DenominatorNegative;
     } else if (chart_type_props.numerator_leq_denominator && !isNullOrUndefined(numerator) && denominator < numerator) {
-      rtn.message = "Denominator < numerator";
+      rtn.message = "Nævner er mindre end tæller";
       rtn.type = ValidationFailTypes.DenominatorLessThanNumerator;
     } else if (chart_type_props.denominator_gt_one && denominator <= 1) {
-      rtn.message = "Denominator <= 1"
+      rtn.message = "Nævner er højst 1"
       rtn.type = ValidationFailTypes.DenominatorLessThanOne
     }
   }
 
   if (chart_type_props.needs_sd) {
     if (isNullOrUndefined(xbar_sd)) {
-      rtn.message = "SD missing";
+      rtn.message = "SD mangler";
       rtn.type = ValidationFailTypes.SDMissing;
     } else if (isNaN(xbar_sd) && !isNullOrUndefined(numerator)) {
-      rtn.message = "SD is not a number";
+      rtn.message = "SD er ikke et tal";
       rtn.type = ValidationFailTypes.SDNaN;
     } else if (xbar_sd < 0) {
-      rtn.message = "SD negative";
+      rtn.message = "SD er negativ";
       rtn.type = ValidationFailTypes.SDNegative;
     }
   }
@@ -116,7 +116,7 @@ export default function validateInputData(keys: (string | undefined)[],
     const allInvalid: boolean = all_status.every(d => d !== ValidationFailTypes.Valid);
     if (allInvalid) {
       validationRtn.status = 1; // All data invalid
-      validationRtn.error = "No valid data found!";
+      validationRtn.error = "Ingen gyldige data fundet.";
       return validationRtn;
     }
   }
@@ -124,55 +124,55 @@ export default function validateInputData(keys: (string | undefined)[],
   if (allSameType && commonType !== ValidationFailTypes.Valid) {
     switch(commonType) {
       case ValidationFailTypes.GroupingMissing: {
-        validationRtn.error = "Grouping missing"
+        validationRtn.error = "Gruppering mangler."
         break;
       }
       case ValidationFailTypes.DateMissing: {
-        validationRtn.error = "All dates/IDs are missing or null!"
+        validationRtn.error = "Alle datoer/nøgler mangler."
         break;
       }
       case ValidationFailTypes.NumeratorMissing: {
-        validationRtn.error = "All numerators are missing or null!"
+        validationRtn.error = "Alle tællere mangler."
         break;
       }
       case ValidationFailTypes.NumeratorNaN: {
-        validationRtn.error = "All numerators are not numbers!"
+        validationRtn.error = "Ingen af tællerne er tal."
         break;
       }
       case ValidationFailTypes.NumeratorNegative: {
-        validationRtn.error = "All numerators are negative!"
+        validationRtn.error = "Alle tællere er negative."
         break;
       }
       case ValidationFailTypes.DenominatorMissing: {
-        validationRtn.error = "All denominators missing or null!"
+        validationRtn.error = "Alle nævnere mangler."
         break;
       }
       case ValidationFailTypes.DenominatorNaN: {
-        validationRtn.error = "All denominators are not numbers!"
+        validationRtn.error = "Ingen af nævnerne er tal."
         break;
       }
       case ValidationFailTypes.DenominatorNegative: {
-        validationRtn.error = "All denominators are negative!"
+        validationRtn.error = "Alle nævnere er negative."
         break;
       }
       case ValidationFailTypes.DenominatorLessThanNumerator: {
-        validationRtn.error = "All denominators are smaller than numerators!";
+        validationRtn.error = "Alle nævnere er mindre end tællerne.";
         break;
       }
       case ValidationFailTypes.SDMissing: {
-        validationRtn.error = "All SDs missing or null!";
+        validationRtn.error = "Alle SD-værdier mangler.";
         break;
       }
       case ValidationFailTypes.SDNaN: {
-        validationRtn.error = "All SDs are not numbers!";
+        validationRtn.error = "Ingen af SD-værdierne er tal.";
         break;
       }
       case ValidationFailTypes.SDNegative: {
-        validationRtn.error = "All SDs are negative!";
+        validationRtn.error = "Alle SD-værdier er negative.";
         break;
       }
       case ValidationFailTypes.DenominatorLessThanOne: {
-        validationRtn.error = "All denominators are less than or equal to one!";
+        validationRtn.error = "Alle nævnere er højst 1.";
         break;
       }
     }
