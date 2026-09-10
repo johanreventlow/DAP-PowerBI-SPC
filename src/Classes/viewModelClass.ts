@@ -21,6 +21,22 @@ import { lineNameMap } from "../Functions/getAesthetic";
 import isValidNumber from "../Functions/isValidNumber";
 import { default as updateOptionsUndefined, UpdateOptionsValidTypes } from "../Functions/updateOptionsUndefined";
 
+// powerbi.VisualUpdateType er et bit-flag: Data = 2, Resize = 4, ViewMode = 8,
+// Style = 16, ResizeEnd = 32, All = 62. Power BI sender ofte flere flag samlet,
+// så en test for lighed med Data rammer kun den ene af flere lovlige værdier.
+// Enum'et er `const enum` i API'et og kan ikke importeres som værdi.
+const VISUAL_UPDATE_TYPE_DATA: number = 2;
+
+/**
+ * True når opdateringen kan indeholde ændrede data eller indstillinger.
+ *
+ * Resize alene (4) har ikke Data-bitten sat og skal netop ikke udløse en
+ * genberegning — det er hele pointen med at teste på typen.
+ */
+function updateTouchesData(updateType: number | undefined): boolean {
+  return ((updateType ?? VISUAL_UPDATE_TYPE_DATA) & VISUAL_UPDATE_TYPE_DATA) !== 0;
+}
+
 type LineSettingsKeys = keyof settingsValueType["lines"];
 
 export type viewModelValidationT = {
@@ -244,7 +260,7 @@ export default class viewModelClass {
       }
     }
 
-    if (options.type === 2 || this.firstRun) {
+    if (updateTouchesData(options.type) || this.firstRun) {
       this.inputSettings.update(options.dataViews[0], idx_per_indicator);
     }
     if (this.inputSettings.validationStatus.error !== "") {
@@ -263,7 +279,7 @@ export default class viewModelClass {
     let invalidData: boolean = false;
 
     // Only re-construct data and re-calculate limits if they have changed
-    if (options.type === 2 || this.firstRun) {
+    if (updateTouchesData(options.type) || this.firstRun) {
       // Handle split indexes (only for first indicator in single mode)
       const hasIndicator: boolean = options.dataViews[0].categorical!.categories!.some(d => d.source.roles!.indicator);
       const split_indexes_str: string = <string>(options.dataViews[0]?.metadata?.objects?.split_indexes_storage?.split_indexes) ?? "[]";
