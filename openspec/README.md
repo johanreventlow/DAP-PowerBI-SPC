@@ -6,9 +6,9 @@ Oversigt over projektets change-forslag pr. 2026-09-10.
 
 | Change | Landede via |
 |---|---|
-| `changes/add-anhoj-rules/` | F1 — de to runs-regler og stiplet centerlinje |
+| `changes/archive/2026-06-11-add-anhoj-rules/` | F1 — de to runs-regler og stiplet centerlinje |
 | `changes/archive/2026-06-11-remove-non-anhoj-rules/` | PR #4 (`faafe95`) — `trend`, `twoInThree`, `shift`, NHS-ikoner |
-| `changes/add-anhoj-stats-display/` | PR #3 — men som **signalpanelet**, en anden implementation end branchens `drawAnhojStats.ts` |
+| `changes/archive/2026-09-10-add-anhoj-stats-display/` | PR #3 — men som **signalpanelet**, en anden implementation end branchens `drawAnhojStats.ts` |
 | `changes/archive/2026-09-10-complete-qicharts2-alignment/` | PR #8–#12 — de fem trin nedenfor |
 
 ## complete-qicharts2-alignment
@@ -45,22 +45,18 @@ noteret som manuelle trin i planens `tasks.md`.
 ## Arkiverede branches
 
 Beslutningsgrundlaget her stammer fra `feat/anhoj-rules-f1` og
-`refactor/remove-non-anhoj-f2`. Implementationerne derfra er nu genskrevet mod
-den nuværende kodebase og merget, så branchene har ikke længere kode, der kun
-findes dér.
+`refactor/remove-non-anhoj-f2`. Implementationerne derfra er genskrevet mod
+den nuværende kodebase og merget, så branchene havde ikke længere kode, der
+kun fandtes dér.
 
-**[MANUELT TRIN]** Tag dem alligevel, før de slettes — de er referencen for,
-hvordan tingene så ud undervejs, og et tag holder commits i live, når branchen
-forsvinder:
+Begge er tagget og derefter slettet — lokalt og på origin (10. sep. 2026):
 
-```
-git tag arkiv/f1-2026-06-17 origin/feat/anhoj-rules-f1
-git tag arkiv/f2-plan-2026-05-19 origin/refactor/remove-non-anhoj-f2
-git push origin arkiv/f1-2026-06-17 arkiv/f2-plan-2026-05-19
-```
+| Tag | Spids | Dato |
+|---|---|---|
+| `arkiv/f1-2026-06-17` | `7b4a98d` | 17. juni 2026 |
+| `arkiv/f2-plan-2026-05-19` | `4b410e0` | 19. maj 2026 |
 
-Spidserne er `7b4a98d` (f1, 17. juni 2026) og `4b410e0` (f2-planen,
-19. maj 2026). Bagefter hentes koden frem med fx
+Tagget holder commits i live, så koden hentes stadig frem med fx
 `git show arkiv/f1-2026-06-17:"src/D3 Plotting Functions/drawLimitBand.ts"`.
 
 Tags under `arkiv/` udløser ikke release-workflowet, som kun reagerer på `v*`.
