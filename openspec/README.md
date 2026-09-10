@@ -55,14 +55,19 @@ Branchen er bygget mod kodebasen før Vitest-migreringen og før signalpanelet,
 så den kan ikke merges direkte. Skal arbejdet bruges, er vejen at
 genimplementere per change ovenfor med branchen som reference.
 
-Vil du kunne slette branchen uden at miste koden, så sæt et tag på dens spids
-først — et tag holder commits i live permanent:
+**Slet derfor ikke branchene, før spidserne er tagget.** Et tag holder
+commits i live, når branchen forsvinder:
 
 ```
-git tag arkiv/f1-2026-06-11 origin/feat/anhoj-rules-f1
-git push origin arkiv/f1-2026-06-11
+git tag arkiv/f1-2026-06-17 origin/feat/anhoj-rules-f1
+git tag arkiv/f2-plan-2026-05-19 origin/refactor/remove-non-anhoj-f2
+git push origin arkiv/f1-2026-06-17 arkiv/f2-plan-2026-05-19
 ```
 
-`refactor/remove-non-anhoj-f2` behøver ikke det. Alt den har, som main mangler,
-er enten det, F2 bevidst fjernede, eller Karma-infrastruktur afløst af
-Vitest — og dens plan er bevaret i `changes/remove-non-anhoj-rules/`.
+Spidserne er `7b4a98d` (f1, 17. juni 2026) og `4b410e0` (f2-planen,
+19. maj 2026).
+
+Bagefter hentes koden frem med fx
+`git show arkiv/f1-2026-06-17:"src/D3 Plotting Functions/drawLimitBand.ts"`.
+
+Tags under `arkiv/` udløser ikke release-workflowet, som kun reagerer på `v*`.
