@@ -18,8 +18,16 @@ runs-analysen leder efter.
 
 ## Farven
 
-Står ét sted i `icon.svg`, som `#8db9da`, tre gange (fill på `<svg>`, og stroke
-på centerlinjen og på serielinjen).
+`#3e89c1` — rgb(62, 137, 193). Står tre steder i `icon.svg`: fill på `<svg>`,
+og stroke på centerlinjen og på serielinjen.
+
+Tonen kommer fra biSPCharts, oprindeligt rgb(141, 185, 218). Den viste sig for
+lys: 2,08:1 i kontrast mod hvid, hvor grafik bør have mindst 3:1 for at kunne
+aflæses. Farven her har samme nuance (206°) og samme mætning (51 %), men lavere
+lyshed, og lander på 3,78:1.
+
+Mørkere end dette gør den mere læsbar på lys baggrund, men svagere på mørkt
+tema, hvor forholdet vender. 3,78:1 er valgt som det punkt, der holder i begge.
 
 ## Stregvægte
 
