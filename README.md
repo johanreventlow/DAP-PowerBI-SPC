@@ -7,8 +7,8 @@ runs-analyse efter den danske metode — som implementeret i R-pakken
 Visualen er en fork af
 [AUS-DOH-Safety-and-Quality/PowerBI-SPC](https://github.com/AUS-DOH-Safety-and-Quality/PowerBI-SPC),
 udviklet af Safety and Quality-teamet i Western Australias sundhedsministerium.
-Al oprindelig funktionalitet er bevaret; forken tilføjer signaldetektionen og
-det tilhørende signalpanel.
+Forken tilføjer signaldetektionen og det tilhørende signalpanel — og skærer
+regelsættet ned til det, `qicharts2` rapporterer.
 
 ## Hvad forken tilføjer
 
@@ -24,6 +24,19 @@ fra NHS-praksis og svarer til, hvordan `qicharts2` rapporterer `runs.signal`.
 Tærsklerne er verificeret mod `qicharts2` v0.8.1 på 14 reference-datasæt, som
 ligger i `test/Outlier Flagging/anhoj-fixtures.json` og regenereres med det
 medfølgende R-script.
+
+## Hvad forken har fjernet
+
+`qicharts2` rapporterer to signaler: `runs.signal` (de to regler ovenfor) og
+`sigma.signal` (observationer uden for kontrolgrænserne). Upstreams øvrige
+regler — `trend`, `twoInThree` og `shift` — hører til NHS' *making data
+count*-metode og er fjernet sammen med NHS' variations- og sikkerhedsikoner.
+
+Markeringen af punkter uden for kontrolgrænserne er bevaret; det er
+`sigma.signal`.
+
+Kommer du fra AUS-DOH-visualen og bruger de regler eller ikoner, er det den
+væsentlige forskel at kende.
 
 ## Chart-typer
 
