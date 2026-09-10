@@ -51,10 +51,6 @@ export type summaryTableRowData = {
   target: number | undefined;
   alt_target: number | undefined;
   ll99: number | undefined;
-  ll95: number | undefined;
-  ll68: number | undefined;
-  ul68: number | undefined;
-  ul95: number | undefined;
   ul99: number | undefined;
   astpoint: string;
 }
@@ -109,10 +105,6 @@ export type controlLimitsObject = {
   denominators?: (number | undefined)[];
   targets: (number | undefined)[];
   ll99?: (number | undefined)[];
-  ll95?: (number | undefined)[];
-  ll68?: (number | undefined)[];
-  ul68?: (number | undefined)[];
-  ul95?: (number | undefined)[];
   ul99?: (number | undefined)[];
   count?: (number | undefined)[];
   alt_targets?: (number | undefined)[];
@@ -462,22 +454,16 @@ export default class viewModelClass {
     if (lineSettings.show_alt_target) {
       tableColumnsDef.push({ name: "alt_target", label: lineSettings.ttip_label_alt_target });
     }
-    ["99", "95", "68"].forEach(limit => {
-      if (lineSettings[`show_${limit}` as LineSettingsKeys]) {
-        tableColumnsDef.push({
-          name: `ucl${limit}`,
-          label: `${lineSettings[`ttip_label_${limit}_prefix_upper` as LineSettingsKeys]}${lineSettings[`ttip_label_${limit}` as LineSettingsKeys]}`
-        })
-      }
-    });
-    ["68", "95", "99"].forEach(limit => {
-      if (lineSettings[`show_${limit}` as LineSettingsKeys]) {
-        tableColumnsDef.push({
-          name: `lcl${limit}`,
-          label: `${lineSettings[`ttip_label_${limit}_prefix_lower` as LineSettingsKeys]}${lineSettings[`ttip_label_${limit}` as LineSettingsKeys]}`
-        })
-      }
-    })
+    if (lineSettings.show_99) {
+      tableColumnsDef.push({
+        name: "ucl99",
+        label: `${lineSettings.ttip_label_99_prefix_upper}${lineSettings.ttip_label_99}`
+      })
+      tableColumnsDef.push({
+        name: "lcl99",
+        label: `${lineSettings.ttip_label_99_prefix_lower}${lineSettings.ttip_label_99}`
+      })
+    }
     const anyTooltips: boolean = this.inputData.some(d => d?.tooltips?.some(t => t.length > 0));
 
     if (anyTooltips) {
@@ -509,10 +495,6 @@ export default class viewModelClass {
       table_row_entries.push(["target", formatValues(limits.targets?.[lastIndex], "value")]);
       table_row_entries.push(["alt_target", formatValues(limits.alt_targets?.[lastIndex], "value")]);
       table_row_entries.push(["ucl99", formatValues(limits.ul99?.[lastIndex], "value")]);
-      table_row_entries.push(["ucl95", formatValues(limits.ul95?.[lastIndex], "value")]);
-      table_row_entries.push(["ucl68", formatValues(limits.ul68?.[lastIndex], "value")]);
-      table_row_entries.push(["lcl68", formatValues(limits.ll68?.[lastIndex], "value")]);
-      table_row_entries.push(["lcl95", formatValues(limits.ll95?.[lastIndex], "value")]);
       table_row_entries.push(["lcl99", formatValues(limits.ll99?.[lastIndex], "value")]);
 
       if (anyTooltips && !isNullOrUndefined(this.inputData[i].tooltips)) {
@@ -572,12 +554,6 @@ export default class viewModelClass {
         this.tableColumns[0].push({ name: "ll99", label: "LL 99%" },
                                { name: "ul99", label: "UL 99%" });
       }
-      if (settings.lines.show_95) {
-        this.tableColumns[0].push({ name: "ll95", label: "LL 95%" }, { name: "ul95", label: "UL 95%" });
-      }
-      if (settings.lines.show_68) {
-        this.tableColumns[0].push({ name: "ll68", label: "LL 68%" }, { name: "ul68", label: "UL 68%" });
-      }
     }
 
     if (settings.outliers.astronomical) {
@@ -617,10 +593,6 @@ export default class viewModelClass {
         target: controlLimits.targets[i],
         alt_target: controlLimits.alt_targets?.[i],
         ll99: controlLimits?.ll99?.[i],
-        ll95: controlLimits?.ll95?.[i],
-        ll68: controlLimits?.ll68?.[i],
-        ul68: controlLimits?.ul68?.[i],
-        ul95: controlLimits?.ul95?.[i],
         ul99: controlLimits?.ul99?.[i],
         astpoint: outliers.astpoint[i]
       }
@@ -669,12 +641,6 @@ export default class viewModelClass {
     if (derivedSettings.chart_type_props.has_control_limits) {
       if (settings.lines.show_99) {
         labels.push("ll99", "ul99");
-      }
-      if (settings.lines.show_95) {
-        labels.push("ll95", "ul95");
-      }
-      if (settings.lines.show_68) {
-        labels.push("ll68", "ul68");
       }
     }
 
@@ -750,7 +716,7 @@ export default class viewModelClass {
     let lines_to_scale: Exclude<keyof controlLimitsObject, "keys">[] = ["values", "targets"];
 
     if (derivedSettings.chart_type_props.has_control_limits) {
-      lines_to_scale = lines_to_scale.concat(["ll99", "ll95", "ll68", "ul68", "ul95", "ul99"]);
+      lines_to_scale = lines_to_scale.concat(["ll99", "ul99"]);
     }
 
     let lines_to_truncate: Exclude<keyof controlLimitsObject, "keys">[] = lines_to_scale;
@@ -810,14 +776,10 @@ export default class viewModelClass {
 
       if (derivedSettings.chart_type_props.has_control_limits) {
         if (inputSettings.outliers.astronomical) {
-          const limit_map: Record<string, string> = {
-            "1 Sigma": "68",
-            "2 Sigma": "95",
-            "3 Sigma": "99",
-          };
-          const ast_limit: string = limit_map[inputSettings.outliers.astronomical_limit];
-          const lower_limits: number[] = controlLimits[`ll${ast_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
-          const upper_limits: number[] = controlLimits[`ul${ast_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
+          // Altid mod 3σ. qicharts2's sigma.signal er defineret mod
+          // kontrolgrænserne og kun dem; 1σ og 2σ findes ikke i metoden.
+          const lower_limits: number[] = controlLimits.ll99!.slice(start, end) as number[];
+          const upper_limits: number[] = controlLimits.ul99!.slice(start, end) as number[];
           astronomical(group_values, lower_limits, upper_limits)
             .forEach((flag, idx) => outliers.astpoint[start + idx] = flag)
         }

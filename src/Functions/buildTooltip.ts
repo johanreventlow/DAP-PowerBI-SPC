@@ -6,7 +6,6 @@ import isNullOrUndefined from "./isNullOrUndefined";
 import valueFormatter from "./valueFormatter";
 import type { summaryTableRowData, groupStatsObject } from "../Classes/viewModelClass";
 
-type LinesKeys = keyof settingsValueType["lines"];
 
 /**
  * Builds the tooltip data for a specific index in the chart.
@@ -27,7 +26,6 @@ export default function buildTooltip(table_row: summaryTableRowData,
                                       derivedSettings: derivedSettingsClass,
                                       spc_stats?: groupStatsObject): VisualTooltipDataItem[] {
 
-  const ast_limit: string = inputSettings.outliers.astronomical_limit;
   const formatValues = valueFormatter(inputSettings, derivedSettings);
 
   const tooltip: VisualTooltipDataItem[] = new Array<VisualTooltipDataItem>();
@@ -57,14 +55,11 @@ export default function buildTooltip(table_row: summaryTableRowData,
       value: formatValues(table_row.denominator, "integer")
     })
   }
-  if (derivedSettings.chart_type_props.has_control_limits) {
-    ["99", "95", "65"].forEach(limit => {
-      if (inputSettings.lines[`ttip_show_${limit}` as LinesKeys] && inputSettings.lines[`show_${limit}` as LinesKeys]) {
-        tooltip.push({
-          displayName: `${inputSettings.lines[`ttip_label_${limit}_prefix_upper` as LinesKeys]}${inputSettings.lines[`ttip_label_${limit}` as LinesKeys]}`,
-          value: formatValues(table_row[`ul${limit}` as keyof summaryTableRowData], "value")
-        })
-      }
+  if (derivedSettings.chart_type_props.has_control_limits
+      && inputSettings.lines.ttip_show_99 && inputSettings.lines.show_99) {
+    tooltip.push({
+      displayName: `${inputSettings.lines.ttip_label_99_prefix_upper}${inputSettings.lines.ttip_label_99}`,
+      value: formatValues(table_row.ul99, "value")
     })
   }
   if (inputSettings.lines.show_target && inputSettings.lines.ttip_show_target) {
@@ -79,27 +74,20 @@ export default function buildTooltip(table_row: summaryTableRowData,
       value: formatValues(table_row.alt_target, "value")
     })
   }
-  if (derivedSettings.chart_type_props.has_control_limits) {
-    ["68", "95", "99"].forEach(limit => {
-      if (inputSettings.lines[`ttip_show_${limit}` as LinesKeys] && inputSettings.lines[`show_${limit}` as LinesKeys]) {
-        tooltip.push({
-          displayName: `${inputSettings.lines[`ttip_label_${limit}_prefix_lower` as LinesKeys]}${inputSettings.lines[`ttip_label_${limit}` as LinesKeys]}`,
-          value: formatValues(table_row[`ll${limit}` as keyof summaryTableRowData], "value")
-        })
-      }
+  if (derivedSettings.chart_type_props.has_control_limits
+      && inputSettings.lines.ttip_show_99 && inputSettings.lines.show_99) {
+    tooltip.push({
+      displayName: `${inputSettings.lines.ttip_label_99_prefix_lower}${inputSettings.lines.ttip_label_99}`,
+      value: formatValues(table_row.ll99, "value")
     })
   }
 
   // Points beyond the control limits are the one per-point flag left; the
   // runs rules are series-level and appear as counts below.
   if (table_row.astpoint !== "none") {
-    let flag_text: string = "Beyond control limit";
-    if (ast_limit !== "3 Sigma") {
-      flag_text = `${flag_text} (${ast_limit})`;
-    }
     tooltip.push({
       displayName: "Pattern(s)",
-      value: flag_text
+      value: "Beyond control limit"
     })
   }
 

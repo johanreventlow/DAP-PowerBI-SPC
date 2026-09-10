@@ -37,8 +37,8 @@ import isNullOrUndefined from "../Functions/isNullOrUndefined";
  *   - values: The moving ranges (n-1 values)
  *   - numerators/denominators: The original values if using ratios, excluding first point
  *   - targets: The centreline (average moving range) for each point
- *   - ll99/ll95/ll68: Lower limits (all zero, as moving ranges cannot be negative)
- *   - ul68/ul95/ul99: Upper 1σ, 2σ, and 3σ control limits
+ *   - ll99: Lower limit (always zero, as moving ranges cannot be negative)
+ *   - ul99: Upper 3σ control limit
  */
 export default function mrLimits(args: Readonly<controlLimitsArgs>): controlLimitsObject {
   // Determine if we're calculating ratios (numerator/denominator) or raw values
@@ -84,18 +84,11 @@ export default function mrLimits(args: Readonly<controlLimitsArgs>): controlLimi
     denominators: useRatio ? args.denominators!.slice(1) : undefined, // Original denominators (if ratio), exclude first
     targets: new Array<number>(n_mr),                           // Centreline (mean moving range)
     ll99: new Array<number>(n_mr),                              // Lower 3σ limit (always 0)
-    ll95: new Array<number>(n_mr),                              // Lower 2σ limit (always 0)
-    ll68: new Array<number>(n_mr),                              // Lower 1σ limit (always 0)
-    ul68: new Array<number>(n_mr),                              // Upper 1σ limit
-    ul95: new Array<number>(n_mr),                              // Upper 2σ limit
     ul99: new Array<number>(n_mr)                               // Upper 3σ limit
   }
 
   const sigma: number = 3.267 / 3;
-  const twoSigma: number = 2 * sigma;
   const threeSigma: number = 3 * sigma;
-  const ul68: number = cl * sigma;
-  const ul95: number = cl * twoSigma;
   const ul99: number = cl * threeSigma;
 
   // Populate arrays with moving ranges and control limits
@@ -108,10 +101,6 @@ export default function mrLimits(args: Readonly<controlLimitsArgs>): controlLimi
     }
     rtn.targets[i] = cl;                        // Centreline: MR̄
     rtn.ll99![i] = 0;                            // LCL: 0
-    rtn.ll95![i] = 0;                            // 2σ lower: 0
-    rtn.ll68![i] = 0;                            // 1σ lower: 0
-    rtn.ul68![i] = ul68;         // 1σ upper: 1.089 × MR̄
-    rtn.ul95![i] = ul95;         // 2σ upper: 2.178 × MR̄
     rtn.ul99![i] = ul99;                   // UCL: 3.267 × MR̄ (D4 constant)
   }
 

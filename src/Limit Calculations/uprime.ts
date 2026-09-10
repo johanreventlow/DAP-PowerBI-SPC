@@ -46,8 +46,6 @@ import type { controlLimitsObject, controlLimitsArgs } from "../Classes/viewMode
  *   - denominators: The original sample sizes
  *   - targets: The centreline (overall rate) for each point
  *   - ll99/ul99: Lower/Upper 3-sigma control limits (lower limits truncated at 0)
- *   - ll95/ul95: Lower/Upper 2-sigma warning limits (lower limits truncated at 0)
- *   - ll68/ul68: Lower/Upper 1-sigma limits (lower limits truncated at 0)
  */
 export default function uprimeLimits(args: Readonly<controlLimitsArgs>): controlLimitsObject {
   // Extract input arrays from arguments
@@ -121,10 +119,6 @@ export default function uprimeLimits(args: Readonly<controlLimitsArgs>): control
     denominators: args.denominators,                       // Original sample sizes
     targets: new Array<number>(n),                         // Centreline (overall rate)
     ll99: new Array<number>(n),                            // Lower 3-sigma limit
-    ll95: new Array<number>(n),                            // Lower 2-sigma limit
-    ll68: new Array<number>(n),                            // Lower 1-sigma limit
-    ul68: new Array<number>(n),                            // Upper 1-sigma limit
-    ul95: new Array<number>(n),                            // Upper 2-sigma limit
     ul99: new Array<number>(n)                             // Upper 3-sigma limit
   }
 
@@ -133,15 +127,10 @@ export default function uprimeLimits(args: Readonly<controlLimitsArgs>): control
   for (let i = 0; i < n; i++) {
     // Calculate sigma for this sample: σ = base_sd × (MR / d2)
     const sigma: number = sd[i] * sigma_multiplier;
-    const twoSigma: number = 2 * sigma;
     const threeSigma: number = 3 * sigma;
 
     rtn.targets[i] = cl;                                   // Centreline: ū
     rtn.ll99![i] = Math.max(0, cl - threeSigma);             // LCL: max(0, ū - 3σ)
-    rtn.ll95![i] = Math.max(0, cl - twoSigma);             // 2σ lower: max(0, ū - 2σ)
-    rtn.ll68![i] = Math.max(0, cl - sigma);             // 1σ lower: max(0, ū - σ)
-    rtn.ul68![i] = cl + sigma;                          // 1σ upper: ū + σ
-    rtn.ul95![i] = cl + twoSigma;                          // 2σ upper: ū + 2σ
     rtn.ul99![i] = cl + threeSigma;                          // UCL: ū + 3σ
   }
 

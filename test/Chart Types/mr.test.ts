@@ -11,8 +11,6 @@ const denominators: number[] = [113,132,121,134,116,131,93,138,182,157,100,103,1
 
 const values: number[] = [0.0088,0.0117,0.0109,0.0081,0.0222,0.0048,0.0222,0.0213,0.0388,0.0028,0.012,0.0132,0.01,0.0136,4e-04,0.0183]
 const ul99: number[] = [0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448,0.0448];
-const ul95: number[] = [0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298,0.0298];
-const ll95: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 const ll99: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
 describe("MR Chart Test", () => {
@@ -40,8 +38,6 @@ describe("MR Chart Test", () => {
     for (let i = 0; i < limits.keys.length; i++) {
       expect((limits.values as number[])[i]).toBeCloseTo(values[i], 4);
       expect((limits.ul99 as number[])[i]).toBeCloseTo(ul99[i], 4);
-      expect((limits.ul95 as number[])[i]).toBeCloseTo(ul95[i], 4);
-      expect((limits.ll95 as number[])[i]).toBeCloseTo(ll95[i], 4);
       expect((limits.ll99 as number[])[i]).toBeCloseTo(ll99[i], 4);
     }
   });
