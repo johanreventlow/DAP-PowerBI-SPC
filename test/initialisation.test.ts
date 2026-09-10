@@ -1,4 +1,5 @@
 import { testDom, createVisualHost } from "powerbi-visuals-utils-testutils";
+import { defaultSettings } from "../src/settings";
 import { Visual } from "../src/visual";
 import buildDataView from "./helpers/buildDataView";
 import { describe, it, expect } from "vitest";
@@ -56,4 +57,37 @@ describe("Chart Initialisation", () => {
 
   // Remove visual element from DOM to avoid interfering with other tests
   element.remove();
+});
+
+// The colour palette is read from the host so the visual can honour Windows'
+// high-contrast mode. The constructor seeds the field with an empty object,
+// and the guard that fills it tested for null or undefined — which an empty
+// object is neither. The palette was therefore never read, isHighContrast
+// stayed undefined, and every high-contrast branch in the visual was dead
+// code. That is an accessibility failure, not a cosmetic one.
+describe("Colour palette", () => {
+  const visual = new Visual({
+    element: testDom("500", "500"),
+    host: createVisualHost({})
+  });
+  visual.update({
+    dataViews: [ buildDataView({ key: stringKeys, numerators: validNumerators },
+                               JSON.parse(JSON.stringify(defaultSettings))) ],
+    viewport: { width: 500, height: 500 },
+    type: 2 /*powerbi.VisualUpdateType.Data*/
+  });
+
+  it("is read from the host rather than left empty", () => {
+    const palette = visual.viewModel.colourPalette;
+    // The mock host supplies these; before the fix they were all undefined
+    // because the palette object was never filled in at all.
+    expect(palette.foregroundColour).toBeTypeOf("string");
+    expect(palette.backgroundColour).toBeTypeOf("string");
+    expect(palette.foregroundSelectedColour).toBeTypeOf("string");
+    expect(palette.hyperlinkColour).toBeTypeOf("string");
+    // isHighContrast is deliberately not asserted: the test host declares it
+    // in its typings but never assigns it at runtime, so it stays undefined
+    // here. Power BI itself supplies a boolean, which is what the
+    // high-contrast branches throughout the visual read.
+  });
 });

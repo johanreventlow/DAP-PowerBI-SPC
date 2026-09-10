@@ -40,7 +40,7 @@ describe("flagOutliers — multi-group Anhøj signals", () => {
     } as unknown as defaultSettingsType;
 
     const derivedSettings = {
-        chart_type_props: { has_control_limits: false }
+        chart_type_props: { has_control_limits: false, name: "run", runs_analysis_applies: true }
     } as unknown as derivedSettingsClass;
 
     const vm = new viewModelClass();

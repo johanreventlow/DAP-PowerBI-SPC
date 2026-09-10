@@ -227,7 +227,12 @@ export default class viewModelClass {
     } else if (updateOptionsStatus === UpdateOptionsValidTypes.MissingNumerators) {
       return { status: false, error: "No Numerators passed!" }
     }
-    if (isNullOrUndefined(this.colourPalette)) {
+    // The constructor seeds this with an empty object, which is neither null
+    // nor undefined — so the original guard never fired and the palette was
+    // never filled. isHighContrast stayed undefined, leaving every
+    // high-contrast branch in the visual dead. Fill it whenever the host's
+    // palette has not been read yet.
+    if (isNullOrUndefined(this.colourPalette?.isHighContrast)) {
       this.colourPalette = {
         isHighContrast: host.colorPalette.isHighContrast,
         foregroundColour: host.colorPalette.foreground.value,
@@ -968,10 +973,15 @@ export default class viewModelClass {
       // the centerline, not whether the counts exist. The panel shows the
       // numbers either way, and one pass replaces two wrapper calls.
       const runs: runsAnalysisObject = anhojRunsAnalysis(group_values, group_targets);
-      if (inputSettings.outliers.anhoj_long_run) {
+      // qicharts2 forces runs.signal FALSE for chart == 'mr'. Consecutive
+      // moving ranges share a data point, so they are autocorrelated by
+      // construction and the runs analysis assumption of independence does
+      // not hold. The counts stay visible; only the verdict is withheld.
+      const runsApply: boolean = derivedSettings.chart_type_props.runs_analysis_applies;
+      if (inputSettings.outliers.anhoj_long_run && runsApply) {
         group_signal.long_run = runs.long_run_signal;
       }
-      if (inputSettings.outliers.anhoj_few_crossings) {
+      if (inputSettings.outliers.anhoj_few_crossings && runsApply) {
         group_signal.few_crossings = runs.few_crossings_signal;
       }
       perGroupSignals.push(group_signal);
@@ -986,13 +996,30 @@ export default class viewModelClass {
           && !isNullOrUndefined(controlLimits.ul99)) {
         const lower_limits: number[] = controlLimits.ll99!.slice(start, end) as number[];
         const upper_limits: number[] = controlLimits.ul99!.slice(start, end) as number[];
-        nBeyondLimits = astronomical(group_values, lower_limits, upper_limits)
-          .filter((flag, idx) => flag !== "none" && isValidNumber(group_values[idx]))
-          .length;
+        // Counted directly rather than through `astronomical`, which relies on
+        // `between` and so reports a NaN-bounded value as outside. A constant
+        // series on an I-chart produces exactly that: every moving range is 0,
+        // so the screening bound is 0, nothing falls below it, and the average
+        // becomes 0/0. That reported a series with no variation at all as
+        // entirely out of control.
+        //
+        // A limit that is not a real number is no limit, not a breached one —
+        // matching qicharts2, where `y > ucl | y < lcl` maps NA to FALSE.
+        nBeyondLimits = group_values.filter((value: number, idx: number) => {
+          if (!isValidNumber(value)) {
+            return false;
+          }
+          const lower: number = lower_limits[idx];
+          const upper: number = upper_limits[idx];
+          return (isValidNumber(upper) && value > upper)
+              || (isValidNumber(lower) && value < lower);
+        }).length;
       }
 
       perGroupStats.push({
         ...runs,
+        long_run_signal: runs.long_run_signal && runsApply,
+        few_crossings_signal: runs.few_crossings_signal && runsApply,
         n_beyond_limits: nBeyondLimits,
         beyond_limits_signal: nBeyondLimits !== null && nBeyondLimits > 0
       });

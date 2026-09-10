@@ -37,6 +37,11 @@ export default class plotPropertiesClass {
   yAxis: axisProperties;
   xScale: d3.AxisScale<number>;
   yScale: d3.AxisScale<number>;
+  // Whether the signal panel is drawn this update. Decided here, where the
+  // viewport is known, so that the padding reserved for the panel and the
+  // drawing of it can never disagree — otherwise a narrow tile would keep
+  // an empty strip to the right of the plot.
+  showSignalPanel: boolean;
 
   // Separate function so that the axis can be re-calculated on changes to padding
   initialiseScale(svgWidth: number, svgHeight: number): void {
@@ -69,6 +74,7 @@ export default class plotPropertiesClass {
       label_colour: "#000000"
     }
     this.displayPlot = false;
+    this.showSignalPanel = false;
 
     this.xAxis = dummyAxisProperties;
     this.yAxis = dummyAxisProperties;
@@ -151,11 +157,18 @@ export default class plotPropertiesClass {
                                       ? inputSettings.x_axis.xlimit_label_size
                                       : 0;
 
+    // The panel is only worth its width when the plot keeps a usable share
+    // of the tile; below the threshold the tooltip carries the same counts.
+    this.showSignalPanel = inputSettings.signal_panel.show_panel
+      && options.viewport.width >= inputSettings.signal_panel.panel_hide_below_width
+      && (viewModel.outliers[0]?.per_group_stats?.length ?? 0) > 0;
+    const panelPadding: number = this.showSignalPanel ? inputSettings.signal_panel.panel_width : 0;
+
     this.xAxis = {
       lower: !isNullOrUndefined(xLowerLimit) ? xLowerLimit : 0,
       upper: xUpperLimit as number,
       start_padding: inputSettings.canvas.left_padding + leftLabelPadding,
-      end_padding: inputSettings.canvas.right_padding,
+      end_padding: inputSettings.canvas.right_padding + panelPadding,
       colour: colorPalette.isHighContrast ? colorPalette.foregroundColour : inputSettings.x_axis.xlimit_colour,
       ticks: inputSettings.x_axis.xlimit_ticks,
       tick_size: `${xTickSize}px`,
