@@ -37,12 +37,19 @@ To ting hører til `danish-ui` og mangler på main:
   Main formaterer tal uden komma-håndtering nogen steder. For danske brugere
   vises `3.5` hvor der skulle stå `3,5`.
 
+## Samlet i én plan
+
+`changes/complete-qicharts2-alignment/` samler alle beslutninger, der endnu
+ikke er i koden, i fem trin med rækkefølge og begrundelse. Den løser samtidig
+tre steder, hvor beslutninger fra 11. juni modsiger hinanden — tidsstemplet
+afgør, og de senere gælder.
+
 ## Ikke afgjort
 
 | Change | Note |
 |---|---|
 | `changes/remove-non-anhoj-rules/` (maj-versionen) | Overhalet af juni-revisionen i `archive/`. Bevaret alene for `specs/centerline-calculation/spec.md`, som argumenterer for at fjerne chart-typerne `i_m` og `i_mm` — de findes ikke i `qicharts2` og er stadig valgbare |
-| `changes/archive/2026-06-11-align-limits-qicharts2/` | Arkiveret som udført på branchen. Ikke efterprøvet mod main |
+| `changes/archive/2026-06-11-align-limits-qicharts2/` | Efterprøvet 2026-09-10: intet af den er på main. Indgår nu i `complete-qicharts2-alignment` |
 
 ## Vigtigt om koden
 
