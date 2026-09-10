@@ -1,9 +1,25 @@
 # NEWS
 
-## 1.8.0.0 — DAP SPC
+## 1.0.0.0 — DAP SPC
 
 Første udgivelse under det nye navn. Visualen har eget GUID (`DAPSPC`) og
 kan derfor installeres side om side med den oprindelige AUS-DOH-visual.
+
+### Om versionsnummeret
+
+Versionen starter forfra på 1.0.0.0. Den tidligere `1.8.0.0` var upstreams
+eget løbenummer, arvet gennem merge `91b03ef` fra AUS-DOH-commit `7fc0f5f`
+(13. august 2026) — ikke et tal denne fork havde tildelt.
+
+Efter fjernelsen af NHS-reglerne er DAP SPC ikke en nyere udgave af
+AUS-DOH-visualen, men et andet produkt med et andet regelsæt, eget navn og
+eget GUID. En fælles nummerserie ville få de to til at se sammenlignelige ud
+og ville kollidere ved fremtidige merges fra upstream. Repoet havde ingen tags
+og ingen udgivelser på tidspunktet for skiftet, så ingen versionshistorik
+brydes.
+
+Kommende merges fra upstream noteres her med deres commit, så relationen kan
+slås op uden at være bundet ind i versionsnummeret.
 
 ### Nye features
 
@@ -62,7 +78,7 @@ formateringsruden. Selve dataene og de øvrige indstillinger er upåvirkede.
 
 ## F1 — Anhøj-regler
 
-*Udviklingsforløb, aldrig udgivet separat; indgår i 1.8.0.0. Stinavne i
+*Udviklingsforløb, aldrig udgivet separat; indgår i 1.0.0.0. Stinavne i
 formateringsruden nedenfor er dem, der gjaldt undervejs.*
 
 ### Nye features

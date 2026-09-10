@@ -4,7 +4,7 @@
     "displayName":"DAP SPC",
     "guid":"DAPSPC",
     "visualClassName":"Visual",
-    "version":"1.8.0.0",
+    "version":"1.0.0.0",
     "description":"Statistisk proceskontrol: SPC-diagrammer med automatisk signaldetektion",
     "supportUrl":"https://github.com/johanreventlow/DAP-PowerBI-SPC/issues",
     "gitHubUrl":"https://github.com/johanreventlow/DAP-PowerBI-SPC"

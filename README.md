@@ -78,8 +78,8 @@ enige — ellers stopper workflowet, før noget publiceres:
 
 ```
 # ret versionen begge steder først, commit, og så:
-git tag v1.8.0.1
-git push origin v1.8.0.1
+git tag v1.0.0.1
+git push origin v1.0.0.1
 ```
 
 [Release-workflowet](.github/workflows/release.yml) kører derefter linter,
