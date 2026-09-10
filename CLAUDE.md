@@ -104,7 +104,7 @@ inkrementel log-PMF-rekurrens — bevidst uden `lgamma` i hot path.
 - **OpenSpec:** Brug `/opsx:propose` for non-trivielle ændringer
   (Anhøj-rule-tilføjelser kvalificerer)
 - **Versioning:** `pbiviz.json` + `package.json` skal holdes synkront
-  (aktuelt 1.8.0.0; jf. POWERBI_VISUAL_STANDARDS.md)
+  (aktuelt 1.0.0.0 — egen versionsserie, jf. POWERBI_VISUAL_STANDARDS.md)
 
 ---
 
