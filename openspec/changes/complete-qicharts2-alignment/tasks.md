@@ -90,17 +90,23 @@ property, der kun fjernes ét af stederne, fejler tavst — det har kostet tid f
 
 ## Trin 3 — Retningsfarver
 
-- [ ] Slet `src/Outlier Flagging/checkFlagDirection.ts` og dens test
-- [ ] Fjern kald i `viewModelClass.ts`; `astronomical` returnerer et brud, der
+> **Udført 2026-09-10.** Panelets tredje række var allerede dækket af
+> `flagOutliersGroupStats.test.ts` ("counts limits independently of the
+> astronomical toggle"), så den planlagte test ville have været et svagere
+> duplikat. I stedet er `astpoint`-kontrakten låst: feltet bærer nu siden
+> (`upper`/`lower`), ikke en vurdering.
+
+- [x] Slet `src/Outlier Flagging/checkFlagDirection.ts` og dens test
+- [x] Fjern kald i `viewModelClass.ts`; `astronomical` returnerer et brud, der
       ikke oversættes til en vurdering
-- [ ] Fjern "General"-gruppen (`process_flag_type`, `improvement_direction`)
+- [x] Fjern "General"-gruppen (`process_flag_type`, `improvement_direction`)
       fra `src/Settings Model/outliersSettings.ts`
-- [ ] Erstat de fire farvevælgere med én `ast_colour`
-- [ ] Ryd direction-keys i `getAesthetic.ts`
-- [ ] Opdatér `capabilities.json` synkront
-- [ ] Test: punkt over og punkt under grænsen får samme farve
-- [ ] Test: signalpanelets tredje række er uændret (optællingen er allerede
-      uafhængig af både toggle og retning — det skal blive ved med at gælde)
+- [x] Erstat de fire farvevælgere med én `ast_colour`
+- [x] Ryd direction-keys i `getAesthetic.ts`
+- [x] Opdatér `capabilities.json` synkront
+- [x] Test: punkt over og punkt under grænsen får samme farve
+- [x] ~~Test: signalpanelets tredje række er uændret~~ — allerede dækket af
+      `flagOutliersGroupStats.test.ts`; låste i stedet `astpoint`-kontrakten
 
 ---
 

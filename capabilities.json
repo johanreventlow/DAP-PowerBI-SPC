@@ -99,26 +99,11 @@
     },
     "outliers" : {
       "properties": {
-        "process_flag_type": {
-          "type": { "enumeration" : [ ] }
-        },
-        "improvement_direction": {
-          "type": { "enumeration" : [ ] }
-        },
         "astronomical": {
           "type" : { "bool" : true }
         },
-        "ast_colour_improvement":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "ast_colour_deterioration":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "ast_colour_neutral_low":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "ast_colour_neutral_high":{
-          "type": { "fill": { "solid": { "color": true } } }
+        "ast_colour": {
+          "type" : { "fill" : { "solid" : { "color" : true } } }
         },
         "anhoj_long_run": {
           "type" : { "bool" : true }

@@ -8,8 +8,6 @@ import settingsClass from "./settingsClass";
 import { type settingsValueType } from "../settings";
 import type derivedSettingsClass from "./derivedSettingsClass";
 import buildTooltip from "../Functions/buildTooltip";
-import getAesthetic from "../Functions/getAesthetic";
-import checkFlagDirection from "../Outlier Flagging/checkFlagDirection";
 import rep from "../Functions/rep";
 import type { dataObject } from "../Functions/extractInputData";
 import extractInputData from "../Functions/extractInputData";
@@ -580,10 +578,11 @@ export default class viewModelClass {
         aesthetics.colour = this.colourPalette.foregroundColour;
       }
       if (outliers.astpoint[i] !== "none") {
-        aesthetics.colour = getAesthetic(outliers.astpoint[i], "outliers",
-                                  "ast_colour", settings) as string;
-        aesthetics.colour_outline = getAesthetic(outliers.astpoint[i], "outliers",
-                                  "ast_colour", settings) as string;
+        // Én farve, ens over og under grænsen. astpoint bærer stadig hvilken
+        // side bruddet er på, fordi optællingen og tooltippet bruger det —
+        // men det oversættes ikke længere til en vurdering.
+        aesthetics.colour = settings.outliers.ast_colour;
+        aesthetics.colour_outline = settings.outliers.ast_colour;
       }
       const table_row: summaryTableRowData = {
         date: controlLimits.keys[i].label,
@@ -758,8 +757,6 @@ export default class viewModelClass {
 
   flagOutliers(controlLimits: controlLimitsObject, groupStartEndIndexes: number[][],
                 inputSettings: settingsValueType, derivedSettings: derivedSettingsClass): outliersObject {
-    const process_flag_type: string = inputSettings.outliers.process_flag_type;
-    const improvement_direction: string = inputSettings.outliers.improvement_direction;
     const perGroupSignals: { long_run: boolean; few_crossings: boolean }[] = [];
     const perGroupStats: groupStatsObject[] = [];
     const outliers: outliersObject = {
@@ -839,17 +836,12 @@ export default class viewModelClass {
         beyond_limits_signal: nBeyondLimits !== null && nBeyondLimits > 0
       });
     }
-    // The runs rules are series-level signals (dashed centerline) with no
-    // per-point flags to direction-map. Points beyond the control limits are
-    // per-point, so they still go through improvement_direction mapping.
-    const directionMappedKeys: ReadonlyArray<keyof outliersObject> = ["astpoint"];
-    directionMappedKeys.forEach(key => {
-      const arr = outliers[key] as string[];
-      for (let i = 0; i < arr.length; i++) {
-        arr[i] = checkFlagDirection(arr[i],
-                                    { process_flag_type, improvement_direction });
-      }
-    });
+    // astpoint bliver stående som "upper" / "lower" / "none". Tidligere blev
+    // det her oversat til improvement/deterioration/neutral ud fra hvilken vej
+    // brugeren mente var den gode. qicharts2 fortolker ikke retning —
+    // sigma.signal er en ren boolean per punkt — og vurderingen af, om et
+    // signal er godt eller skidt, afhænger af indikatoren og den kliniske
+    // kontekst, ikke af en indstilling i værktøjet.
     return outliers;
   }
 }

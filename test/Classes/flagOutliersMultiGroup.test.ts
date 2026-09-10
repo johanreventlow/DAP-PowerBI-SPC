@@ -23,8 +23,6 @@ describe("flagOutliers — multi-group Anhøj signals", () => {
 
     const settings = {
         outliers: {
-            process_flag_type: "both",
-            improvement_direction: "increase",
             astronomical: false,
                       anhoj_long_run: true,
             anhoj_few_crossings: true

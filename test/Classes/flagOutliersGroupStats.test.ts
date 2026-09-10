@@ -9,8 +9,6 @@ import { anhojFixtures } from "../Outlier Flagging/anhojFixtures";
 // control limits — which only exists on chart types that have limits.
 
 const baseOutlierSettings = {
-  process_flag_type: "both",
-  improvement_direction: "increase",
   astronomical: false,
   anhoj_long_run: true,
   anhoj_few_crossings: true
@@ -121,6 +119,25 @@ describe("flagOutliers — per-group statistics", () => {
 
     expect(outliers.per_group_stats[0].n_beyond_limits).toBe(2);
     expect(outliers.astpoint.every(f => f === "none")).toBe(true);
+  });
+
+  // astpoint bar tidligere en vurdering — improvement / deterioration /
+  // neutral_low / neutral_high — udledt af improvement_direction. Nu bærer den
+  // kun hvilken side af grænsen bruddet er på. Tooltip og optælling læser den,
+  // så kontrakten skal låses.
+  it("markerer siden, ikke en vurdering", () => {
+    const ll99: number[] = values.map(() => 1);
+    const ul99: number[] = values.map(() => 12);
+    const vm = new viewModelClass();
+    const outliers = vm.flagOutliers(
+      { values, targets, ll99, ul99 } as never,
+      groups, settingsWith({ astronomical: true }), derivedWith(true)
+    );
+
+    const distinct = [...new Set(outliers.astpoint)].sort();
+    expect(distinct).toEqual(["none", "upper"]);
+    expect(outliers.astpoint).not.toContain("improvement");
+    expect(outliers.astpoint).not.toContain("deterioration");
   });
 
   it("keeps the counts per period in a rebaselined chart", () => {
