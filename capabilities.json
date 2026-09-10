@@ -458,6 +458,15 @@
         "plot_label_prefix_99": {
           "type": { "text": true }
         },
+        "show_band_99": {
+          "type" : { "bool" : true }
+        },
+        "band_colour_99": {
+          "type" : { "fill" : { "solid" : { "color" : true } } }
+        },
+        "band_opacity_99": {
+          "type" : { "numeric" : true }
+        },
         "plot_label_prefix_main": {
           "type": { "text": true }
         },

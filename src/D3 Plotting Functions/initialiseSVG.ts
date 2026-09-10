@@ -11,6 +11,9 @@ export default function initialiseSVG(selection: svgBaseType,
   selection.append('text').classed('xaxislabel', true)
   selection.append('g').classed("yaxisgroup", true)
   selection.append('text').classed('yaxislabel', true)
+  // Før linesgroup: SVG maler i dokumentorden, så båndet skal ligge her for
+  // at havne bag linjer og punkter.
+  selection.append('g').classed("limitbandgroup", true)
   selection.append('g').classed("linesgroup", true)
   selection.append('g').classed("dotsgroup", true)
 }

@@ -112,18 +112,25 @@ property, der kun fjernes ét af stederne, fejler tavst — det har kostet tid f
 
 ## Trin 4 — 3σ-bånd
 
+> **Udført 2026-09-10.** Mutationstest afslørede, at den planlagte
+> `has_control_limits`-guard og en `!!limits?.ll99`-kontrol var ækvivalente:
+> `run` er den eneste chart-type uden kontrolgrænser, og `run.ts` er den
+> eneste limit-beregning, der ikke producerer `ll99`. Den ene er fjernet.
+> Run-diagram-testen kan derfor ikke isolere hvilken guard der virker — den
+> verificerer udfaldet, ikke mekanismen.
+
 Reference: `git show arkiv/f1-2026-06-17:"src/D3 Plotting Functions/drawLimitBand.ts"`.
 Skrives om mod nuværende kodebase — den gamle er fra før Vitest og
 signalpanelet.
 
-- [ ] Ny `src/D3 Plotting Functions/drawLimitBand.ts`
-- [ ] SVG-gruppe bag linjer og punkter i tegnerækkefølgen
-- [ ] Ét bånd per fase, brudt ved faseskift
-- [ ] Intet bånd på chart-typer uden kontrolgrænser
-- [ ] Indstillinger i `linesSettings.ts`: vis/skjul (**default fra**), farve,
+- [x] Ny `src/D3 Plotting Functions/drawLimitBand.ts`
+- [x] SVG-gruppe bag linjer og punkter i tegnerækkefølgen
+- [x] Ét bånd per fase, brudt ved faseskift
+- [x] Intet bånd på chart-typer uden kontrolgrænser
+- [x] Indstillinger i `linesSettings.ts`: vis/skjul (**default fra**), farve,
       gennemsigtighed — synkront i `capabilities.json`
-- [ ] Test: faseopdelt diagram giver to adskilte bånd
-- [ ] Test: run-diagram giver intet bånd
+- [x] Test: faseopdelt diagram giver to adskilte bånd
+- [x] Test: run-diagram giver intet bånd
 
 ---
 

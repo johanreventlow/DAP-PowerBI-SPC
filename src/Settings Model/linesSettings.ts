@@ -93,7 +93,12 @@ const linesSettings = {
       plot_label_font_99: fontOption("Value Font"),
       plot_label_size_99: fontSizeOption("Value Font Size"),
       plot_label_colour_99: colourOption("Value Colour", "standard"),
-      plot_label_prefix_99: textOption("Value Prefix", "")
+      plot_label_prefix_99: textOption("Value Prefix", ""),
+      // Default fra: båndet er en tilvalgt læsehjælp, ikke en del af
+      // qicharts2's udtryk.
+      show_band_99: toggleOption("Show Filled Band Between Limits", false),
+      band_colour_99: colourOption("Band Colour", "limits"),
+      band_opacity_99: numberOption("Band Opacity", 0.15, { min: 0, max: 1 })
     }
   }
 };
