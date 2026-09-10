@@ -1,26 +1,31 @@
 # Tasks — Remove Non-Anhøj Rules
 
-> **Status pr. 2026-09-10.** Planen blev skrevet 2026-05-19 på branchen
-> `refactor/remove-non-anhoj-f2` og aldrig merged. Delvist udført i stedet via
-> PR #4 (commit `faafe95`), som blev skåret efter en snævrere afgrænsning.
-> Afkrydsningerne nedenfor er derfor ikke ajour — brug denne oversigt:
+> **Status pr. 2026-09-10 — rettet.**
 >
-> | Afsnit | Status |
+> Denne plan er fra 2026-05-19 og blev **revideret 2026-06-11**. Revisionen
+> ligger i `../archive/2026-06-11-remove-non-anhoj-rules/` og er den, der
+> gælder. Den er udført: F2 landede via PR #4 (commit `faafe95`) med præcis
+> juni-revisionens afgrænsning.
+>
+> Juni-revisionen indsnævrede scopet på tre punkter, som denne maj-version
+> stadig beskriver, og som derfor **ikke** er udestående arbejde:
+>
+> | Maj-planen ville | Juni-revisionen |
 > |---|---|
-> | 2.1–2.3 slet `trend`, `twoInThree`, `shift` | **udført** |
-> | 2.4 slet `checkFlagDirection` | **udestående** — stadig importeret og kaldt i `viewModelClass.ts:924` |
-> | 3 NHS-ikoner + cascade-cleanup | **udført**, inkl. summary-table og grouped-pipeline |
-> | 4 slet `i_m` + `i_mm` | **udestående** — begge er stadig valgbare i Chart Type-dropdownen |
-> | 5 omdøb `astronomical` → `outsideControlLimits` | **udestående** — filen hedder stadig `astronomical.ts`; settings-gruppen blev i stedet omdøbt til "Beyond Control Limit" |
-> | 6–7 direction-agnostisk farvelægning | **udestående** |
-> | `astronomical_limit`-indstillingen fjernes | **udestående** — findes stadig i `capabilities.json` |
+> | slette `checkFlagDirection.ts` | **bevar den** — "bruges af astronomical" |
+> | omdøbe `astronomical.ts` → `outsideControlLimits.ts` | taget ud af scope |
+> | fjerne `astronomical_limit` | taget ud af scope |
+>
+> Det ene punkt fra maj, der **ikke** blev afgjort i juni og stadig står
+> åbent, er fjernelsen af chart-typerne `i_m` og `i_mm`. Begge er stadig
+> valgbare i Chart Type-dropdownen. Begrundelsen ligger i
+> `specs/centerline-calculation/spec.md`, som juni-revisionen ikke har —
+> det er grunden til, at denne maj-version bevares frem for at slettes.
 >
 > Advarslen i 1.4 blev respekteret: `calculateTrendLine.ts` og
-> `lines.show_trend` er urørte. Det er trend-*linjen* (regressions-overlay), en
-> anden feature end den fjernede trend-*regel*.
+> `lines.show_trend` er urørte. Det er trend-*linjen* (regressions-overlay),
+> en anden feature end den fjernede trend-*regel*.
 >
-> Præmissen om, at `astronomical` = `qicharts2`'s `sigma.signal`, blev nået
-> uafhængigt igen i september og er grunden til, at reglen blev bevaret.
 > SHA-referencerne i 1.1 nedenfor er forældede.
 
 ## 1. Pre-flight
