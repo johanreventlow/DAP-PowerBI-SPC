@@ -92,6 +92,13 @@ formateringsruden. Selve dataene og de øvrige indstillinger er upåvirkede.
 
 ### Rettelser
 
+* Indstillinger og grænseberegning blev sprunget over ved en del af Power BI's
+  opdateringer. `VisualUpdateType` er et bit-flag, men koden sammenlignede med
+  `=== 2` og ramte derfor kun en opdatering, hvor Data-bitten stod alene. Kom
+  ændringen som `All` (62) eller `Data|Resize` (6), gentegnede visualen den
+  forrige beregning. Synligt fx ved at skifte diagramtype fra `i` til `run` og
+  tilbage: dropdownen sagde `i`, men grafen var stadig tegnet uden
+  kontrolgrænser. En ren resize udløser fortsat ingen genberegning.
 * Kontrolgrænser, der ikke er reelle tal, tælles ikke længere som brud. En
   konstant serie på et i-chart gav `0/0`-grænser, og hele serien blev talt som
   uden for kontrol.
