@@ -97,12 +97,12 @@ export default function extractInputData(inputView: DataViewCategorical,
       if (settingsMessages[i].length > 0) {
         settingsMessages[i].forEach(setting_removal_message => {
           removalMessages.push(
-            `Conditional formatting for ${groupVarName} ${keys![idx]} ignored due to: ${setting_removal_message}.`
+            `Betinget formatering for ${groupVarName} ${keys![idx]} ignoreret: ${setting_removal_message}.`
           )}
         );
       }
     } else {
-      removalMessages.push(`${groupVarName} ${keys![idx]} removed due to: ${inputValidStatus.messages[idx]}.`)
+      removalMessages.push(`${groupVarName} ${keys![idx]} udeladt: ${inputValidStatus.messages[idx]}.`)
     }
   })
 

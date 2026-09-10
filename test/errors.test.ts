@@ -30,7 +30,7 @@ describe("Chart Errors", () => {
       type:  2 /*powerbi.VisualUpdateType.Data*/
     });
 
-    expect_error(svgElement, 'No Numerators passed!');
+    expect_error(svgElement, 'Ingen tællere angivet.');
 
     visual.update({
       dataViews: [ buildDataView({ key: stringKeys, numerators: rep(<any>null, 7) }) ],
@@ -38,7 +38,7 @@ describe("Chart Errors", () => {
       type:  2 /*powerbi.VisualUpdateType.Data*/
     });
 
-    expect_error(svgElement, 'All numerators are missing or null!');
+    expect_error(svgElement, 'Alle tællere mangler.');
 
     visual.update({
       dataViews: [ buildDataView({ key: stringKeys, numerators: stringKeys }) ],
@@ -46,7 +46,7 @@ describe("Chart Errors", () => {
       type:  2 /*powerbi.VisualUpdateType.Data*/
     });
 
-    expect_error(svgElement, 'All numerators are not numbers!');
+    expect_error(svgElement, 'Ingen af tællerne er tal.');
 
     visual.update({
       dataViews: [ buildDataView({ key: rep(<any>null, 7), numerators: validNumerators }) ],
@@ -54,7 +54,7 @@ describe("Chart Errors", () => {
       type:  2 /*powerbi.VisualUpdateType.Data*/
     });
 
-    expect_error(svgElement, 'All dates/IDs are missing or null!');
+    expect_error(svgElement, 'Alle datoer/nøgler mangler.');
   });
 
   element.remove();

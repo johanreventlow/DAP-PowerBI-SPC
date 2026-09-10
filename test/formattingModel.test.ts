@@ -21,12 +21,12 @@ describe("FormattingModel — Signal Detection group", () => {
     });
 
     it("outliers card contains a Signal Detection group", () => {
-        const signalGroup = outliersCard?.groups.find(g => g.displayName === "Signal Detection");
+        const signalGroup = outliersCard?.groups.find(g => g.displayName === "Signaldetektion");
         expect(signalGroup).toBeTruthy();
     });
 
     it("Signal Detection group contains exactly the two toggles (no colour pickers)", () => {
-        const signalGroup = outliersCard?.groups.find(g => g.displayName === "Signal Detection");
+        const signalGroup = outliersCard?.groups.find(g => g.displayName === "Signaldetektion");
         const sliceProps: string[] = (signalGroup?.slices ?? []).map((s: any) => {
             return s.control?.properties?.descriptor?.propertyName;
         });
@@ -38,7 +38,7 @@ describe("FormattingModel — Signal Detection group", () => {
     });
 
     it("Signal Detection slice descriptors target the outliers object", () => {
-        const signalGroup = outliersCard?.groups.find(g => g.displayName === "Signal Detection");
+        const signalGroup = outliersCard?.groups.find(g => g.displayName === "Signaldetektion");
         (signalGroup?.slices ?? []).forEach((slice: any) => {
             expect(slice.control?.properties?.descriptor?.objectName).toBe("outliers");
         });
@@ -65,7 +65,7 @@ describe("FormattingModel — Signal Panel card", () => {
     it("exposes the panel, label and tooltip groups", () => {
         const names = (card?.groups ?? []).map(g => g.displayName);
         expect(names).toContain("Panel");
-        expect(names).toContain("Labels");
+        expect(names).toContain("Etiketter");
         expect(names).toContain("Tooltip");
     });
 

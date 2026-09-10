@@ -21,14 +21,14 @@
     { "name": "ExportContent", "essential": false }
   ],
   "dataRoles": [
-    { "displayName": "Outcome/Numerator",     "name": "numerators",   "kind": "Measure" },
-    { "displayName": "Denominator",           "name": "denominators", "kind": "Measure" },
-    { "displayName": "ID Key (Date)",         "name": "key",          "kind": "Grouping" },
-    { "displayName": "Grouping (Summary Table)",         "name": "indicator",          "kind": "Grouping" },
-    { "displayName": "Rebaseline Groupings",  "name": "groupings",    "kind": "Measure" },
-    { "displayName": "SD (for xbar)",         "name": "xbar_sds",     "kind": "Measure" },
+    { "displayName": "Værdi/Tæller",     "name": "numerators",   "kind": "Measure" },
+    { "displayName": "Nævner",           "name": "denominators", "kind": "Measure" },
+    { "displayName": "Nøgle (dato)",         "name": "key",          "kind": "Grouping" },
+    { "displayName": "Gruppering (oversigtstabel)",         "name": "indicator",          "kind": "Grouping" },
+    { "displayName": "Faser (rebaseline)",  "name": "groupings",    "kind": "Measure" },
+    { "displayName": "SD (til xbar)",         "name": "xbar_sds",     "kind": "Measure" },
     { "displayName": "Tooltips",              "name": "tooltips",     "kind": "Measure" },
-    { "displayName": "Value Labels",          "name": "labels",     "kind": "Measure" }
+    { "displayName": "Værdietiketter",          "name": "labels",     "kind": "Measure" }
   ],
   "objects": {
     "split_indexes_storage" : {

@@ -1,15 +1,15 @@
 import { dropdownOption } from "./common";
 
 const datesSettings = {
-  description: "Date Settings",
-  displayName: "Date Settings",
+  description: "Datoformat",
+  displayName: "Datoformat",
   settingsGroups: {
     "all": {
-      date_format_day: dropdownOption("Day Format", "DD", ["DD", "Thurs DD", "Thursday DD", "(blank)"]),
-      date_format_month: dropdownOption("Month Format", "MM", ["MM", "Mon", "Month", "(blank)"]),
-      date_format_year: dropdownOption("Year Format", "YYYY", ["YYYY", "YY", "(blank)"]),
-      date_format_delim: dropdownOption("Delimiter", "/", ["/", "-", " "]),
-      date_format_locale: dropdownOption("Locale", "en-GB", ["en-GB", "en-US"])
+      date_format_day: dropdownOption("Dagformat", "DD", ["DD", "Thurs DD", "Thursday DD", "(blank)"]),
+      date_format_month: dropdownOption("Månedsformat", "MM", ["MM", "Mon", "Month", "(blank)"]),
+      date_format_year: dropdownOption("Årsformat", "YYYY", ["YYYY", "YY", "(blank)"]),
+      date_format_delim: dropdownOption("Skilletegn", "/", ["/", "-", " "]),
+      date_format_locale: dropdownOption("Landestandard", "en-GB", ["en-GB", "en-US"])
     }
   }
 };

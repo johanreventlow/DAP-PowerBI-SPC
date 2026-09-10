@@ -136,17 +136,25 @@ signalpanelet.
 
 ## Trin 5 — Dansk UI
 
+> **Udført 2026-09-10.** Fire eksisterende tests hang på engelske strenge og
+> blev rettet med oversættelsen: `errors.test.ts` (fire fejlbeskeder) og
+> `formattingModel.test.ts` ("Signal Detection" → "Signaldetektion",
+> "Labels" → "Etiketter"). Property-nøglerne `anhoj_long_run` og
+> `anhoj_few_crossings` beholder deres navne — de er interne identifikatorer,
+> og et navneskift ville koste gemte indstillinger i eksisterende rapporter.
+> `danishUi.test.ts` afgrænser derfor kravet til det, brugeren kan se.
+
 Reference for terminologien: `arkiv/f1-2026-06-17` har fladen oversat.
 
-- [ ] `src/Functions/toFixedComma.ts` — dansk decimalkomma
-- [ ] Anvend den alle steder tal vises: tooltips, oversigtstabel,
+- [x] `src/Functions/toFixedComma.ts` — dansk decimalkomma
+- [x] Anvend den alle steder tal vises: tooltips, oversigtstabel,
       akse-etiketter, linje-etiketter, signalpanel
-- [ ] Oversæt alle `src/Settings Model/*.ts`: kortnavne, gruppenavne,
+- [x] Oversæt alle `src/Settings Model/*.ts`: kortnavne, gruppenavne,
       indstillingsnavne, dropdown-labels
-- [ ] Oversæt feltbrøndenes navne i `capabilities.json`
-- [ ] Oversæt tooltip-labels og tabelkolonner
-- [ ] Oversæt fejl- og valideringsbeskeder
-- [ ] Verificér: "Anhøj" fremgår ikke af den brugervendte flade
+- [x] Oversæt feltbrøndenes navne i `capabilities.json`
+- [x] Oversæt tooltip-labels og tabelkolonner
+- [x] Oversæt fejl- og valideringsbeskeder
+- [x] Verificér: "Anhøj" fremgår ikke af den brugervendte flade
 - [ ] **[MANUELT TRIN]** Johan læser terminologien igennem. Oversættelsen kan
       laves; om ordvalget er det rigtige i huset, er en faglig vurdering
 
