@@ -89,24 +89,6 @@ export default class settingsClass {
       })
     })
 
-    if (this.settings[0].nhs_icons.show_variation_icons) {
-      const patterns: string[] = ["astronomical", "shift", "trend", "two_in_three"];
-      const anyOutlierPatterns: boolean = patterns.some(d => this.settings[0].outliers[d as keyof settingsValueType["outliers"]]);
-      if (!anyOutlierPatterns) {
-        this.validationStatus.status = 1;
-        this.validationStatus.error = "Variation icons require at least one outlier pattern to be selected";
-      }
-    }
-/*
-    if (this.settings[0].nhs_icons.show_assurance_icons) {
-      const altTargetPresent: boolean = !isNullOrUndefined(this.settings[0].lines.alt_target);
-      const improvementDirection: string = this.settings[0].outliers.improvement_direction;
-      if (!altTargetPresent || improvementDirection === "neutral") {
-        this.validationStatus.status = 1;
-        this.validationStatus.error = "Assurance icons require an alternative target and a non-neutral improvement direction";
-      }
-    }
-*/
     this.settings.forEach((settingsItem, idx) => {
       this.derivedSettings[idx] = new derivedSettingsClass(settingsItem.spc);
     });

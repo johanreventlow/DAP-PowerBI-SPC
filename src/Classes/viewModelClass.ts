@@ -14,16 +14,11 @@ import rep from "../Functions/rep";
 import type { dataObject } from "../Functions/extractInputData";
 import extractInputData from "../Functions/extractInputData";
 import isNullOrUndefined from "../Functions/isNullOrUndefined";
-import variationIconsToDraw from "../Outlier Flagging/variationIconsToDraw";
-import assuranceIconToDraw from "../Outlier Flagging/assuranceIconToDraw";
 import validateDataViewColumns from "../Functions/validateDataViewColumns";
 import valueFormatter from "../Functions/valueFormatter";
 import calculateTrendLine from "../Functions/calculateTrendLine";
 import groupBy from "../Functions/groupBy";
 import astronomical from "../Outlier Flagging/astronomical";
-import trend from "../Outlier Flagging/trend";
-import twoInThree from "../Outlier Flagging/twoInThree";
-import shift from "../Outlier Flagging/shift";
 import { anhojRunsAnalysis, type runsAnalysisObject } from "../Outlier Flagging/anhojShared";
 import { lineNameMap } from "../Functions/getAesthetic";
 import isValidNumber from "../Functions/isValidNumber";
@@ -66,9 +61,6 @@ export type summaryTableRowData = {
   speclimits_upper: number | undefined;
   trend_line: number | undefined;
   astpoint: string;
-  trend: string;
-  shift: string;
-  two_in_three: string;
 }
 
 export type summaryTableRowDataGrouped = {
@@ -84,8 +76,6 @@ export type summaryTableRowDataGrouped = {
   lcl68: number;
   lcl95: number;
   lcl99: number;
-  variation: string;
-  assurance: string;
 }
 
 export type plotData = {
@@ -155,9 +145,6 @@ export type groupStatsObject = runsAnalysisObject & {
 
 export type outliersObject = {
   astpoint: string[];
-  trend: string[];
-  two_in_three: string[];
-  shift: string[];
   // One entry per data-group (baseline-split). Order matches
   // groupStartEndIndexes for the same indicator.
   per_group_signals: { long_run: boolean; few_crossings: boolean }[];
@@ -502,13 +489,6 @@ export default class viewModelClass {
         })
       }
     })
-    const nhsIconSettings: settingsValueType["nhs_icons"] = this.inputSettings.settings[0].nhs_icons;
-    if (nhsIconSettings.show_variation_icons) {
-      tableColumnsDef.push({ name: "variation", label: "Variation" });
-    }
-    if (nhsIconSettings.show_assurance_icons) {
-      tableColumnsDef.push({ name: "assurance", label: "Assurance" });
-    }
     const anyTooltips: boolean = this.inputData.some(d => d?.tooltips?.some(t => t.length > 0));
 
     if (anyTooltips) {
@@ -524,48 +504,11 @@ export default class viewModelClass {
         continue;
       }
       const formatValues = valueFormatter(this.inputSettings.settings[i], this.inputSettings.derivedSettings[i]);
-      const varIconFilter: string = this.inputSettings.settings[i].summary_table.table_variation_filter;
-      const assIconFilter: string = this.inputSettings.settings[i].summary_table.table_assurance_filter;
       const limits: controlLimitsObject = this.controlLimits[i];
       if (!limits) {
         continue;
       }
-      const outliers: outliersObject = this.outliers[i];
       const lastIndex: number = limits.keys.length - 1;
-      const varIcons: string[] = variationIconsToDraw(outliers, this.inputSettings.settings[i]);
-      if (varIconFilter !== "all") {
-        if (varIconFilter === "improvement" && !(["improvementHigh", "improvementLow"].includes(varIcons[0]))) {
-          continue;
-        }
-        if (varIconFilter === "deterioration" && !(["concernHigh", "concernLow"].includes(varIcons[0]))) {
-          continue;
-        }
-        if (varIconFilter === "neutral" && !(["neutralHigh", "neutralLow"].includes(varIcons[0]))) {
-          continue;
-        }
-        if (varIconFilter === "common" && varIcons[0] !== "commonCause") {
-          continue;
-        }
-        if (varIconFilter === "special" && varIcons[0] === "commonCause") {
-          continue;
-        }
-      }
-      const assIcon: string = assuranceIconToDraw(limits, this.inputSettings.settings[i],
-                                                      this.inputSettings.derivedSettings[i]);
-      if (assIconFilter !== "all") {
-        if (assIconFilter === "any" && assIcon === "inconsistent") {
-          continue;
-        }
-        if (assIconFilter === "pass" && assIcon !== "consistentPass") {
-          continue;
-        }
-        if (assIconFilter === "fail" && assIcon !== "consistentFail") {
-          continue;
-        }
-        if (assIconFilter === "inconsistent" && assIcon !== "inconsistent") {
-          continue;
-        }
-      }
       const table_row_entries: [string, string | number][] = new Array<[string, string | number]>();
       this.indicatorVarNames.forEach((indicator_name, idx) => {
         table_row_entries.push([indicator_name, this.groupNames[i][idx]]);
@@ -582,8 +525,6 @@ export default class viewModelClass {
       table_row_entries.push(["lcl68", formatValues(limits.ll68?.[lastIndex], "value")]);
       table_row_entries.push(["lcl95", formatValues(limits.ll95?.[lastIndex], "value")]);
       table_row_entries.push(["lcl99", formatValues(limits.ll99?.[lastIndex], "value")]);
-      table_row_entries.push(["variation", varIcons[0]]);
-      table_row_entries.push(["assurance", assIcon]);
 
       if (anyTooltips && !isNullOrUndefined(this.inputData[i].tooltips)) {
         this.inputData[i].tooltips![lastIndex].forEach(tooltip => {
@@ -660,12 +601,6 @@ export default class viewModelClass {
     if (settings.outliers.astronomical) {
       this.tableColumns[0].push({ name: "astpoint", label: "Ast. Point" });
     }
-    if (settings.outliers.trend) {
-      this.tableColumns[0].push({ name: "trend", label: "Trend" });
-    }
-    if (settings.outliers.shift) {
-      this.tableColumns[0].push({ name: "shift", label: "Shift" });
-    }
 
     // Which period a row belongs to. Bounds are [start, end) and monotonic
     // in i, so a cursor is enough — the same walk initialiseGroupedLines
@@ -685,24 +620,6 @@ export default class viewModelClass {
       const aesthetics: settingsValueType["scatter"] = inputData.scatter_formatting[i];
       if (this.colourPalette.isHighContrast) {
         aesthetics.colour = this.colourPalette.foregroundColour;
-      }
-      if (outliers.shift[i] !== "none") {
-        aesthetics.colour = getAesthetic(outliers.shift[i], "outliers",
-                                  "shift_colour", settings) as string;
-        aesthetics.colour_outline = getAesthetic(outliers.shift[i], "outliers",
-                                  "shift_colour", settings) as string;
-      }
-      if (outliers.trend[i] !== "none") {
-        aesthetics.colour = getAesthetic(outliers.trend[i], "outliers",
-                                  "trend_colour", settings) as string;
-        aesthetics.colour_outline = getAesthetic(outliers.trend[i], "outliers",
-                                  "trend_colour", settings) as string;
-      }
-      if (outliers.two_in_three[i] !== "none") {
-        aesthetics.colour = getAesthetic(outliers.two_in_three[i], "outliers",
-                                  "twointhree_colour", settings) as string;
-        aesthetics.colour_outline = getAesthetic(outliers.two_in_three[i], "outliers",
-                                  "twointhree_colour", settings) as string;
       }
       if (outliers.astpoint[i] !== "none") {
         aesthetics.colour = getAesthetic(outliers.astpoint[i], "outliers",
@@ -726,10 +643,7 @@ export default class viewModelClass {
         speclimits_lower: controlLimits?.speclimits_lower?.[i],
         speclimits_upper: controlLimits?.speclimits_upper?.[i],
         trend_line: controlLimits?.trend_line?.[i],
-        astpoint: outliers.astpoint[i],
-        trend: outliers.trend[i],
-        shift: outliers.shift[i],
-        two_in_three: outliers.two_in_three[i]
+        astpoint: outliers.astpoint[i]
       }
 
 
@@ -913,17 +827,11 @@ export default class viewModelClass {
                 inputSettings: settingsValueType, derivedSettings: derivedSettingsClass): outliersObject {
     const process_flag_type: string = inputSettings.outliers.process_flag_type;
     const improvement_direction: string = inputSettings.outliers.improvement_direction;
-    const trend_n: number = inputSettings.outliers.trend_n;
-    const shift_n: number = inputSettings.outliers.shift_n;
     const ast_specification: boolean = inputSettings.outliers.astronomical_limit === "Specification";
-    const two_in_three_specification: boolean = inputSettings.outliers.two_in_three_limit === "Specification";
     const perGroupSignals: { long_run: boolean; few_crossings: boolean }[] = [];
     const perGroupStats: groupStatsObject[] = [];
     const outliers: outliersObject = {
       astpoint: rep("none", controlLimits.values.length),
-      two_in_three: rep("none", controlLimits.values.length),
-      trend: rep("none", controlLimits.values.length),
-      shift: rep("none", controlLimits.values.length),
       per_group_signals: perGroupSignals,
       per_group_stats: perGroupStats
     }
@@ -934,14 +842,14 @@ export default class viewModelClass {
       const group_targets: number[] = controlLimits.targets.slice(start, end) as number[];
       const group_signal = { long_run: false, few_crossings: false };
 
-      if (derivedSettings.chart_type_props.has_control_limits || ast_specification || two_in_three_specification) {
-        const limit_map: Record<string, string> = {
-          "1 Sigma": "68",
-          "2 Sigma": "95",
-          "3 Sigma": "99",
-          "Specification": "",
-        };
+      if (derivedSettings.chart_type_props.has_control_limits || ast_specification) {
         if (inputSettings.outliers.astronomical) {
+          const limit_map: Record<string, string> = {
+            "1 Sigma": "68",
+            "2 Sigma": "95",
+            "3 Sigma": "99",
+            "Specification": "",
+          };
           const ast_limit: string = limit_map[inputSettings.outliers.astronomical_limit];
           const ll_prefix: string = ast_specification ? "speclimits_lower" : "ll";
           const ul_prefix: string = ast_specification ? "speclimits_upper" : "ul";
@@ -950,24 +858,6 @@ export default class viewModelClass {
           astronomical(group_values, lower_limits, upper_limits)
             .forEach((flag, idx) => outliers.astpoint[start + idx] = flag)
         }
-        if (inputSettings.outliers.two_in_three) {
-          const highlight_series: boolean = inputSettings.outliers.two_in_three_highlight_series;
-          const two_in_three_limit: string = limit_map[inputSettings.outliers.two_in_three_limit];
-          const ll_prefix: string = two_in_three_specification ? "speclimits_lower" : "ll";
-          const ul_prefix: string = two_in_three_specification ? "speclimits_upper" : "ul";
-          const lower_warn_limits: number[] = controlLimits[`${ll_prefix}${two_in_three_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
-          const upper_warn_limits: number[] = controlLimits[`${ul_prefix}${two_in_three_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
-          twoInThree(group_values, lower_warn_limits, upper_warn_limits, highlight_series)
-            .forEach((flag, idx) => outliers.two_in_three[start + idx] = flag)
-        }
-      }
-      if (inputSettings.outliers.trend) {
-        trend(group_values, trend_n)
-          .forEach((flag, idx) => outliers.trend[start + idx] = flag)
-      }
-      if (inputSettings.outliers.shift) {
-        shift(group_values, group_targets, shift_n)
-          .forEach((flag, idx) => outliers.shift[start + idx] = flag)
       }
       // Computed unconditionally: the toggles decide whether a signal dashes
       // the centerline, not whether the counts exist. The panel shows the
@@ -1024,11 +914,10 @@ export default class viewModelClass {
         beyond_limits_signal: nBeyondLimits !== null && nBeyondLimits > 0
       });
     }
-    // Anhøj rules are series-level signals (dashed centerline) and have
-    // no per-point flags to direction-map. The legacy point-flagging
-    // rules still go through improvement_direction mapping.
-    const directionMappedKeys: ReadonlyArray<keyof outliersObject>
-      = ["astpoint", "trend", "two_in_three", "shift"];
+    // The runs rules are series-level signals (dashed centerline) with no
+    // per-point flags to direction-map. Points beyond the control limits are
+    // per-point, so they still go through improvement_direction mapping.
+    const directionMappedKeys: ReadonlyArray<keyof outliersObject> = ["astpoint"];
     directionMappedKeys.forEach(key => {
       const arr = outliers[key] as string[];
       for (let i = 0; i < arr.length; i++) {

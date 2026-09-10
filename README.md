@@ -1,4 +1,4 @@
-# SPC RØST
+# DAP SPC
 
 En Power BI custom visual til SPC-diagrammer (statistisk proceskontrol) med
 runs-analyse efter den danske metode — som implementeret i R-pakken
@@ -7,8 +7,8 @@ runs-analyse efter den danske metode — som implementeret i R-pakken
 Visualen er en fork af
 [AUS-DOH-Safety-and-Quality/PowerBI-SPC](https://github.com/AUS-DOH-Safety-and-Quality/PowerBI-SPC),
 udviklet af Safety and Quality-teamet i Western Australias sundhedsministerium.
-Al oprindelig funktionalitet er bevaret; forken tilføjer signaldetektionen og
-det tilhørende signalpanel.
+Forken tilføjer signaldetektionen og det tilhørende signalpanel — og skærer
+regelsættet ned til det, `qicharts2` rapporterer.
 
 ## Hvad forken tilføjer
 
@@ -25,6 +25,19 @@ Tærsklerne er verificeret mod `qicharts2` v0.8.1 på 14 reference-datasæt, som
 ligger i `test/Outlier Flagging/anhoj-fixtures.json` og regenereres med det
 medfølgende R-script.
 
+## Hvad forken har fjernet
+
+`qicharts2` rapporterer to signaler: `runs.signal` (de to regler ovenfor) og
+`sigma.signal` (observationer uden for kontrolgrænserne). Upstreams øvrige
+regler — `trend`, `twoInThree` og `shift` — hører til NHS' *making data
+count*-metode og er fjernet sammen med NHS' variations- og sikkerhedsikoner.
+
+Markeringen af punkter uden for kontrolgrænserne er bevaret; det er
+`sigma.signal`.
+
+Kommer du fra AUS-DOH-visualen og bruger de regler eller ikoner, er det den
+væsentlige forskel at kende.
+
 ## Chart-typer
 
 Run, i (XmR), mr, p, p', u, u', c, xbar, s, g og t.
@@ -32,7 +45,7 @@ Run, i (XmR), mr, p, p', u, u', c, xbar, s, g og t.
 ## Installation
 
 Hent den nyeste `.pbiviz` fra
-[Releases](https://github.com/johanreventlow/PowerBI-SPC/releases). I Power BI:
+[Releases](https://github.com/johanreventlow/DAP-PowerBI-SPC/releases). I Power BI:
 **Visualiseringer → ⋯ → Importér en visual fra en fil**.
 
 Visualen har eget GUID og lever derfor side om side med den oprindelige
@@ -59,6 +72,6 @@ Kør testene med `npm test` (Vitest i headless Chromium — første kørsel kræ
 GPL-3.0, arvet fra upstream. Se `LICENSE.md`.
 
 Fejl og ønsker til denne fork:
-[Issues](https://github.com/johanreventlow/PowerBI-SPC/issues). Spørgsmål om
+[Issues](https://github.com/johanreventlow/DAP-PowerBI-SPC/issues). Spørgsmål om
 den oprindelige visuals funktionalitet hører hjemme
 [hos upstream](https://github.com/AUS-DOH-Safety-and-Quality/PowerBI-SPC).

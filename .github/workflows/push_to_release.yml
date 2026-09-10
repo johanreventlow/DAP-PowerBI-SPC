@@ -22,12 +22,12 @@ jobs:
         set -euo pipefail
         # Fail loudly rather than shipping a dev build under the production
         # guid if these ever drift out of sync with pbiviz.json again.
-        grep -q '"name":"PBISPCRoest"' pbiviz.json
-        grep -q '"displayName":"SPC RØST"' pbiviz.json
-        grep -q '"guid":"PBISPCRoest"' pbiviz.json
-        sed -i 's/"name":"PBISPCRoest"/"name":"PBISPCRoestDEV"/g' pbiviz.json
-        sed -i 's/"displayName":"SPC RØST"/"displayName":"SPC RØST (Dev)"/g' pbiviz.json
-        sed -i 's/"guid":"PBISPCRoest"/"guid":"PBISPCRoestDEV"/g' pbiviz.json
+        grep -q '"name":"DAPSPC"' pbiviz.json
+        grep -q '"displayName":"DAP SPC"' pbiviz.json
+        grep -q '"guid":"DAPSPC"' pbiviz.json
+        sed -i 's/"name":"DAPSPC"/"name":"DAPSPCDEV"/g' pbiviz.json
+        sed -i 's/"displayName":"DAP SPC"/"displayName":"DAP SPC (Dev)"/g' pbiviz.json
+        sed -i 's/"guid":"DAPSPC"/"guid":"DAPSPCDEV"/g' pbiviz.json
       shell: bash
 
     - name: Build

@@ -2,7 +2,6 @@ import canvasSettings from "./Settings Model/canvasSettings";
 import spcSettings from "./Settings Model/spcSettings";
 import outliersSettings from "./Settings Model/outliersSettings";
 import signalPanelSettings from "./Settings Model/signalPanelSettings";
-import nhsIconsSettings from "./Settings Model/nhsIconsSettings";
 import scatterSettings from "./Settings Model/scatterSettings";
 import linesSettings from "./Settings Model/linesSettings";
 import xAxisSettings from "./Settings Model/xAxisSettings";
@@ -25,7 +24,6 @@ const settingsModel = {
   spc: addGetters(spcSettings),
   outliers: addGetters(outliersSettings),
   signal_panel: addGetters(signalPanelSettings),
-  nhs_icons: addGetters(nhsIconsSettings),
   scatter: addGetters(scatterSettings),
   lines: addGetters(linesSettings),
   x_axis: addGetters(xAxisSettings),
