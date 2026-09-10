@@ -283,9 +283,6 @@
         "show_alt_target": {
           "type" : { "bool" : true }
         },
-        "show_specification": {
-          "type" : { "bool" : true }
-        },
         "show_trend": {
           "type" : { "bool" : true }
         },
@@ -305,9 +302,6 @@
           "type": { "numeric": true }
         },
         "width_alt_target": {
-          "type": { "numeric": true }
-        },
-        "width_specification": {
           "type": { "numeric": true }
         },
         "width_trend": {
@@ -331,9 +325,6 @@
         "type_alt_target": {
           "type": { "enumeration" : [ ] }
         },
-        "type_specification": {
-          "type": { "enumeration" : [ ] }
-        },
         "type_trend": {
           "type": { "enumeration" : [ ] }
         },
@@ -355,9 +346,6 @@
         "colour_alt_target":{
           "type": { "fill": { "solid": { "color": true } } }
         },
-        "colour_specification":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
         "colour_trend":{
           "type": { "fill": { "solid": { "color": true } } }
         },
@@ -374,9 +362,6 @@
           "type" : { "bool" : true }
         },
         "ttip_show_alt_target": {
-          "type" : { "bool" : true }
-        },
-        "ttip_show_specification": {
           "type" : { "bool" : true }
         },
         "ttip_show_trend": {
@@ -413,15 +398,6 @@
           "type": { "text": true }
         },
         "ttip_label_alt_target": {
-          "type": { "text": true }
-        },
-        "ttip_label_specification": {
-          "type": { "text": true }
-        },
-        "ttip_label_specification_prefix_lower": {
-          "type": { "text": true }
-        },
-        "ttip_label_specification_prefix_upper": {
           "type": { "text": true }
         },
         "ttip_label_trend": {
@@ -463,12 +439,6 @@
         "opacity_unselected_alt_target": {
           "type": { "numeric": true }
         },
-        "opacity_specification": {
-          "type": { "numeric": true }
-        },
-        "opacity_unselected_specification": {
-          "type": { "numeric": true }
-        },
         "opacity_trend": {
           "type": { "numeric": true }
         },
@@ -478,16 +448,7 @@
         "alt_target": {
           "type": { "numeric": true }
         },
-        "specification_upper": {
-          "type": { "numeric": true }
-        },
-        "specification_lower": {
-          "type": { "numeric": true }
-        },
         "multiplier_alt_target": {
-          "type" : { "bool" : true }
-        },
-        "multiplier_specification": {
           "type" : { "bool" : true }
         },
         "plot_label_show_99": {
@@ -506,9 +467,6 @@
           "type": { "bool": true }
         },
         "plot_label_show_alt_target": {
-          "type": { "bool": true }
-        },
-        "plot_label_show_specification": {
           "type": { "bool": true }
         },
         "plot_label_show_trend": {
@@ -532,9 +490,6 @@
         "plot_label_show_all_alt_target": {
           "type": { "bool": true }
         },
-        "plot_label_show_all_specification": {
-          "type": { "bool": true }
-        },
         "plot_label_show_all_trend": {
           "type": { "bool": true }
         },
@@ -554,9 +509,6 @@
           "type": { "numeric": true }
         },
         "plot_label_show_n_alt_target": {
-          "type": { "numeric": true }
-        },
-        "plot_label_show_n_specification": {
           "type": { "numeric": true }
         },
         "plot_label_show_n_trend": {
@@ -580,9 +532,6 @@
         "plot_label_position_alt_target": {
           "type": { "enumeration" : [ ] }
         },
-        "plot_label_position_specification": {
-          "type": { "enumeration" : [ ] }
-        },
         "plot_label_position_trend": {
           "type": { "enumeration" : [ ] }
         },
@@ -602,9 +551,6 @@
           "type": { "numeric": true }
         },
         "plot_label_vpad_alt_target": {
-          "type": { "numeric": true }
-        },
-        "plot_label_vpad_specification": {
           "type": { "numeric": true }
         },
         "plot_label_vpad_trend": {
@@ -628,9 +574,6 @@
         "plot_label_hpad_alt_target": {
           "type": { "numeric": true }
         },
-        "plot_label_hpad_specification": {
-          "type": { "numeric": true }
-        },
         "plot_label_hpad_trend": {
           "type": { "numeric": true }
         },
@@ -650,9 +593,6 @@
           "type": { "formatting": { "fontFamily": true } }
         },
         "plot_label_font_alt_target": {
-          "type": { "formatting": { "fontFamily": true } }
-        },
-        "plot_label_font_specification": {
           "type": { "formatting": { "fontFamily": true } }
         },
         "plot_label_font_trend": {
@@ -676,9 +616,6 @@
         "plot_label_size_alt_target": {
           "type": { "formatting": { "fontSize": true } }
         },
-        "plot_label_size_specification": {
-          "type": { "formatting": { "fontSize": true } }
-        },
         "plot_label_size_trend": {
           "type": { "formatting": { "fontSize": true } }
         },
@@ -698,9 +635,6 @@
           "type": { "fill": { "solid": { "color": true } } }
         },
         "plot_label_colour_alt_target":{
-          "type": { "fill": { "solid": { "color": true } } }
-        },
-        "plot_label_colour_specification":{
           "type": { "fill": { "solid": { "color": true } } }
         },
         "plot_label_colour_trend":{
@@ -724,9 +658,6 @@
         "plot_label_prefix_alt_target": {
           "type": { "text": true }
         },
-        "plot_label_prefix_specification": {
-          "type": { "text": true }
-        },
         "plot_label_prefix_trend": {
           "type": { "text": true }
         },
@@ -746,9 +677,6 @@
           "type": { "bool": true }
         },
         "join_rebaselines_alt_target": {
-          "type": { "bool": true }
-        },
-        "join_rebaselines_specification": {
           "type": { "bool": true }
         },
         "join_rebaselines_trend": {
@@ -971,14 +899,6 @@
         },
         "table_body_border_left_right": {
           "type": { "bool": true }
-        }
-      }
-    },
-    "download_options" : {
-      "displayName" : "Download Options",
-      "properties": {
-        "show_button": {
-          "type" : { "bool" : true }
         }
       }
     },
