@@ -48,8 +48,6 @@ import median from "../Functions/median";
  *   - numerators/denominators: The original values if using ratios
  *   - targets: The centreline (median) for each point
  *   - ll99/ul99: Lower/Upper 3-sigma control limits
- *   - ll95/ul95: Lower/Upper 2-sigma warning limits
- *   - ll68/ul68: Lower/Upper 1-sigma limits
  */
 export default function immLimits(args: controlLimitsArgs): controlLimitsObject {
   // Determine if we're calculating ratios (numerator/denominator) or raw values
@@ -114,20 +112,10 @@ export default function immLimits(args: controlLimitsArgs): controlLimitsObject 
     denominators: useRatio ? args.denominators : undefined, // Original denominators (if ratio)
     targets: new Array<number>(n),                         // Centreline (median)
     ll99: new Array<number>(n),                            // Lower 3-sigma limit
-    ll95: new Array<number>(n),                            // Lower 2-sigma limit
-    ll68: new Array<number>(n),                            // Lower 1-sigma limit
-    ul68: new Array<number>(n),                            // Upper 1-sigma limit
-    ul95: new Array<number>(n),                            // Upper 2-sigma limit
     ul99: new Array<number>(n)                             // Upper 3-sigma limit
   }
-
-  const twoSigma: number = 2 * sigma;
   const threeSigma: number = 3 * sigma;
   const ll99: number = cl - threeSigma;
-  const ll95: number = cl - twoSigma;
-  const ll68: number = cl - sigma;
-  const ul68: number = cl + sigma;
-  const ul95: number = cl + twoSigma;
   const ul99: number = cl + threeSigma;
 
   // Calculate control limits for each point
@@ -144,10 +132,6 @@ export default function immLimits(args: controlLimitsArgs): controlLimitsObject 
 
     rtn.targets[i] = cl;               // Centreline: x̃ (median)
     rtn.ll99![i] = ll99;      // LCL: x̃ - 3σ
-    rtn.ll95![i] = ll95;      // 2σ lower limit: x̃ - 2σ
-    rtn.ll68![i] = ll68;      // 1σ lower limit: x̃ - σ
-    rtn.ul68![i] = ul68;      // 1σ upper limit: x̃ + σ
-    rtn.ul95![i] = ul95;      // 2σ upper limit: x̃ + 2σ
     rtn.ul99![i] = ul99;      // UCL: x̃ + 3σ
   }
 

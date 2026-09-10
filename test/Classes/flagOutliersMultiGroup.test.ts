@@ -26,8 +26,7 @@ describe("flagOutliers — multi-group Anhøj signals", () => {
             process_flag_type: "both",
             improvement_direction: "increase",
             astronomical: false,
-            astronomical_limit: "3 Sigma",
-            anhoj_long_run: true,
+                      anhoj_long_run: true,
             anhoj_few_crossings: true
         }
     } as unknown as defaultSettingsType;

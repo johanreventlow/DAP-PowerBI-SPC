@@ -10,8 +10,6 @@ const numerators: number[] = [5,7,5,7,7,5,4,9,8,13,8,7,8,7,12,11,8];
 const denominators: number[] = [113,132,121,134,116,131,93,138,182,157,100,103,146,108,153,141,134];
 
 const ul99: number[] = [0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957,0.0957];
-const ul95: number[] = [0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836,0.0836];
-const ll95: number[] = [0.035,0.035,0.035,0.035,0.035,0.035,0.035,0.035,0.035,0.035,0.035,0.035,0.035,0.035,0.035,0.035,0.035];
 const ll99: number[] = [0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229,0.0229];
 
 describe("I Chart Test", () => {
@@ -38,8 +36,6 @@ describe("I Chart Test", () => {
     const limits: controlLimitsObject = visual.viewModel.controlLimits[0];
     for (let i = 0; i < limits.keys.length; i++) {
       expect((limits.ul99 as number[])[i]).toBeCloseTo(ul99[i], 4);
-      expect((limits.ul95 as number[])[i]).toBeCloseTo(ul95[i], 4);
-      expect((limits.ll95 as number[])[i]).toBeCloseTo(ll95[i], 4);
       expect((limits.ll99 as number[])[i]).toBeCloseTo(ll99[i], 4);
     }
   });

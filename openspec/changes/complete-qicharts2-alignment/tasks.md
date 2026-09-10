@@ -58,28 +58,33 @@ property, der kun fjernes ét af stederne, fejler tavst — det har kostet tid f
 
 ## Trin 2 — Grænsefladen
 
+> **Udført 2026-09-10.** Fundet undervejs: `buildTooltip` skrev
+> `["99", "95", "65"]` hvor indstillingerne hedder `_68`, så 1σ-rækken i
+> tooltip aldrig kunne vises. Upstream-fejl; moot her, men den findes stadig
+> i AUS-DOH og bør meldes videre.
+
 Ét gennemløb af de 14 filer i `src/Limit Calculations/`, frem for tre.
 
 ### 2.1 Beregning
 
-- [ ] Fjern `ll95`/`ul95` og `ll68`/`ul68` fra `controlLimitsObject`
+- [x] Fjern `ll95`/`ul95` og `ll68`/`ul68` fra `controlLimitsObject`
       (`src/Classes/viewModelClass.ts`)
-- [ ] Fjern dem fra alle limit-beregninger: `c.ts`, `g.ts`, `i.ts`, `i_m.ts`,
+- [x] Fjern dem fra alle limit-beregninger: `c.ts`, `g.ts`, `i.ts`, `i_m.ts`,
       `i_mm.ts`, `mr.ts`, `p.ts`, `pprime.ts`, `s.ts`, `t.ts`, `u.ts`,
       `uprime.ts`, `xbar.ts`
 
 ### 2.2 Rendering og visning
 
-- [ ] Fjern 95%- og 68%-grupperne fra `src/Settings Model/linesSettings.ts`
-- [ ] Ryd `drawLineLabels.ts` og `getAesthetic.ts`
-- [ ] Fjern rækker fra `buildTooltip.ts` og kolonner fra oversigtstabellen
-- [ ] Fjern alle `*_95`- og `*_68`-properties fra `capabilities.json`
+- [x] Fjern 95%- og 68%-grupperne fra `src/Settings Model/linesSettings.ts`
+- [x] Ryd `drawLineLabels.ts` og `getAesthetic.ts`
+- [x] Fjern rækker fra `buildTooltip.ts` og kolonner fra oversigtstabellen
+- [x] Fjern alle `*_95`- og `*_68`-properties fra `capabilities.json`
 
 ### 2.3 `astronomical_limit`
 
-- [ ] Fjern dropdownen fra `src/Settings Model/outliersSettings.ts`
-- [ ] `astronomical` sammenligner altid mod `ll99`/`ul99`
-- [ ] Fjern property fra `capabilities.json`
+- [x] Fjern dropdownen fra `src/Settings Model/outliersSettings.ts`
+- [x] `astronomical` sammenligner altid mod `ll99`/`ul99`
+- [x] Fjern property fra `capabilities.json`
 
 ---
 

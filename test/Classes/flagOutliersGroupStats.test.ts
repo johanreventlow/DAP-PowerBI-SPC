@@ -12,7 +12,6 @@ const baseOutlierSettings = {
   process_flag_type: "both",
   improvement_direction: "increase",
   astronomical: false,
-  astronomical_limit: "3 Sigma",
   anhoj_long_run: true,
   anhoj_few_crossings: true
 };
@@ -88,6 +87,25 @@ describe("flagOutliers — per-group statistics", () => {
 
     expect(outliers.per_group_stats[0].n_beyond_limits).toBe(0);
     expect(outliers.per_group_stats[0].beyond_limits_signal).toBe(false);
+  });
+
+  // astronomical_limit-dropdownen er væk: flagging sker altid mod 3σ, som
+  // qicharts2's sigma.signal. Uden denne ville en ændring tilbage til et
+  // opslag i andre grænseniveauer ikke blive fanget.
+  it("flager mod 3σ-grænserne", () => {
+    const ll99: number[] = values.map(() => 1);
+    const ul99: number[] = values.map(() => 12);
+    const vm = new viewModelClass();
+    const outliers = vm.flagOutliers(
+      { values, targets, ll99, ul99 } as never,
+      groups, settingsWith({ astronomical: true }), derivedWith(true)
+    );
+
+    // Fixturen har 13 to gange, som er de eneste værdier over 12.
+    const flagged: number[] = outliers.astpoint
+      .map((flag, idx) => flag !== "none" ? values[idx] : NaN)
+      .filter(v => !Number.isNaN(v));
+    expect(flagged).toEqual([13, 13]);
   });
 
   it("counts limits independently of the astronomical toggle", () => {
