@@ -57,26 +57,6 @@ export default function buildTooltip(table_row: summaryTableRowData,
       value: formatValues(table_row.denominator, "integer")
     })
   }
-  if (inputSettings.lines.ttip_show_trend && inputSettings.lines.show_trend) {
-    tooltip.push({
-      displayName: inputSettings.lines.ttip_label_trend,
-      value: formatValues(table_row.trend_line, "value")
-    })
-  }
-  if (inputSettings.lines.show_specification && inputSettings.lines.ttip_show_specification) {
-    if (!isNullOrUndefined(table_row.speclimits_upper)) {
-      tooltip.push({
-        displayName: `Upper ${inputSettings.lines.ttip_label_specification}`,
-        value: formatValues(table_row.speclimits_upper, "value")
-      })
-    }
-    if (!isNullOrUndefined(table_row.speclimits_lower)) {
-      tooltip.push({
-        displayName: `Lower ${inputSettings.lines.ttip_label_specification}`,
-        value: formatValues(table_row.speclimits_lower, "value")
-      })
-    }
-  }
   if (derivedSettings.chart_type_props.has_control_limits) {
     ["99", "95", "65"].forEach(limit => {
       if (inputSettings.lines[`ttip_show_${limit}` as LinesKeys] && inputSettings.lines[`show_${limit}` as LinesKeys]) {

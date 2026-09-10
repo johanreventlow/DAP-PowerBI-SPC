@@ -10,43 +10,49 @@ property, der kun fjernes ét af stederne, fejler tavst — det har kostet tid f
 
 ## Trin 1 — Fire uafhængige fjernelser
 
+> **Udført 2026-09-10.** Én rettelse undervejs: 1.4 kunne ikke løses ved blot
+> at fjerne typerne fra dropdown-listen. `valid` er hvidlisten i
+> `extractConditionalFormatting`, så en gemt værdi udenfor den erstattes af
+> default og udløser en fejlbesked. `dropdownOption` har derfor fået et
+> `hiddenValues`-argument, så en værdi kan blive gyldig uden at blive tilbudt.
+
 ### 1.1 Download-knap
 
-- [ ] Slet `src/D3 Plotting Functions/drawDownloadButton.ts`
-- [ ] Slet `src/Settings Model/downloadSettings.ts`
-- [ ] Fjern kortet fra `src/settings.ts`
-- [ ] Fjern kald og gruppe fra `src/visual.ts`
-- [ ] Fjern `download_options` fra `capabilities.json`
+- [x] Slet `src/D3 Plotting Functions/drawDownloadButton.ts`
+- [x] Slet `src/Settings Model/downloadSettings.ts`
+- [x] Fjern kortet fra `src/settings.ts`
+- [x] Fjern kald og gruppe fra `src/visual.ts`
+- [x] Fjern `download_options` fra `capabilities.json`
 
 ### 1.2 Specifikationsgrænser
 
-- [ ] Fjern "Specification Limits"-gruppen fra `src/Settings Model/linesSettings.ts`
-- [ ] Fjern `"Specification"` som valg i `astronomical_limit`
+- [x] Fjern "Specification Limits"-gruppen fra `src/Settings Model/linesSettings.ts`
+- [x] Fjern `"Specification"` som valg i `astronomical_limit`
       (`src/Settings Model/outliersSettings.ts`) — dropdownen selv fjernes i trin 2
-- [ ] Ryd referencer i `plotPropertiesClass.ts`, `viewModelClass.ts`,
+- [x] Ryd referencer i `plotPropertiesClass.ts`, `viewModelClass.ts`,
       `drawLineLabels.ts`, `buildTooltip.ts`, `extractInputData.ts`, `getAesthetic.ts`
-- [ ] Fjern properties fra `capabilities.json`
+- [x] Fjern properties fra `capabilities.json`
 
 ### 1.3 Trendlinje
 
 > Dette er trend-**linjen** (regressionsoverlay), ikke trend-**reglen**, som
 > blev fjernet i F2. Navnene ligner hinanden; det er to forskellige features.
 
-- [ ] Slet `src/Functions/calculateTrendLine.ts` og dens test
-- [ ] Fjern "Trend"-gruppen fra `src/Settings Model/linesSettings.ts`
-- [ ] Fjern `trend_line` fra `viewModelClass.ts` (`summaryTableRowData`,
+- [x] Slet `src/Functions/calculateTrendLine.ts` og dens test
+- [x] Fjern "Trend"-gruppen fra `src/Settings Model/linesSettings.ts`
+- [x] Fjern `trend_line` fra `viewModelClass.ts` (`summaryTableRowData`,
       linje-opsætning) og fra `buildTooltip.ts`, `getAesthetic.ts`
-- [ ] Fjern `trend_line`-dataroller fra `capabilities.json`
-- [ ] Fjern properties fra `capabilities.json`
+- [x] ~~Fjern `trend_line`-dataroller~~ — `trend_line` var beregnet, ikke en datarolle
+- [x] Fjern properties fra `capabilities.json` (19 stk.)
 
 ### 1.4 Skjul `i_m` og `i_mm`
 
-- [ ] Fjern de to fra dropdown-listen i `src/Settings Model/spcSettings.ts`
-      (både værdi- og label-array)
-- [ ] Behold `src/Limit Calculations/i_m.ts` og `i_mm.ts` uændret
-- [ ] Behold deres registrering i `derivedSettingsClass.ts`, så en gemt
+- [x] Fjern de to fra `items` via `dropdownOption`'s nye `hiddenValues`.
+      **Ikke** fra `valid` — se noten øverst
+- [x] Behold `src/Limit Calculations/i_m.ts` og `i_mm.ts` uændret
+- [x] Behold deres registrering i `derivedSettingsClass.ts`, så en gemt
       `chart_type` stadig renderer
-- [ ] Test: en gemt `chart_type: "i_m"` renderer fortsat korrekt
+- [x] Test: en gemt `chart_type: "i_m"` renderer fortsat korrekt
 
 ---
 

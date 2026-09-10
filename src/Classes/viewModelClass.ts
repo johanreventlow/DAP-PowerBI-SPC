@@ -16,7 +16,6 @@ import extractInputData from "../Functions/extractInputData";
 import isNullOrUndefined from "../Functions/isNullOrUndefined";
 import validateDataViewColumns from "../Functions/validateDataViewColumns";
 import valueFormatter from "../Functions/valueFormatter";
-import calculateTrendLine from "../Functions/calculateTrendLine";
 import groupBy from "../Functions/groupBy";
 import astronomical from "../Outlier Flagging/astronomical";
 import { anhojRunsAnalysis, type runsAnalysisObject } from "../Outlier Flagging/anhojShared";
@@ -57,9 +56,6 @@ export type summaryTableRowData = {
   ul68: number | undefined;
   ul95: number | undefined;
   ul99: number | undefined;
-  speclimits_lower: number | undefined;
-  speclimits_upper: number | undefined;
-  trend_line: number | undefined;
   astpoint: string;
 }
 
@@ -120,9 +116,6 @@ export type controlLimitsObject = {
   ul99?: (number | undefined)[];
   count?: (number | undefined)[];
   alt_targets?: (number | undefined)[];
-  speclimits_lower?: (number | undefined)[];
-  speclimits_upper?: (number | undefined)[];
-  trend_line?: (number | undefined)[];
 };
 
 export type controlLimitsArgs = {
@@ -410,7 +403,6 @@ export default class viewModelClass {
 
       const calcLimitsGrouped: controlLimitsObject[] = groupedData.map(d => {
         const currLimits = limitFunction(d.limitInputArgs);
-        currLimits.trend_line = calculateTrendLine(currLimits.values);
         return currLimits;
       });
 
@@ -428,12 +420,9 @@ export default class viewModelClass {
     } else {
       // Calculate control limits using user-specified type
       controlLimits = limitFunction(inputData.limitInputArgs);
-      controlLimits.trend_line = calculateTrendLine(controlLimits.values);
     }
 
     controlLimits.alt_targets = inputData.alt_targets;
-    controlLimits.speclimits_lower = inputData.speclimits_lower;
-    controlLimits.speclimits_upper = inputData.speclimits_upper;
 
     for (const key in controlLimits) {
       const keyTyped: keyof controlLimitsObject = key as keyof controlLimitsObject;
@@ -578,13 +567,6 @@ export default class viewModelClass {
     if (settings.lines.show_alt_target) {
       this.tableColumns[0].push({ name: "alt_target", label: "Alt. Target" });
     }
-    if (settings.lines.show_specification) {
-      this.tableColumns[0].push({ name: "speclimits_lower", label: "Spec. Lower" },
-                             { name: "speclimits_upper", label: "Spec. Upper" });
-    }
-    if (settings.lines.show_trend) {
-      this.tableColumns[0].push({ name: "trend_line", label: "Trend Line" });
-    }
     if (derivedSettings.chart_type_props.has_control_limits) {
       if (settings.lines.show_99) {
         this.tableColumns[0].push({ name: "ll99", label: "LL 99%" },
@@ -640,9 +622,6 @@ export default class viewModelClass {
         ul68: controlLimits?.ul68?.[i],
         ul95: controlLimits?.ul95?.[i],
         ul99: controlLimits?.ul99?.[i],
-        speclimits_lower: controlLimits?.speclimits_lower?.[i],
-        speclimits_upper: controlLimits?.speclimits_upper?.[i],
-        trend_line: controlLimits?.trend_line?.[i],
         astpoint: outliers.astpoint[i]
       }
 
@@ -686,12 +665,6 @@ export default class viewModelClass {
     }
     if (settings.lines.show_alt_target) {
       labels.push("alt_targets");
-    }
-    if (settings.lines.show_specification) {
-      labels.push("speclimits_lower", "speclimits_upper");
-    }
-    if (settings.lines.show_trend) {
-      labels.push("trend_line");
     }
     if (derivedSettings.chart_type_props.has_control_limits) {
       if (settings.lines.show_99) {
@@ -787,12 +760,6 @@ export default class viewModelClass {
         lines_to_scale = lines_to_scale.concat(["alt_targets"]);
       }
     }
-    if (inputSettings.lines.show_specification) {
-      lines_to_truncate = lines_to_truncate.concat(["speclimits_lower", "speclimits_upper"]);
-      if (inputSettings.lines.multiplier_specification) {
-        lines_to_scale = lines_to_scale.concat(["speclimits_lower", "speclimits_upper"]);
-      }
-    }
 
     lines_to_scale.forEach(limit => {
       if (isNullOrUndefined(controlLimits[limit])) {
@@ -827,7 +794,6 @@ export default class viewModelClass {
                 inputSettings: settingsValueType, derivedSettings: derivedSettingsClass): outliersObject {
     const process_flag_type: string = inputSettings.outliers.process_flag_type;
     const improvement_direction: string = inputSettings.outliers.improvement_direction;
-    const ast_specification: boolean = inputSettings.outliers.astronomical_limit === "Specification";
     const perGroupSignals: { long_run: boolean; few_crossings: boolean }[] = [];
     const perGroupStats: groupStatsObject[] = [];
     const outliers: outliersObject = {
@@ -842,19 +808,16 @@ export default class viewModelClass {
       const group_targets: number[] = controlLimits.targets.slice(start, end) as number[];
       const group_signal = { long_run: false, few_crossings: false };
 
-      if (derivedSettings.chart_type_props.has_control_limits || ast_specification) {
+      if (derivedSettings.chart_type_props.has_control_limits) {
         if (inputSettings.outliers.astronomical) {
           const limit_map: Record<string, string> = {
             "1 Sigma": "68",
             "2 Sigma": "95",
             "3 Sigma": "99",
-            "Specification": "",
           };
           const ast_limit: string = limit_map[inputSettings.outliers.astronomical_limit];
-          const ll_prefix: string = ast_specification ? "speclimits_lower" : "ll";
-          const ul_prefix: string = ast_specification ? "speclimits_upper" : "ul";
-          const lower_limits: number[] = controlLimits[`${ll_prefix}${ast_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
-          const upper_limits: number[] = controlLimits[`${ul_prefix}${ast_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
+          const lower_limits: number[] = controlLimits[`ll${ast_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
+          const upper_limits: number[] = controlLimits[`ul${ast_limit}` as Exclude<keyof controlLimitsObject, "keys">]!.slice(start, end) as number[];
           astronomical(group_values, lower_limits, upper_limits)
             .forEach((flag, idx) => outliers.astpoint[start + idx] = flag)
         }

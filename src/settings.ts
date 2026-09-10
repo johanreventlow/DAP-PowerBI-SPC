@@ -8,7 +8,6 @@ import xAxisSettings from "./Settings Model/xAxisSettings";
 import yAxisSettings from "./Settings Model/yAxisSettings";
 import datesSettings from "./Settings Model/datesSettings";
 import summaryTableSettings from "./Settings Model/summaryTableSettings";
-import downloadSettings from "./Settings Model/downloadSettings";
 import labelsSettings from "./Settings Model/labelsSettings";
 import { addGetters, type SettingDefaultTypes, type MergeUnions } from "./Settings Model/common";
 
@@ -30,7 +29,6 @@ const settingsModel = {
   y_axis: addGetters(yAxisSettings),
   dates: addGetters(datesSettings),
   summary_table: addGetters(summaryTableSettings),
-  download_options: addGetters(downloadSettings),
   labels: addGetters(labelsSettings),
 
   get defaultValues(): settingsValueType {

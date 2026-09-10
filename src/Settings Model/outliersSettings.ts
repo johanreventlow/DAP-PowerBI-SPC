@@ -10,7 +10,7 @@ const outliersSettings = {
     },
     "Beyond Control Limit" : {
       astronomical: toggleOption("Highlight Observations Beyond Limit", false),
-      astronomical_limit: dropdownOption("Limit to Compare Against", "3 Sigma", ["1 Sigma", "2 Sigma", "3 Sigma", "Specification"]),
+      astronomical_limit: dropdownOption("Limit to Compare Against", "3 Sigma", ["1 Sigma", "2 Sigma", "3 Sigma"]),
       ast_colour_improvement: colourOption("Imp. Colour", "improvement"),
       ast_colour_deterioration: colourOption("Det. Colour", "deterioration"),
       ast_colour_neutral_low: colourOption("Neutral (Low) Colour", "neutral_low"),

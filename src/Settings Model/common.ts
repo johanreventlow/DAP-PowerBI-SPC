@@ -122,25 +122,35 @@ const valueTransforms: Record<string, (x: string) => string> = {
   sentence: (x: string) => x.toLowerCase().replace(/\b\w/g, (char: string) => char.toUpperCase())
 };
 
+/**
+ * @param hiddenValues - Værdier der forbliver gyldige, men ikke tilbydes i
+ *   dropdownen. `valid` er hvidlisten i extractConditionalFormatting: en gemt
+ *   værdi udenfor den erstattes af default og udløser en fejlbesked til
+ *   brugeren. Skal en indstilling kunne trækkes tilbage uden at ødelægge
+ *   rapporter, der allerede bruger den, skal den altså blive i `valid` og kun
+ *   forsvinde fra `items`.
+ */
 function dropdownOption(displayName: string, defaultValue: string,
                         validValues: string[], displayTransform?: string,
-                        displayNames?: string[]) {
-  const numValues: number = validValues.length;
+                        displayNames?: string[], hiddenValues?: string[]) {
   const rtn = {
     displayName: displayName,
     type: FormattingComponent.Dropdown,
     default: defaultValue,
     valid: validValues,
-    items: new Array<DropdownItem>(numValues)
+    items: new Array<DropdownItem>()
   };
 
   const transformFun: (x: string) => string = valueTransforms[(displayTransform ?? "none")]
 
-  for (let i: number = 0; i < numValues; i++) {
-    rtn.items[i] = {
+  for (let i: number = 0; i < validValues.length; i++) {
+    if (hiddenValues?.includes(validValues[i])) {
+      continue;
+    }
+    rtn.items.push({
       displayName: displayNames ? displayNames[i] : transformFun(validValues[i]),
       value: validValues[i]
-    }
+    })
   }
 
   return rtn;
