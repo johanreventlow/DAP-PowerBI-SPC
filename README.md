@@ -67,6 +67,33 @@ Resultatet lander i `dist/`.
 Kør testene med `npm test` (Vitest i headless Chromium — første kørsel kræver
 `npx playwright install chromium`).
 
+## Udgivelse
+
+En release skæres fra et tag. Versionen skal stå tre steder, og de skal være
+enige — ellers stopper workflowet, før noget publiceres:
+
+1. `pbiviz.json` → `visual.version`
+2. `package.json` → `version`
+3. tagget selv, med `v` foran
+
+```
+# ret versionen begge steder først, commit, og så:
+git tag v1.8.0.1
+git push origin v1.8.0.1
+```
+
+[Release-workflowet](.github/workflows/release.yml) kører derefter linter,
+tests og build, og lægger `.pbiviz`-filen på
+[Releases](https://github.com/johanreventlow/DAP-PowerBI-SPC/releases) med
+release-noterne fra det matchende afsnit i `NEWS.md`.
+
+Power BI kræver et firecifret versionsnummer (`x.y.z.w`).
+
+Bemærk at `push_to_release.yml` er noget andet: den bygger manuelt en
+**(Dev)**-mærket variant med sit eget GUID, så en testversion kan ligge side
+om side med produktionsversionen i Power BI. Den er ikke vejen til en
+udgivelse.
+
 ## Licens og support
 
 GPL-3.0, arvet fra upstream. Se `LICENSE.md`.

@@ -1,0 +1,96 @@
+name: "Release"
+
+# Production release, cut from a version tag. Unlike push_to_release.yml,
+# which builds a separately-guid'ed "(Dev)" visual for side-by-side testing,
+# this ships the real visual under its production name and guid.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: "Build and publish"
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Setup Node 24
+      uses: actions/setup-node@v7
+      with:
+        node-version: 24
+        cache: 'npm'
+
+    - name: Verify tag matches the declared version
+      run: |
+        set -euo pipefail
+        tag_version="${GITHUB_REF_NAME#v}"
+        pbiviz_version="$(node -p "require('./pbiviz.json').visual.version")"
+        package_version="$(node -p "require('./package.json').version")"
+
+        # A tag that disagrees with the manifest ships a visual whose version
+        # nobody can trace back to a commit. Fail before anything is published.
+        if [ "$tag_version" != "$pbiviz_version" ]; then
+          echo "::error::Tag ${GITHUB_REF_NAME} does not match pbiviz.json version ${pbiviz_version}"
+          exit 1
+        fi
+        if [ "$tag_version" != "$package_version" ]; then
+          echo "::error::pbiviz.json (${pbiviz_version}) and package.json (${package_version}) disagree"
+          exit 1
+        fi
+        echo "Releasing version ${tag_version}"
+      shell: bash
+
+    - name: Install PBI visual Tools
+      run: npm install -g powerbi-visuals-tools@6.2.0
+
+    - name: Install Package Dependencies
+      run: npm ci
+
+    - name: Run linter
+      run: pbiviz lint
+
+    - name: Run unit tests
+      run: |
+        npx playwright install chromium
+        npm run test
+
+    - name: Build package
+      run: pbiviz package
+
+    - name: Extract release notes
+      run: |
+        set -euo pipefail
+        version="${GITHUB_REF_NAME#v}"
+        # Pull the NEWS.md section whose heading starts with this version,
+        # stopping at the next "## " heading.
+        awk -v v="$version" '
+          $0 ~ "^## " v ( "([^0-9]|$)" ) { found = 1; next }
+          found && /^## / { exit }
+          found { print }
+        ' NEWS.md > release-notes.md
+        if [ ! -s release-notes.md ]; then
+          echo "No NEWS.md section for ${version}; falling back to generated notes"
+          rm -f release-notes.md
+        fi
+      shell: bash
+
+    - name: Publish release
+      run: |
+        set -euo pipefail
+        if [ -f release-notes.md ]; then
+          gh release create "${GITHUB_REF_NAME}" dist/*.pbiviz \
+            --title "${GITHUB_REF_NAME}" \
+            --notes-file release-notes.md
+        else
+          gh release create "${GITHUB_REF_NAME}" dist/*.pbiviz \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes
+        fi
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
