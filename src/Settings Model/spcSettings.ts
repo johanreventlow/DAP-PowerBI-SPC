@@ -11,7 +11,10 @@ const spcSettings = {
       // tilbage til default med en fejlbesked.
       // Se openspec/changes/complete-qicharts2-alignment.
       chart_type: dropdownOption(
-        "Diagramtype", "i",
+        // Default som i qicharts2: `formals(qic)$chart` har "run" først.
+        // Et seriediagram stiller ingen krav til fordelingen og er derfor det
+        // sikre udgangspunkt, før brugeren tager stilling til diagramtypen.
+        "Diagramtype", "run",
         ["run", "i", "i_m", "i_mm", "mr", "p", "pp", "u", "up", "c", "xbar", "s", "g", "t"], "none",
         [
           "run - Seriediagram (median)",

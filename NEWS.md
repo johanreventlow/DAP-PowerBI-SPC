@@ -23,6 +23,10 @@ slås op uden at være bundet ind i versionsnummeret.
 
 ### Nye features
 
+* **Seriediagram er nu standard-diagramtypen.** `qicharts2` defaulter til
+  `run`, og et seriediagram stiller ingen krav til fordelingen — det er derfor
+  det sikre udgangspunkt, før brugeren aktivt vælger diagramtype. Rapporter,
+  hvor diagramtypen allerede er valgt, er upåvirkede.
 * **Signalpanel** (settings → Signal Panel): tallene bag signalerne vist
   permanent til højre for grafen — faktisk værdi over for forventet, én blok
   per periode. Rækkerne er `Serielængde (maksimum)`, `Antal kryds (minimum)`,
