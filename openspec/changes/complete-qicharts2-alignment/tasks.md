@@ -1,0 +1,137 @@
+# Tasks — complete-qicharts2-alignment
+
+Ét trin per PR. Hvert trin afsluttes grønt (`npm test`, `npx tsc --noEmit`,
+`pbiviz lint`, `pbiviz package`) før næste påbegyndes.
+
+**Gennemgående regel:** settings og `capabilities.json` ryddes synkront. En
+property, der kun fjernes ét af stederne, fejler tavst — det har kostet tid før.
+
+---
+
+## Trin 1 — Fire uafhængige fjernelser
+
+### 1.1 Download-knap
+
+- [ ] Slet `src/D3 Plotting Functions/drawDownloadButton.ts`
+- [ ] Slet `src/Settings Model/downloadSettings.ts`
+- [ ] Fjern kortet fra `src/settings.ts`
+- [ ] Fjern kald og gruppe fra `src/visual.ts`
+- [ ] Fjern `download_options` fra `capabilities.json`
+
+### 1.2 Specifikationsgrænser
+
+- [ ] Fjern "Specification Limits"-gruppen fra `src/Settings Model/linesSettings.ts`
+- [ ] Fjern `"Specification"` som valg i `astronomical_limit`
+      (`src/Settings Model/outliersSettings.ts`) — dropdownen selv fjernes i trin 2
+- [ ] Ryd referencer i `plotPropertiesClass.ts`, `viewModelClass.ts`,
+      `drawLineLabels.ts`, `buildTooltip.ts`, `extractInputData.ts`, `getAesthetic.ts`
+- [ ] Fjern properties fra `capabilities.json`
+
+### 1.3 Trendlinje
+
+> Dette er trend-**linjen** (regressionsoverlay), ikke trend-**reglen**, som
+> blev fjernet i F2. Navnene ligner hinanden; det er to forskellige features.
+
+- [ ] Slet `src/Functions/calculateTrendLine.ts` og dens test
+- [ ] Fjern "Trend"-gruppen fra `src/Settings Model/linesSettings.ts`
+- [ ] Fjern `trend_line` fra `viewModelClass.ts` (`summaryTableRowData`,
+      linje-opsætning) og fra `buildTooltip.ts`, `getAesthetic.ts`
+- [ ] Fjern `trend_line`-dataroller fra `capabilities.json`
+- [ ] Fjern properties fra `capabilities.json`
+
+### 1.4 Skjul `i_m` og `i_mm`
+
+- [ ] Fjern de to fra dropdown-listen i `src/Settings Model/spcSettings.ts`
+      (både værdi- og label-array)
+- [ ] Behold `src/Limit Calculations/i_m.ts` og `i_mm.ts` uændret
+- [ ] Behold deres registrering i `derivedSettingsClass.ts`, så en gemt
+      `chart_type` stadig renderer
+- [ ] Test: en gemt `chart_type: "i_m"` renderer fortsat korrekt
+
+---
+
+## Trin 2 — Grænsefladen
+
+Ét gennemløb af de 14 filer i `src/Limit Calculations/`, frem for tre.
+
+### 2.1 Beregning
+
+- [ ] Fjern `ll95`/`ul95` og `ll68`/`ul68` fra `controlLimitsObject`
+      (`src/Classes/viewModelClass.ts`)
+- [ ] Fjern dem fra alle limit-beregninger: `c.ts`, `g.ts`, `i.ts`, `i_m.ts`,
+      `i_mm.ts`, `mr.ts`, `p.ts`, `pprime.ts`, `s.ts`, `t.ts`, `u.ts`,
+      `uprime.ts`, `xbar.ts`
+
+### 2.2 Rendering og visning
+
+- [ ] Fjern 95%- og 68%-grupperne fra `src/Settings Model/linesSettings.ts`
+- [ ] Ryd `drawLineLabels.ts` og `getAesthetic.ts`
+- [ ] Fjern rækker fra `buildTooltip.ts` og kolonner fra oversigtstabellen
+- [ ] Fjern alle `*_95`- og `*_68`-properties fra `capabilities.json`
+
+### 2.3 `astronomical_limit`
+
+- [ ] Fjern dropdownen fra `src/Settings Model/outliersSettings.ts`
+- [ ] `astronomical` sammenligner altid mod `ll99`/`ul99`
+- [ ] Fjern property fra `capabilities.json`
+
+---
+
+## Trin 3 — Retningsfarver
+
+- [ ] Slet `src/Outlier Flagging/checkFlagDirection.ts` og dens test
+- [ ] Fjern kald i `viewModelClass.ts`; `astronomical` returnerer et brud, der
+      ikke oversættes til en vurdering
+- [ ] Fjern "General"-gruppen (`process_flag_type`, `improvement_direction`)
+      fra `src/Settings Model/outliersSettings.ts`
+- [ ] Erstat de fire farvevælgere med én `ast_colour`
+- [ ] Ryd direction-keys i `getAesthetic.ts`
+- [ ] Opdatér `capabilities.json` synkront
+- [ ] Test: punkt over og punkt under grænsen får samme farve
+- [ ] Test: signalpanelets tredje række er uændret (optællingen er allerede
+      uafhængig af både toggle og retning — det skal blive ved med at gælde)
+
+---
+
+## Trin 4 — 3σ-bånd
+
+Reference: `git show arkiv/f1-2026-06-17:"src/D3 Plotting Functions/drawLimitBand.ts"`.
+Skrives om mod nuværende kodebase — den gamle er fra før Vitest og
+signalpanelet.
+
+- [ ] Ny `src/D3 Plotting Functions/drawLimitBand.ts`
+- [ ] SVG-gruppe bag linjer og punkter i tegnerækkefølgen
+- [ ] Ét bånd per fase, brudt ved faseskift
+- [ ] Intet bånd på chart-typer uden kontrolgrænser
+- [ ] Indstillinger i `linesSettings.ts`: vis/skjul (**default fra**), farve,
+      gennemsigtighed — synkront i `capabilities.json`
+- [ ] Test: faseopdelt diagram giver to adskilte bånd
+- [ ] Test: run-diagram giver intet bånd
+
+---
+
+## Trin 5 — Dansk UI
+
+Reference for terminologien: `arkiv/f1-2026-06-17` har fladen oversat.
+
+- [ ] `src/Functions/toFixedComma.ts` — dansk decimalkomma
+- [ ] Anvend den alle steder tal vises: tooltips, oversigtstabel,
+      akse-etiketter, linje-etiketter, signalpanel
+- [ ] Oversæt alle `src/Settings Model/*.ts`: kortnavne, gruppenavne,
+      indstillingsnavne, dropdown-labels
+- [ ] Oversæt feltbrøndenes navne i `capabilities.json`
+- [ ] Oversæt tooltip-labels og tabelkolonner
+- [ ] Oversæt fejl- og valideringsbeskeder
+- [ ] Verificér: "Anhøj" fremgår ikke af den brugervendte flade
+- [ ] **[MANUELT TRIN]** Johan læser terminologien igennem. Oversættelsen kan
+      laves; om ordvalget er det rigtige i huset, er en faglig vurdering
+
+---
+
+## Afslutning
+
+- [ ] `NEWS.md`-entry, der samler alle fem trin
+- [ ] `README.md`: opdatér afsnittene om hvad forken tilføjer og har fjernet
+- [ ] **[MANUELT TRIN]** Verificér i Power BI Desktop — visualen er stadig
+      aldrig set i en rigtig rude
+- [ ] **[MANUELT TRIN]** Skær `v1.0.0.0` når alle fem trin er inde
