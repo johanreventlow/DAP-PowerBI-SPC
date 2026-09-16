@@ -1,6 +1,6 @@
 # OpenSpec — status
 
-Oversigt over projektets change-forslag pr. 2026-09-10.
+Oversigt over projektets change-forslag pr. 2026-09-16.
 
 ## Udført og på main
 
@@ -10,6 +10,7 @@ Oversigt over projektets change-forslag pr. 2026-09-10.
 | `changes/archive/2026-06-11-remove-non-anhoj-rules/` | PR #4 (`faafe95`) — `trend`, `twoInThree`, `shift`, NHS-ikoner |
 | `changes/archive/2026-09-10-add-anhoj-stats-display/` | PR #3 — men som **signalpanelet**, en anden implementation end branchens `drawAnhojStats.ts` |
 | `changes/archive/2026-09-10-complete-qicharts2-alignment/` | PR #8–#12 — de fem trin nedenfor |
+| `changes/archive/2026-09-16-add-i-prime-chart/` | PR #16 — normaliseret individkort (`ip`); ny capability `specs/limit-calculation/` |
 
 ## complete-qicharts2-alignment
 
@@ -35,12 +36,6 @@ Spec-delta'erne er foldet ind i `specs/chart-rendering/` og
 **Står tilbage:** ordvalget i den danske oversættelse er ikke fagligt
 gennemlæst, og visualen er endnu ikke set i en rigtig Power BI-rude. Begge er
 noteret som manuelle trin i planens `tasks.md`.
-
-## I gang
-
-| Change | Note |
-|---|---|
-| `changes/add-i-prime-chart/` | Normaliseret individkort (`ip`) som ny diagramtype; ny capability `limit-calculation`. Branch `feat/i-prime-chart` |
 
 ## Ikke afgjort
 
