@@ -115,6 +115,13 @@ formateringsruden. Selve dataene og de øvrige indstillinger er upåvirkede.
   var 0, så sigma blev `NaN`. p'- og u'-diagrammer med en centerlinje på 0
   (eller 1 for p') får nu grænser lig centerlinjen. Porteret fra upstream
   `d30efbf` og `2ece234`.
+* "Antal punkter til grænseberegning" virker nu sammen med faseopdeling. Før
+  blev udvalget beregnet som positioner i hele serien og derefter skåret ud
+  per fase, så senere faser kunne få et tomt eller forkert udvalg og dermed
+  manglende eller forkerte grænser. Udvalget beregnes nu inden for hver fase.
+  Den nye indstilling **Anvend punktudvalg efter hver faseopdeling** (default
+  fra) styrer, om udvalget kun gælder første fase, eller om hver fase får sit
+  eget. Porteret fra upstream `89a691c`, `4bbdcf7` og `114e757`.
 
 ### Interne ændringer
 
