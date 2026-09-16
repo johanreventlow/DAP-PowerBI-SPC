@@ -109,6 +109,12 @@ formateringsruden. Selve dataene og de øvrige indstillinger er upåvirkede.
 * 1σ-rækken i tooltip kunne aldrig vises: koden slog `show_65` og
   `ttip_show_65` op, hvor indstillingerne hedder `_68`. En tastefejl arvet fra
   upstream. Moot her, hvor 1σ er fjernet, men den findes stadig opstrøms.
+* Diagrammer med helt konstante værdier (fx 100 % i alle perioder) tegnes nu
+  korrekt. En y-akse uden spænd gav division med nul i skalaen, og
+  outlier-screeningen af moving ranges frasorterede alle ranges, når de alle
+  var 0, så sigma blev `NaN`. p'- og u'-diagrammer med en centerlinje på 0
+  (eller 1 for p') får nu grænser lig centerlinjen. Porteret fra upstream
+  `d30efbf` og `2ece234`.
 
 ### Interne ændringer
 
