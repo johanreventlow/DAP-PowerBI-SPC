@@ -56,6 +56,12 @@ function validateInputDataImpl(key: string | undefined,
     } else if (isNaN(denominator)) {
       rtn.message = "Nævner er ikke et tal";
       rtn.type = ValidationFailTypes.DenominatorNaN;
+    } else if (chart_type_props.denominator_positive && (denominator <= 0 || !Number.isFinite(denominator))) {
+      // Kun ip. Står FØR den generelle negativ-gren, så nul, negativ og
+      // uendelig nævner får én fælles regel og én fælles fejlbesked.
+      // Infinity passerer både isNaN og < 0.
+      rtn.message = "Nævner skal være større end 0";
+      rtn.type = ValidationFailTypes.DenominatorNotPositive;
     } else if (denominator < 0) {
       rtn.message = "Nævner er negativ";
       rtn.type = ValidationFailTypes.DenominatorNegative;
@@ -65,10 +71,6 @@ function validateInputDataImpl(key: string | undefined,
     } else if (chart_type_props.denominator_gt_one && denominator <= 1) {
       rtn.message = "Nævner er højst 1"
       rtn.type = ValidationFailTypes.DenominatorLessThanOne
-    } else if (chart_type_props.denominator_positive && (denominator <= 0 || !Number.isFinite(denominator))) {
-      // Infinity passerer både isNaN og < 0 ovenfor.
-      rtn.message = "Nævner skal være større end 0";
-      rtn.type = ValidationFailTypes.DenominatorNotPositive;
     }
   }
 

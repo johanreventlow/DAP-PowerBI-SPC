@@ -251,12 +251,18 @@ describe("I′ nævnervalidering", () => {
     expect(result.status).toBe(0);
     expect(result.messages).toEqual([
       "", "Nævner mangler", "Nævner er ikke et tal",
-      "Nævner skal være større end 0", "Nævner er negativ", "Nævner skal være større end 0"
+      "Nævner skal være større end 0", "Nævner skal være større end 0", "Nævner skal være større end 0"
     ]);
   });
 
-  it("afviser hele serien, når alle nævnere er 0", () => {
-    const result = validateInputData(keys, numerators, [0, 0, 0, 0, 0, 0], undefined, ipProps, [0, 1, 2, 3, 4, 5]);
+  // Nul og negativ deler regel og besked, så en serie med begge får én samlet
+  // fejl i stedet for den generiske "Ingen gyldige data fundet." (Cycle 3, Codex NEW).
+  it.each([
+    { name: "alle nævnere er 0", denominators: [0, 0, 0, 0, 0, 0] },
+    { name: "alle nævnere er negative", denominators: [-1, -2, -3, -1, -2, -3] },
+    { name: "nævnere er en blanding af 0 og negative", denominators: [-1, 0, -2, 0, 0, -3] }
+  ])("afviser hele serien med én besked, når $name", ({ denominators }) => {
+    const result = validateInputData(keys, numerators, denominators, undefined, ipProps, [0, 1, 2, 3, 4, 5]);
     expect(result.status).toBe(1);
     expect(result.error).toBe("Alle nævnere skal være større end 0.");
   });
@@ -284,7 +290,30 @@ describe("I′ nævnervalidering", () => {
       viewport: { width: 500, height: 500 }, type: 2
     } as any);
     const err = element.querySelector(".errormessage text");
-    expect(err?.textContent).toBe("Ingen gyldige data fundet.");
+    expect(err?.textContent).toBe("Alle nævnere skal være større end 0.");
     element.remove();
   });
+});
+
+// Cycle 3 L2: fixtures bærer qicharts2's runs.signal per fase for alle fem
+// serier, men kun extreme_difference blev sammenlignet. Én test per
+// fixture/variant kobler hele kæden ip → flagOutliers → anhojRunsAnalysis.
+describe("I′ runs-signal mod qicharts2-fixtures", () => {
+  fixtures.forEach(fx => fx.variants.forEach(v => {
+    it(`${fx.name} (outliers_in_limits=${v.outliers_in_limits}) matcher runs.signal per fase`, () => {
+      const parts: number[] = Array.from(new Set(v.part));
+      const groupings: string[] | undefined = parts.length > 1 ? v.part.map(p => `Fase ${p}`) : undefined;
+      const { element, visual } = render(
+        { numerators: fx.numerators, denominators: fx.denominators ?? undefined, groupings },
+        { outliers_in_limits: v.outliers_in_limits });
+      const stats = visual.viewModel.outliers[0].per_group_stats;
+      expect(stats).toHaveLength(parts.length);
+      parts.forEach((part, g) => {
+        const first: number = v.part.indexOf(part);
+        expect(stats[g].long_run_signal || stats[g].few_crossings_signal, `fase ${part}`)
+          .toBe(v.runs_signal[first]);
+      });
+      element.remove();
+    });
+  }));
 });
