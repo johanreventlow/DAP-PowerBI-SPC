@@ -1,7 +1,7 @@
 # Ikon
 
-`icon.svg` er kilden. De to PNG'er genereres ud fra den og redigeres ikke i
-hånden.
+`icon.png` er kilden. Den er tegnet i hånden direkte i 20×20 — den størrelse,
+ikonet faktisk vises i — og der findes ikke en vektorkilde bag den.
 
 | Fil | Størrelse | Hvor den ses |
 |---|---|---|
@@ -12,44 +12,60 @@ hånden.
 
 ## Motivet
 
-En serie med seks observationer i træk over centerlinjen efterfulgt af et fald
-under den. Det er en usædvanligt lang serie — det ene af de to signaler,
-runs-analysen leder efter.
+Et kontroldiagram: centerlinje, to kontrolgrænser med et udfyldt bånd imellem,
+og en serie, der svinger om centerlinjen.
 
-## Farven
+Det tidligere ikon viste i stedet en usædvanligt lang serie — det ene af de to
+signaler, runs-analysen leder efter. Det blev skiftet ud, fordi motivet havde
+for mange detaljer til at overleve 20×20: den stiplede centerlinje blev til
+tåge, og punkterne smeltede sammen med linjen. Det gamle motiv og dets
+SVG-kilde ligger i historikken frem til `5b14844`.
 
-`#3e89c1` — rgb(62, 137, 193). Står tre steder i `icon.svg`: fill på `<svg>`,
-og stroke på centerlinjen og på serielinjen.
+## Farver
 
-Tonen kommer fra biSPCharts, oprindeligt rgb(141, 185, 218). Den viste sig for
-lys: 2,08:1 i kontrast mod hvid, hvor grafik bør have mindst 3:1 for at kunne
-aflæses. Farven her har samme nuance (206°) og samme mætning (51 %), men lavere
-lyshed, og lander på 3,78:1.
+| Element | Farve | Mod hvid | Mod mørk |
+|---|---|---|---|
+| Akse, serie | `#424240` | 10,07:1 | 1,61:1 |
+| Datapunkter | `#000000` | 21,00:1 | 1,29:1 |
+| Kontrolgrænser | `#3e89c1` | 3,78:1 | 4,30:1 |
+| Centerlinje | `#1a76aa` | 4,98:1 | 3,26:1 |
+| Bånd | `#a3c4e6` | 1,81:1 | 8,97:1 |
 
-Mørkere end dette gør den mere læsbar på lys baggrund, men svagere på mørkt
-tema, hvor forholdet vender. 3,78:1 er valgt som det punkt, der holder i begge.
+`#3e89c1` er projektets blå og bruges også i visualen.
 
-## Stregvægte
+Båndet ligger bevidst under de 3:1, grafik ellers bør have. Det er en
+baggrundsflade, og grænselinjerne er dens kant — jo mørkere båndet bliver, jo
+mere æder det linjerne. Ved 1,81:1 står de 2,09:1 fri af det.
 
-Centerlinjen har `stroke-width="0.8"` og serielinjen `0.7`. Det er tungere end
-motivet har i en webkontekst, og det er med vilje: ikonet vises reelt ved
-20×20, hvor viewBox'ens 16 enheder skaleres med 1,25. Ved den oprindelige vægt
-på 0,5 med halv opacitet blev centerlinjen under én pixel og forsvandt — og den
-er den vigtigste streg i motivet, fordi medianen er hele pointen i metoden.
+Baggrunden er gennemsigtig. Det er væsentligt: en uigennemsigtig hvid baggrund
+ser upåfaldende ud på lyst tema og lyser op som en lampe på mørkt.
+
+## To kendte mangler
+
+**Serien og aksen er næsten sorte** og giver derfor 1,61:1 og 1,29:1 på mørkt
+tema. Ikonet er skarpt på lyst tema og svagt på mørkt. Skal ét ikon holde
+begge steder, skal de to elementer lysnes til en mellemtone, sådan som de blå
+toner allerede ligger.
+
+**`large-icon.png` er en ren opskalering** af de 20×20 med faktor 15 og uden
+udglatning. Motivet er det rigtige, men ved 300×300 ses hver pixel som en
+15×15 klods. Det holder ikke til AppSource.
+
+Begge dele løses af det samme: en vektorkilde. Tegnes motivet som SVG, kan
+farverne justeres ét sted, og begge PNG'er kan genereres skarpt i hver sin
+størrelse.
 
 ## Regenerering
 
-Efter en ændring i `icon.svg`:
+Så længe kilden er en 20×20 PNG, genereres den store sådan her:
 
 ```
-pip install cairosvg
 python3 -c "
-import cairosvg
-svg = open('assets/icon.svg','rb').read()
-cairosvg.svg2png(bytestring=svg, write_to='assets/icon.png', output_width=20, output_height=20)
-cairosvg.svg2png(bytestring=svg, write_to='assets/large-icon.png', output_width=300, output_height=300)
+from PIL import Image
+im = Image.open('assets/icon.png').convert('RGBA')
+im.resize((300, 300), Image.NEAREST).save('assets/large-icon.png')
 "
 ```
 
-Kontrollér resultatet ved faktisk 20×20, ikke kun forstørret. Et ikon, der ser
-rigtigt ud ved 200 %, kan være mudder ved 100 %.
+`Image.NEAREST` er bevidst: alt andet slører kanterne uden at tilføje detalje,
+som ikke findes i kilden.
