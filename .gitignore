@@ -25,3 +25,6 @@ test/__screenshots__
 test/**/__screenshots__
 
 .vitest-attachments
+
+# Personlige Claude Code-instruktioner (loades lokalt, deles ikke)
+CLAUDE.local.md
