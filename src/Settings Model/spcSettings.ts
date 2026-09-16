@@ -41,6 +41,7 @@ const spcSettings = {
       split_on_click: toggleOption("Opdel i faser ved klik", false),
       num_points_subset: numberOption("Antal punkter til grænseberegning", undefined),
       subset_points_from: dropdownOption("Beregn grænser fra", "Start", ["Start", "End"], "none", ["Start", "Slut"]),
+      subset_rebaselines: toggleOption("Anvend punktudvalg efter hver faseopdeling", false),
       ttip_show_date: toggleOption("Vis dato i tooltip", true),
       ttip_label_date: textOption("Dato-etiket i tooltip", "Automatic"),
       ttip_show_numerator: toggleOption("Vis tæller i tooltip", true),
