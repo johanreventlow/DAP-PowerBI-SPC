@@ -42,7 +42,7 @@ Dokumenteres i README.
 `Σs/(o−1)`. Implementeret som gennemsnit af de faktiske differencer.
 
 **D3 — Eksakt `√(π/2)`, ikke `1.128`.** `1/1.128 = 0.88652`,
-`√(π/2)/... ` giver `√(2/π) = 0.88623`. Relativ forskel ≈ 3,3·10⁻⁴ på sigma.
+ved `d = 1` giver `√(π/2)/√2 = √π/2 = 0.88623`. Relativ forskel ≈ 3,3·10⁻⁴ på sigma.
 Testen "I′ med d=1 ≈ I" bruger den tolerance og kører med
 `outliers_in_limits = true`, så screeningens `3.267` vs `3.2665` ikke kan
 flippe en grænseværdi.

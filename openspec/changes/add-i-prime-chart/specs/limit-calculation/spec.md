@@ -14,7 +14,7 @@ afskæring ved 0 eller 1. Konstanten SHALL være eksakt `√(π/2)`, ikke `1.128
 
 - **WHEN** `ip` bruges uden nævnerkolonne
 - **THEN** er grænserne konstante og svarer til I-kortets inden for en
-  relativ tolerance på 5·10⁻⁴ (forskellen mellem `√(2/π)` og `1/1.128`)
+  relativ tolerance på 5·10⁻⁴ (forskellen mellem `√π/2` og `1/1.128`)
 
 #### Scenario: Konstant nævner giver konstante grænser
 

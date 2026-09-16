@@ -87,7 +87,9 @@ Lægger du gennemsnittet direkte i tælleren, plotter visualen `x̄_i/d_i`.
 Baselinen ("Antal punkter til grænseberegning") fastlægger centerlinje og
 sigma; punkter uden for baselinen får grænser med deres egen nævner. Bemærk
 at `qicharts2` her tager differencerne over hele fasen og ikke kun
-baselinen, så med `freeze` afviger dens grænser lidt fra visualens.
+baselinen, så med `freeze` afviger dens grænser lidt fra visualens. En helt
+konstant serie får grænser lig centerlinjen, hvor `qicharts2` med screening
+slået til viser ingen grænser (`NA`); ingen af delene giver et signal.
 
 Kortet er ikke universelt: ved meget lave counts, stærkt skæve data eller
 variation, der ikke aftager med `1/d_i`, holder antagelsen ikke, og
