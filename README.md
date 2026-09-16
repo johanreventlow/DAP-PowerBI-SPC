@@ -61,8 +61,9 @@ derfor er forskellig fra punkt til punkt. Metodens antagelse er, at variansen
 falder med nævneren, `Var(y_i) ≈ σ²/d_i`; derfor får punkter med små nævnere
 bredere kontrolgrænser end punkter med store. Uden nævner er `d_i = 1`, og
 kortet er et almindeligt I-kort — bortset fra at `i'` bruger den eksakte
-konstant `√(π/2)` i stedet for den afrundede `1.128`, hvilket flytter
-grænserne cirka 0,03 %.
+konstant `√(π/2)` i stedet for den afrundede `1.128`, så grænseafstanden
+bliver cirka 0,03 % smallere, og at screeningsgrænsen er `3,2665·s̄` mod
+I-kortets `3,267`.
 
 Beregningen: centerlinjen er `Σn/Σd` (vægtet, ikke gennemsnittet af
 ratioerne), sigma estimeres fra de normaliserede successive differencer
