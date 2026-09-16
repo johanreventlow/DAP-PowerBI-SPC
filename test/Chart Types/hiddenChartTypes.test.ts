@@ -41,7 +41,7 @@ describe("Skjulte chart-typer", () => {
 
   it("tilbyder stadig de typer, der skal kunne vælges", () => {
     const values: string[] = spcSettings.settingsGroups.all.chart_type.valid;
-    ["run", "i", "mr", "p", "pp", "u", "up", "c", "xbar", "s", "g", "t"]
+    ["run", "i", "ip", "mr", "p", "pp", "u", "up", "c", "xbar", "s", "g", "t"]
       .forEach(t => expect(values).toContain(t));
   });
 

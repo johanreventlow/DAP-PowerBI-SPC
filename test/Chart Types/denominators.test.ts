@@ -5,7 +5,7 @@ import { defaultSettings } from "../../src/settings";
 import { Visual } from "../../src/visual";
 import buildDataView from "../helpers/buildDataView";
 
-const chartTypes = ["p", "pp", "u", "up", "i", "i_m", "i_mm", "mr", "run", "xbar", "s"] as const;
+const chartTypes = ["p", "pp", "u", "up", "i", "ip", "i_m", "i_mm", "mr", "run", "xbar", "s"] as const;
 const limitNames = ["ll99", "ul99"] as const;
 type ExpectedLimits = Pick<controlLimitsObject, "values" | "targets" | typeof limitNames[number]>;
 type Input = { numerators: number[], denominators: number[], xbar_sds?: number[] };
@@ -196,6 +196,15 @@ for (let i = 0; i < 3; i++) {
 }
 const references = [
   { chart_type: "i", input: ratioInput, expected: limitsAround(ratioValues, 0.5375, meanRangeSigmas) },
+  {
+    // I′: CL = 25/36; s_i = √(π/2)·|Δy|/√(1/d_i + 1/d_{i-1}); SD_i = s̄/√d_i
+    chart_type: "ip", input: ratioInput,
+    expected: limitsAround(ratioValues, 25 / 36, (() => {
+      const s = [0.25 / Math.sqrt(1 / 4 + 1 / 8), 0, 0.4 / Math.sqrt(1 / 4 + 1 / 20)].map(d => d * Math.sqrt(Math.PI / 2));
+      const sbar = (s[0] + s[1] + s[2]) / 3;
+      return ratioInput.denominators.map(d => sbar / Math.sqrt(d));
+    })())
+  },
   { chart_type: "i_m", input: ratioInput, expected: limitsAround(ratioValues, 0.5, meanRangeSigmas) },
   { chart_type: "i_mm", input: ratioInput, expected: limitsAround(ratioValues, 0.5, medianRangeSigmas) },
   { chart_type: "run", input: ratioInput, expected: limitsAround(ratioValues, 0.5) },

@@ -2,6 +2,7 @@ import type { settingsValueType } from "../settings"
 
 const valueNames: Record<string, string> = {
   "i": "Observation",
+  "ip": "Observation",
   "i_m": "Observation",
   "i_mm": "Observation",
   "c": "Count",
@@ -33,7 +34,8 @@ export default class derivedSettingsClass {
     value_name: string,
     x_axis_use_date: boolean,
     date_name: string,
-    denominator_gt_one: boolean
+    denominator_gt_one: boolean,
+    denominator_positive: boolean
   }
 
   constructor(inputSettingsSpc: settingsValueType["spc"]) {
@@ -60,7 +62,7 @@ export default class derivedSettingsClass {
     this.chart_type_props = {
       name: chartType,
       needs_denominator: ["p", "pp", "u", "up", "xbar", "s"].includes(chartType),
-      denominator_optional: ["i", "i_m", "i_mm", "run", "mr"].includes(chartType),
+      denominator_optional: ["i", "ip", "i_m", "i_mm", "run", "mr"].includes(chartType),
       numerator_non_negative: ["p", "pp", "u", "up", "s", "c", "g", "t"].includes(chartType),
       numerator_leq_denominator: ["p", "pp"].includes(chartType),
       has_control_limits: !(["run"].includes(chartType)),
@@ -73,7 +75,10 @@ export default class derivedSettingsClass {
       value_name: valueNames[chartType],
       x_axis_use_date: !(["g", "t"].includes(chartType)),
       date_name: !(["g", "t"].includes(chartType)) ? "Date" : "Event",
-      denominator_gt_one: ["xbar", "s"].includes(chartType)
+      denominator_gt_one: ["xbar", "s"].includes(chartType),
+      // I′ deler med √d_i, så en nævner på 0 (eller negativ/uendelig) giver
+      // ingen meningsfuld grænse. Kun ip — andre typers validering er uændret.
+      denominator_positive: ["ip"].includes(chartType)
     }
 
     this.multiplier = multiplier

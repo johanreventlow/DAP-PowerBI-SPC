@@ -17,7 +17,8 @@ const enum ValidationFailTypes {
   NumeratorNaN = 10,
   DenominatorNaN = 11,
   SDNaN = 12,
-  DenominatorLessThanOne = 13
+  DenominatorLessThanOne = 13,
+  DenominatorNotPositive = 14
 }
 
 function validateInputDataImpl(key: string | undefined,
@@ -64,6 +65,10 @@ function validateInputDataImpl(key: string | undefined,
     } else if (chart_type_props.denominator_gt_one && denominator <= 1) {
       rtn.message = "Nævner er højst 1"
       rtn.type = ValidationFailTypes.DenominatorLessThanOne
+    } else if (chart_type_props.denominator_positive && (denominator <= 0 || !Number.isFinite(denominator))) {
+      // Infinity passerer både isNaN og < 0 ovenfor.
+      rtn.message = "Nævner skal være større end 0";
+      rtn.type = ValidationFailTypes.DenominatorNotPositive;
     }
   }
 
@@ -173,6 +178,10 @@ export default function validateInputData(keys: (string | undefined)[],
       }
       case ValidationFailTypes.DenominatorLessThanOne: {
         validationRtn.error = "Alle nævnere er højst 1.";
+        break;
+      }
+      case ValidationFailTypes.DenominatorNotPositive: {
+        validationRtn.error = "Alle nævnere skal være større end 0.";
         break;
       }
     }
