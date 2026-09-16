@@ -17,7 +17,8 @@ const enum ValidationFailTypes {
   NumeratorNaN = 10,
   DenominatorNaN = 11,
   SDNaN = 12,
-  DenominatorLessThanOne = 13
+  DenominatorLessThanOne = 13,
+  DenominatorNotPositive = 14
 }
 
 function validateInputDataImpl(key: string | undefined,
@@ -55,6 +56,12 @@ function validateInputDataImpl(key: string | undefined,
     } else if (isNaN(denominator)) {
       rtn.message = "Nævner er ikke et tal";
       rtn.type = ValidationFailTypes.DenominatorNaN;
+    } else if (chart_type_props.denominator_positive && (denominator <= 0 || !Number.isFinite(denominator))) {
+      // Kun ip. Står FØR den generelle negativ-gren, så nul, negativ og
+      // uendelig nævner får én fælles regel og én fælles fejlbesked.
+      // Infinity passerer både isNaN og < 0.
+      rtn.message = "Nævner skal være større end 0";
+      rtn.type = ValidationFailTypes.DenominatorNotPositive;
     } else if (denominator < 0) {
       rtn.message = "Nævner er negativ";
       rtn.type = ValidationFailTypes.DenominatorNegative;
@@ -173,6 +180,10 @@ export default function validateInputData(keys: (string | undefined)[],
       }
       case ValidationFailTypes.DenominatorLessThanOne: {
         validationRtn.error = "Alle nævnere er højst 1.";
+        break;
+      }
+      case ValidationFailTypes.DenominatorNotPositive: {
+        validationRtn.error = "Alle nævnere skal være større end 0.";
         break;
       }
     }

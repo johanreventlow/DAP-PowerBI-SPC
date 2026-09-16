@@ -15,10 +15,11 @@ const spcSettings = {
         // Et seriediagram stiller ingen krav til fordelingen og er derfor det
         // sikre udgangspunkt, før brugeren tager stilling til diagramtypen.
         "Diagramtype", "run",
-        ["run", "i", "i_m", "i_mm", "mr", "p", "pp", "u", "up", "c", "xbar", "s", "g", "t"], "none",
+        ["run", "i", "ip", "i_m", "i_mm", "mr", "p", "pp", "u", "up", "c", "xbar", "s", "g", "t"], "none",
         [
           "run - Seriediagram (median)",
           "i - Individuelle målinger",
+          "i' - Normaliseret individkort (varierende nævner)",
           "i_m - Individuelle målinger: median-centerlinje",
           "i_mm - Individuelle målinger: median-centerlinje, median-MR-grænser",
           "mr - Glidende variationsbredde (moving range)",

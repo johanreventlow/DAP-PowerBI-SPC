@@ -76,4 +76,25 @@ describe("Skift af chart-type frem og tilbage", () => {
 
     element.remove();
   });
+
+  // Samme sekvens med I′ imellem: ip har egne, varierende grænser og skal
+  // genskabes efter et run-mellemspil ligesom i.
+  it("genskaber kontrolgrænser ved i → ip → run → ip", () => {
+    const element = testDom("500", "500");
+    const visual = new Visual({ element: element, host: createVisualHost({}) } as any);
+
+    render(visual, "i", 2);
+    render(visual, "ip", 62);
+    const asIp: controlLimitsObject = visual.viewModel.controlLimits[0];
+    expect(asIp.ul99, "ip burde have kontrolgrænser").toBeDefined();
+    render(visual, "run", 2);
+    expect(visual.viewModel.controlLimits[0].ul99).toBeUndefined();
+    render(visual, "ip", 62);
+    const back: controlLimitsObject = visual.viewModel.controlLimits[0];
+    expect(back.ul99).toBeDefined();
+    expect(back.ul99![0]).toBeCloseTo(asIp.ul99![0] as number, 10);
+    expect(limitLineNames(visual)).toContain("ul99");
+
+    element.remove();
+  });
 });

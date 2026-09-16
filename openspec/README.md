@@ -36,6 +36,12 @@ Spec-delta'erne er foldet ind i `specs/chart-rendering/` og
 gennemlæst, og visualen er endnu ikke set i en rigtig Power BI-rude. Begge er
 noteret som manuelle trin i planens `tasks.md`.
 
+## I gang
+
+| Change | Note |
+|---|---|
+| `changes/add-i-prime-chart/` | Normaliseret individkort (`ip`) som ny diagramtype; ny capability `limit-calculation`. Branch `feat/i-prime-chart` |
+
 ## Ikke afgjort
 
 | Change | Note |

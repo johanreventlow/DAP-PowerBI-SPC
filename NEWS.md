@@ -23,6 +23,17 @@ slås op uden at være bundet ind i versionsnummeret.
 
 ### Nye features
 
+* **Normaliseret individkort (`i'`).** Anhøj/Taylors I′-kort
+  (`qicharts2`: `chart = "ip"`) som ny diagramtype: et I-kort, hvor hver
+  observation kan have sin egen nævner, og grænsebredden følger `1/√d_i`.
+  Centerlinjen er `Σn/Σd`, sigma estimeres fra de normaliserede successive
+  differencer med den eksakte konstant `√(π/2)`, og "Behold outliers i
+  grænseberegning" screener store differencer som for de øvrige typer. Uden
+  nævner reduceres kortet til I-kortet. Ingen automatisk afskæring ved 0
+  eller 1. En leveret nævner skal være større end 0 — punkter med nul,
+  negativ eller uendelig nævner udelades med en fejlbesked. Aggregerede
+  gennemsnit indlæses som *tæller = gennemsnit × n, nævner = n*; se README.
+  Verificeret mod `qicharts2` v0.8.1 på fem reference-datasæt.
 * **Seriediagram er nu standard-diagramtypen.** `qicharts2` defaulter til
   `run`, og et seriediagram stiller ingen krav til fordelingen — det er derfor
   det sikre udgangspunkt, før brugeren aktivt vælger diagramtype. Rapporter,

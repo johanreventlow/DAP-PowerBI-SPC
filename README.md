@@ -50,7 +50,54 @@ det den væsentlige forskel at kende.
 
 ## Chart-typer
 
-Run, i (XmR), mr, p, p', u, u', c, xbar, s, g og t.
+Run, i (XmR), i', mr, p, p', u, u', c, xbar, s, g og t.
+
+### i' — normaliseret individkort
+
+`i'` er Anhøj/Taylors normaliserede individkort (`qicharts2`: `chart = "ip"`).
+Det er et I-kort for observationer, der er gennemsnit eller ratioer over et
+varierende antal enheder — patienter, dage, prøver — og hvor usikkerheden
+derfor er forskellig fra punkt til punkt. Metodens antagelse er, at variansen
+falder med nævneren, `Var(y_i) ≈ σ²/d_i`; derfor får punkter med små nævnere
+bredere kontrolgrænser end punkter med store. Uden nævner er `d_i = 1`, og
+kortet er et almindeligt I-kort — bortset fra at `i'` bruger den eksakte
+konstant `√(π/2)` i stedet for den afrundede `1.128`, så grænseafstanden
+bliver cirka 0,03 % smallere, og at screeningsgrænsen er `3,2665·s̄` mod
+I-kortets `3,267`.
+
+Beregningen: centerlinjen er `Σn/Σd` (vægtet, ikke gennemsnittet af
+ratioerne), sigma estimeres fra de normaliserede successive differencer
+`s_i = √(π/2)·|y_i − y_{i−1}| / √(1/d_i + 1/d_{i−1})`, og grænserne er
+`CL ± 3·s̄/√d_i`. "Behold outliers i grænseberegning" virker som for de
+andre typer: er den fra, screenes `s_i ≥ 3,2665·s̄` bort, før `s̄`
+genberegnes. Der afskæres ikke automatisk ved 0 eller 1 — kortet kan bruges
+på kontinuerte og negative målinger — men "Afskær nedre/øvre grænser ved"
+virker som sædvanlig.
+
+**Aggregerede gennemsnit skal indlæses som sum og antal.** Har du allerede
+beregnet gruppegennemsnittet `x̄_i`, skal felterne være
+
+```
+Tæller = gruppegennemsnit × gruppestørrelse
+Nævner = gruppestørrelse
+```
+
+Lægger du gennemsnittet direkte i tælleren, plotter visualen `x̄_i/d_i`.
+
+Baselinen ("Antal punkter til grænseberegning") fastlægger centerlinje og
+sigma; punkter uden for baselinen får grænser med deres egen nævner. Bemærk
+at `qicharts2` her tager differencerne over hele fasen og ikke kun
+baselinen, så med `freeze` afviger dens grænser lidt fra visualens. En helt
+konstant serie får grænser lig centerlinjen, hvor `qicharts2` med screening
+slået til viser ingen grænser (`NA`); ingen af delene giver et signal.
+
+Kortet er ikke universelt: ved meget lave counts, stærkt skæve data eller
+variation, der ikke aftager med `1/d_i`, holder antagelsen ikke, og
+grænserne skal læses med faglig forsigtighed. Referencer: Taylor,
+[Normalized Individuals Control Chart](https://variation.com/normalized-individuals-control-chart/);
+Anhøj, [I′ charts for variable subgroup sizes](https://anhoej.github.io/spc4hc/i-prime-charts-for-variable-subgroup-sizes.html).
+Grænserne er verificeret mod `qicharts2` v0.8.1 på fem reference-datasæt i
+`test/Chart Types/ip-fixtures.json`, genereret af R-scriptet i samme mappe.
 
 ## Installation
 
