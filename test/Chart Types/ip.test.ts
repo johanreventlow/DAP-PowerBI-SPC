@@ -54,7 +54,8 @@ describe("ipLimits — formlerne", () => {
     expect(limits.ll99![0]).toBeLessThan(0);
   });
 
-  // √(2/π) = 0.88623 mod 1/1.128 = 0.88652: relativ forskel 3,3·10⁻⁴ på sigma.
+  // Sigma-faktor ved d = 1: √(π/2)/√2 = √π/2 = 0.88623 mod 1/1.128 = 0.88652,
+  // relativ forskel 3,3·10⁻⁴.
   // outliers_in_limits = true, så I-kortets 3.267 mod I′'s 3.2665 ikke kan
   // flippe en grænseværdi.
   it("svarer til I-kortet inden for 5e-4 relativt, når d_i = 1", () => {
@@ -119,6 +120,30 @@ describe("ipLimits — formlerne", () => {
     expect(widths(screened)[0]).toBeCloseTo(3 * sbarScreened, 12);
     expect(widths(screened)[0]).toBeLessThan(widths(all)[0]);
     expect(screened.targets[0]).toBeCloseTo(all.targets[0] as number, 12);
+  });
+
+  // Cycle 3 L4: screeningen beholder s_i < ULS (streng, som qicharts2). Serien
+  // er konstrueret, så den sidste s_i rammer ULS eksakt i flydende tal:
+  // med d = 1 er s_i ∝ |Δy|; differencer [1,1,1,1,a] og a = 3.2665·(4+a)/5
+  // giver a = 3.2665·4/(5 − 3.2665). Et skift til <= beholder alle fem.
+  it("screener en s_i, der er præcis lig ULS, bort", () => {
+    const a: number = 3.2665 * 4 / (5 - 3.2665);
+    const y: number[] = [0, 1, 2, 3, 4, 4 + a];
+    // Samme operationsorden som ip.ts, ellers afviger sidste s_i med 1 ulp.
+    const s: number[] = [];
+    for (let i = 1; i < y.length; i++) {
+      s.push(SQRT_HALF_PI * Math.abs(y[i] - y[i - 1]) / Math.sqrt(2));
+    }
+    let sum: number = 0;
+    for (const v of s) {
+      sum += v;
+    }
+    const sbarRaw: number = sum / 5;
+    expect(s[4]).toBe(3.2665 * sbarRaw); // konstruktionen holder eksakt
+    const screened = ipLimits(makeArgs(y, undefined, undefined, false));
+    const all = ipLimits(makeArgs(y, undefined, undefined, true));
+    expect(widths(screened)[0]).toBeCloseTo(3 * s[0], 12); // kun de fire ens s_i tilbage
+    expect(widths(all)[0]).toBeCloseTo(3 * sbarRaw, 12);
   });
 
   it.each([true, false])("håndterer en konstant serie uden NaN (outliers_in_limits=%s)", keep => {
@@ -199,7 +224,7 @@ type fixture = {
 const fixtures: fixture[] = (fixturesJson as { fixtures: fixture[] }).fixtures;
 
 describe("ipLimits — qicharts2-fixtures", () => {
-  it("dækker de krævede scenarier", () => {
+  it("fixture-sanity: dækker de krævede scenarier", () => {
     const names: string[] = fixtures.map(f => f.name);
     expect(names).toEqual(expect.arrayContaining([
       "continuous_no_denominator", "aggregated_means",
@@ -235,7 +260,7 @@ describe("ipLimits — qicharts2-fixtures", () => {
     });
   });
 
-  it("extreme_difference: screening giver smallere grænser end uden", () => {
+  it("fixture-sanity: extreme_difference har smallere grænser med screening", () => {
     const fx = fixtures.find(f => f.name === "extreme_difference")!;
     const keep = fx.variants.find(v => v.outliers_in_limits)!;
     const screen = fx.variants.find(v => !v.outliers_in_limits)!;
