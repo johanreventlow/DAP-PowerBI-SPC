@@ -44,6 +44,7 @@ Fase 2 (fjernelser) divergerer bevidst fra upstream.
 | F1b | Signalpanel + signaltal i tooltip | DONE |
 | F2 | Fjern `trend`, `twoInThree`, `shift`, NHS-ikoner | DONE |
 | F3 | Rebrand + dokumentation | Rebrand DONE, dokumentation i gang |
+| F4 | Normaliseret individkort `ip` (I′, Anhøj/Taylor) | DONE (PR #16) — manuel Power BI-kontrol udestår |
 
 `astronomical` blev **bevaret** i F2: den er `qicharts2`'s `sigma.signal` og
 ligger til grund for signalpanelets tredje række. `shift` blev fjernet, fordi
@@ -63,6 +64,10 @@ Detaljer: `docs/spc-anhoj-context.md` §6.
   Punktbaserede regler (`astronomical`) har den ældre signatur
   `(...) => string[]` af `"upper" | "lower" | "none"`
 - `src/Limit Calculations/run.ts` + `i_mm.ts` — median-centerline-skabeloner
+- `src/Limit Calculations/ip.ts` — I′: vægtet CL, normaliserede successive
+  differencer, punktvise grænser. Baseline styrer kun CL/`s̄` (bevidst
+  afvigelse fra `qicharts2::qic.ip`). Fixtures: `test/Chart Types/ip-fixtures.json`
+  (R-generator i samme mappe). Spec: `openspec/specs/limit-calculation/`
 - `src/Settings Model/` — ét modul per settings-kort. Nye indstillinger skal
   registreres **både** her og i `capabilities.json`, ellers persisteres de
   tavst ikke
