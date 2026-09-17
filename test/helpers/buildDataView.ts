@@ -27,7 +27,13 @@ function buildColumn(displayName: string, queryName: string, values: any[], sett
       roles: roles,
     },
     values: values,
-    objects: [settings as powerbi.DataViewObjects]
+    // Power BI udfylder objects med én post per række, ikke én i alt. Med kun
+    // én post faldt alle øvrige rækker tilbage til de hardkodede defaults i
+    // extractConditionalFormatting, og enhver værdi, der læses gennem den
+    // betingede formatering, blev forkert i testen. alt_target læses kun
+    // dén vej, så en mållinje blev til et enkelt punkt — en fejl der ikke
+    // findes i produktet.
+    objects: values.map(() => settings as powerbi.DataViewObjects)
   };
 }
 

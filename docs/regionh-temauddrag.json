@@ -1,0 +1,204 @@
+{
+  "name": "DAP SPC — tilføjelse til Region H-temafilen",
+  "visualStyles": {
+    "DAPSPC": {
+      "lines": [
+        {
+          "colour_main": {
+            "solid": {
+              "color": "#002555"
+            }
+          },
+          "colour_99": {
+            "solid": {
+              "color": "#809bbc"
+            }
+          },
+          "band_colour_99": {
+            "solid": {
+              "color": "#809bbc"
+            }
+          },
+          "colour_target": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "colour_alt_target": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "plot_label_colour_main": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "plot_label_colour_target": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "plot_label_colour_alt_target": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "plot_label_colour_99": {
+            "solid": {
+              "color": "#333333"
+            }
+          }
+        }
+      ],
+      "outliers": [
+        {
+          "ast_colour": {
+            "solid": {
+              "color": "#C47B00"
+            }
+          }
+        }
+      ],
+      "x_axis": [
+        {
+          "xlimit_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "xlimit_tick_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "xlimit_label_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "xlimit_tick_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
+          "xlimit_tick_size": 12,
+          "xlimit_label_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
+          "xlimit_label_size": 12
+        }
+      ],
+      "y_axis": [
+        {
+          "ylimit_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "ylimit_tick_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "ylimit_label_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "ylimit_tick_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
+          "ylimit_tick_size": 12,
+          "ylimit_label_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
+          "ylimit_label_size": 12
+        }
+      ],
+      "summary_table": [
+        {
+          "table_outer_border_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "table_header_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "table_header_border_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "table_body_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "table_body_border_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "table_header_bg_colour": {
+            "solid": {
+              "color": "#e3e2e1"
+            }
+          },
+          "table_body_bg_colour": {
+            "solid": {
+              "color": "#FFFFFF"
+            }
+          },
+          "table_header_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
+          "table_header_size": 12,
+          "table_body_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
+          "table_body_size": 12
+        }
+      ],
+      "labels": [
+        {
+          "label_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "label_line_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "label_marker_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "label_marker_outline_colour": {
+            "solid": {
+              "color": "#333333"
+            }
+          },
+          "label_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
+          "label_size": 12,
+          "label_marker_size": 12
+        }
+      ],
+      "scatter": [
+        {
+          "colour": {
+            "solid": {
+              "color": "#002555"
+            }
+          },
+          "colour_outline": {
+            "solid": {
+              "color": "#002555"
+            }
+          }
+        }
+      ],
+      "signal_panel": [
+        {
+          "panel_signal_colour": {
+            "solid": {
+              "color": "#605E5C"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
