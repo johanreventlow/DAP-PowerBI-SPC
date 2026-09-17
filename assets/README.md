@@ -10,6 +10,30 @@ To filer, to formål. Det er bevidst, og de skal holdes i sync i hånden.
 
 `pbiviz.json` peger på `icon.png`.
 
+## Sikker zone: den yderste pixelring vises ikke
+
+Power BI klipper den yderste pixelring væk, når ikonet vises i
+visualiseringsruden. Det blev opdaget, fordi aksen forsvandt: den lå i
+kolonne 0 og række 19, altså præcis i den ring.
+
+**Læg intet i ring 0 eller 19.** Alt indhold ligger nu inden for x 1..18 og
+y 1..18, med aksen langs x=1 og y=18. Kontrollér efter en ændring, at ringen
+er tom:
+
+```
+python3 -c "
+from PIL import Image
+p = Image.open('assets/icon.png').convert('RGBA').load()
+ring = ([p[i,0] for i in range(20)] + [p[i,19] for i in range(20)]
+        + [p[0,i] for i in range(20)] + [p[19,i] for i in range(20)])
+print('ikke-tomme pixels i yderste ring:', sum(1 for c in ring if c[3] > 0))
+"
+```
+
+De 18×18, der er tilbage, er den reelle tegneflade. Det er en tredjedel
+mindre areal end de 20×20 antyder, og det er værd at huske, næste gang
+motivet skal ændres.
+
 ## Hvorfor de 20×20 ikke kommer fra vektoren
 
 Det oplagte ville være at have én kilde og generere begge størrelser ud fra
@@ -44,56 +68,54 @@ motiv og dets SVG-kilde ligger i historikken frem til `5b14844`.
 
 ## Palet
 
-| Element | Farve | Kontrast |
-|---|---|---|
-| Bånd | `#a3c4e6` | 1,81:1 mod hvid |
-| Kontrolgrænser | `#3e89c1` | 3,78:1 mod hvid, 4,30:1 mod mørk |
-| Centerlinje | `#1a76aa` | 4,98:1 mod hvid, 3,26:1 mod mørk |
-| Serie, inde i båndet | `#424240` | 3,69–5,56:1 mod båndet |
-| Serie, uden for båndet | `#6b7480` | 4,74:1 mod hvid, 3,43:1 mod mørk |
-| Datapunkter | `#000000` | 11,60:1 mod båndet |
-| Punkt uden for kontrol | `#1a76aa` | 4,98:1 mod hvid, 3,26:1 mod mørk |
-| Akse | `#6b7480` | 4,74:1 mod hvid, 3,43:1 mod mørk |
+Farverne er Power BI's egne ikonfarver, så visualen står som en af husets i
+visualiseringsruden.
 
-`#3e89c1` er projektets blå og bruges også i visualen.
+| Element | Farve | Mod hvid | Mod mørk | Mod båndet |
+|---|---|---|---|---|
+| Bånd | `#d7e6ff` | 1,26:1 | 12,89:1 | — |
+| Kontrolgrænser | `#83beec` | 1,99:1 | 8,16:1 | 1,58:1 |
+| Centerlinje | `#0063b1` | 6,14:1 | 2,65:1 | 4,87:1 |
+| Punkt uden for kontrol | `#0063b1` | 6,14:1 | 2,65:1 | — |
+| Serie | `#3a3a38` | 11,40:1 | 1,43:1 | 9,04:1 |
+| Datapunkter | `#000000` | 21,00:1 | 1,29:1 | 16,65:1 |
+| Akse | `#3a3a38` | 11,40:1 | 1,43:1 | — |
 
-Brudpunktet har samme blå som centerlinjen. Visualens egen farve for punkter
-uden for kontrol (`beyond_limit`, `#490092`) blev prøvet først, men ikonet
-holder sig til to blå og en grå, og en tredje kulør trak uforholdsmæssigt
-meget opmærksomhed i et felt på 400 pixels.
+## To bevidste kompromiser
 
-I `icon.png` er serien ikke én farve, men en håndsat udglatning hen over
-26 pixels. Tallet i tabellen er spændet. I `icon.svg` er den én streg.
+**Grænselinjerne er svage.** De ligger 1,58:1 fra båndet og 1,99:1 fra hvid,
+så båndets kant er blød. Til gengæld står serien, centerlinjen og punkterne
+skarpt på den lyse flade — 9,04:1, 4,87:1 og 16,65:1 — og motivets kerne er
+det, der bærer ikonet ved 20×20. Konsekvensen er, at det er mindre tydeligt
+*hvilken* linje brudpunktet bryder; punktet selv er stadig klart.
+
+**Mørkt tema er nedprioriteret.** `#3a3a38` giver 1,43:1 mod en mørk baggrund,
+så aksen er svag dér. Båndet, centerlinjen og brudpunktet står stadig, så
+motivet er læseligt — men det er tegnet til en lys rude, og det er langt de
+fleste installationer.
+
+En tidligere version brugte mellemtoner, der klarede 3:1 i begge temaer, og en
+særlig lysere farve til den del af serien, der forlader båndet. Begge dele er
+væk: med Power BI's palet og én serie-farve er den konstruktion overflødig.
 
 ## Hvilken baggrund hvert element måles imod
 
 Det afgør, hvilke krav der giver mening, og det er ikke det samme for alle
 elementer.
 
-**Aksen** er det eneste, der rører den gennemsigtige baggrund. Den skal derfor
-klare både lyst og mørkt tema, og vinduet er smalt: relativ luminans mellem
-0,143 og 0,300. Uden for det falder den igennem i det ene tema eller det andet.
-Sort klarer kun lyst tema — derfor er aksen ikke sort.
-
 **Serien, punkterne, centerlinjen** ligger oven på båndet, som er
 uigennemsigtigt. Deres kontrast er den samme i begge temaer, og det er båndet,
-ikke sidens baggrund, de skal måles imod. Her er mørkt det rigtige valg.
+ikke sidens baggrund, de skal måles imod. Alle tre ligger over 3:1 dér.
 
-**Toppen, der stikker op over den øvre grænse**, er undtagelsen. Dér slipper
-serien båndet og rører baggrunden, og en mørk streg ville falde igennem på
-mørkt tema. Derfor skifter serien til aksens grå over grænselinjen. I
-`icon.svg` gøres det med en `clipPath` over række 5, så kurven kun står ét
-sted.
+**Aksen, grænselinjerne og brudpunktet** rører den gennemsigtige baggrund og
+afhænger derfor af temaet. Det er dem, kompromiserne ovenfor handler om.
 
-Brudpunktet selv ligger højt nok til at have den gennemsigtige baggrund hele
-vejen rundt, og `#1a76aa` klarer 4,98:1 og 3,26:1.
+**Båndet** er en baggrundsflade. Det giver 1,26:1 mod hvid — langt under de
+3:1, grafik ellers bør have, og det er med vilje: fladen skal bære serien, ikke
+konkurrere med den.
 
-**Båndet** ligger bevidst under de 3:1, grafik ellers bør have. Det er en
-baggrundsflade, og grænselinjerne er dens kant — jo mørkere båndet bliver, jo
-mere æder det linjerne. Ved 1,81:1 står de 2,09:1 fri af det.
-
-Baggrunden er gennemsigtig. Det er væsentligt: en uigennemsigtig hvid baggrund
-ser upåfaldende ud på lyst tema og lyser op som en lampe på mørkt.
+Baggrunden er gennemsigtig. En uigennemsigtig hvid baggrund ser upåfaldende ud
+på lyst tema og lyser op som en lampe på mørkt.
 
 ## Regenerering
 
