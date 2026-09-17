@@ -1,0 +1,45 @@
+<!--
+  DAP SPC — ikonets vektorkilde.
+
+  BEMÆRK: denne fil er kilden til large-icon.png (300x300), ikke til
+  icon.png. De 20x20 er sat i hånden, pixel for pixel, og er skarpere end
+  nogen vektor gengivet i den størrelse — diagonalerne i serien udglattes
+  over to pixels, uanset stregvægt. Se assets/README.md.
+
+  Geometrien er den samme som i icon.png, aflæst af dens pixelgitter:
+  seks datapunkter med tre enheders mellemrum. Koordinaterne ender på .5,
+  så hver streg ligger midt i en pixel frem for på kanten mellem to.
+
+  Farverne skal være de samme som i icon.png. Ændres en af dem, skal begge
+  filer rettes.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 20 20">
+  <style>
+    .baand   { fill:   #a3c4e6; }
+    .graense { stroke: #3e89c1; }
+    .center  { stroke: #1a76aa; }
+    .serie   { stroke: #424240; }
+    .punkt   { fill:   #000000; }
+    .akse    { stroke: #6b7480; }
+  </style>
+
+  <rect class="baand" x="1" y="6" width="19" height="7"/>
+
+  <g fill="none" stroke-width="1">
+    <path class="graense" d="M1 5.5H20"/>
+    <path class="graense" d="M1 13.5H20"/>
+    <path class="center"  d="M1 9.5H20"/>
+    <path class="serie" stroke-linejoin="round" stroke-linecap="round"
+          d="M1.5 10.5 L3.5 11.5 L6.5 6.5 L9.5 10.5 L12.5 6.5 L15.5 12.5 L18.5 7.5"/>
+    <path class="akse" d="M0.5 0V20M0 19.5H20"/>
+  </g>
+
+  <g class="punkt">
+    <circle cx="3.5"  cy="11.5" r="0.9"/>
+    <circle cx="6.5"  cy="6.5"  r="0.9"/>
+    <circle cx="9.5"  cy="10.5" r="0.9"/>
+    <circle cx="12.5" cy="6.5"  r="0.9"/>
+    <circle cx="15.5" cy="12.5" r="0.9"/>
+    <circle cx="18.5" cy="7.5"  r="0.9"/>
+  </g>
+</svg>
