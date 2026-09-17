@@ -25,8 +25,8 @@
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 20 20">
   <style>
-    .baand   { fill:   #83beec; }
-    .graense { stroke: #0063b1; }
+    .baand   { fill:   #d7e6ff; }
+    .graense { stroke: #83beec; }
     .center  { stroke: #0063b1; }
     .serie   { stroke: #3a3a38; }
     .punkt   { fill:   #000000; }

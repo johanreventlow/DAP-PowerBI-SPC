@@ -73,28 +73,30 @@ visualiseringsruden.
 
 | Element | Farve | Mod hvid | Mod mørk | Mod båndet |
 |---|---|---|---|---|
-| Bånd | `#83beec` | 1,99:1 | 8,16:1 | — |
-| Kontrolgrænser | `#0063b1` | 6,14:1 | 2,65:1 | 3,08:1 |
-| Centerlinje | `#0063b1` | 6,14:1 | 2,65:1 | 3,08:1 |
-| Punkt uden for kontrol | `#0063b1` | 6,14:1 | 2,65:1 | 3,08:1 |
-| Serie | `#3a3a38` | 11,40:1 | 1,43:1 | 5,72:1 |
-| Datapunkter | `#000000` | 21,00:1 | 1,29:1 | 10,54:1 |
+| Bånd | `#d7e6ff` | 1,26:1 | 12,89:1 | — |
+| Kontrolgrænser | `#83beec` | 1,99:1 | 8,16:1 | 1,58:1 |
+| Centerlinje | `#0063b1` | 6,14:1 | 2,65:1 | 4,87:1 |
+| Punkt uden for kontrol | `#0063b1` | 6,14:1 | 2,65:1 | — |
+| Serie | `#3a3a38` | 11,40:1 | 1,43:1 | 9,04:1 |
+| Datapunkter | `#000000` | 21,00:1 | 1,29:1 | 16,65:1 |
 | Akse | `#3a3a38` | 11,40:1 | 1,43:1 | — |
 
-## Mørkt tema er bevidst nedprioriteret
+## To bevidste kompromiser
 
-`#3a3a38` giver 1,43:1 mod en mørk baggrund. Aksen og den del af serien, der
-stikker op over grænselinjen, er derfor svage på mørkt tema. Båndet og de blå
-linjer står fint, og brudpunktet kan ses, så motivet er stadig læseligt — men
-det er tydeligt tegnet til en lys rude.
+**Grænselinjerne er svage.** De ligger 1,58:1 fra båndet og 1,99:1 fra hvid,
+så båndets kant er blød. Til gengæld står serien, centerlinjen og punkterne
+skarpt på den lyse flade — 9,04:1, 4,87:1 og 16,65:1 — og motivets kerne er
+det, der bærer ikonet ved 20×20. Konsekvensen er, at det er mindre tydeligt
+*hvilken* linje brudpunktet bryder; punktet selv er stadig klart.
 
-Det er et bevidst valg: at bruge Power BI's egne ikonfarver vejer tungere end
-at klare begge temaer lige godt, og ruden er lys i langt de fleste
-installationer.
+**Mørkt tema er nedprioriteret.** `#3a3a38` giver 1,43:1 mod en mørk baggrund,
+så aksen er svag dér. Båndet, centerlinjen og brudpunktet står stadig, så
+motivet er læseligt — men det er tegnet til en lys rude, og det er langt de
+fleste installationer.
 
 En tidligere version brugte mellemtoner, der klarede 3:1 i begge temaer, og en
-særlig lysere farve til den del af serien, der forlader båndet. Det er væk nu —
-med én serie-farve er den konstruktion overflødig.
+særlig lysere farve til den del af serien, der forlader båndet. Begge dele er
+væk: med Power BI's palet og én serie-farve er den konstruktion overflødig.
 
 ## Hvilken baggrund hvert element måles imod
 
@@ -106,11 +108,11 @@ uigennemsigtigt. Deres kontrast er den samme i begge temaer, og det er båndet,
 ikke sidens baggrund, de skal måles imod. Alle tre ligger over 3:1 dér.
 
 **Aksen, grænselinjerne og brudpunktet** rører den gennemsigtige baggrund og
-afhænger derfor af temaet. Det er dem, kompromiset ovenfor handler om.
+afhænger derfor af temaet. Det er dem, kompromiserne ovenfor handler om.
 
-**Båndet** er en baggrundsflade, og grænselinjerne er dens kant. Det giver 1,99:1
-mod hvid — bevidst under de 3:1, grafik ellers bør have, for at linjerne på det
-kan ses. De står 3,08:1 fri af det.
+**Båndet** er en baggrundsflade. Det giver 1,26:1 mod hvid — langt under de
+3:1, grafik ellers bør have, og det er med vilje: fladen skal bære serien, ikke
+konkurrere med den.
 
 Baggrunden er gennemsigtig. En uigennemsigtig hvid baggrund ser upåfaldende ud
 på lyst tema og lyser op som en lampe på mørkt.
