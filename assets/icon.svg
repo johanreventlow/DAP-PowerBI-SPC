@@ -6,9 +6,17 @@
   nogen vektor gengivet i den størrelse — diagonalerne i serien udglattes
   over to pixels, uanset stregvægt. Se assets/README.md.
 
-  Geometrien er den samme som i icon.png, aflæst af dens pixelgitter:
-  seks datapunkter med tre enheders mellemrum. Koordinaterne ender på .5,
-  så hver streg ligger midt i en pixel frem for på kanten mellem to.
+  Geometrien er den samme som i icon.png: seks datapunkter med tre enheders
+  mellemrum. Koordinaterne ender på .5, så hver streg ligger midt i en pixel
+  frem for på kanten mellem to.
+
+  Fjerde datapunkt ligger over den øvre kontrolgrænse. Det er motivets
+  pointe: visualen findes for at finde den slags punkter. Det er derfor
+  markeret med visualens egen farve for punkter uden for kontrol.
+
+  Den del af serien, der stikker op over grænsen, er grå og ikke mørk.
+  Uden for båndet er baggrunden gennemsigtig, og en mørk streg dér falder
+  igennem på mørkt tema — samme grund som aksens farve. Se README.
 
   Farverne skal være de samme som i icon.png. Ændres en af dem, skal begge
   filer rettes.
@@ -19,9 +27,16 @@
     .graense { stroke: #3e89c1; }
     .center  { stroke: #1a76aa; }
     .serie   { stroke: #424240; }
+    .udenfor { stroke: #6b7480; }
     .punkt   { fill:   #000000; }
-    .akse    { stroke: #6b7480; }
+    .brud    { fill:   #9457d0; }
   </style>
+
+  <defs>
+    <path id="kurve" d="M1.5 10.5 L3.5 11.5 L6.5 6.5 L9.5 10.5 L12.5 4.5 L15.5 12.5 L18.5 7.5"/>
+    <!-- alt over den øvre kontrolgrænse i række 5 -->
+    <clipPath id="over-graense"><rect x="0" y="0" width="20" height="5"/></clipPath>
+  </defs>
 
   <rect class="baand" x="1" y="6" width="19" height="7"/>
 
@@ -29,17 +44,18 @@
     <path class="graense" d="M1 5.5H20"/>
     <path class="graense" d="M1 13.5H20"/>
     <path class="center"  d="M1 9.5H20"/>
-    <path class="serie" stroke-linejoin="round" stroke-linecap="round"
-          d="M1.5 10.5 L3.5 11.5 L6.5 6.5 L9.5 10.5 L12.5 6.5 L15.5 12.5 L18.5 7.5"/>
-    <path class="akse" d="M0.5 0V20M0 19.5H20"/>
+    <use class="serie"   href="#kurve" stroke-linejoin="round" stroke-linecap="round"/>
+    <use class="udenfor" href="#kurve" stroke-linejoin="round" stroke-linecap="round"
+         clip-path="url(#over-graense)"/>
+    <path class="udenfor" d="M0.5 0V20M0 19.5H20"/>
   </g>
 
   <g class="punkt">
     <circle cx="3.5"  cy="11.5" r="0.9"/>
     <circle cx="6.5"  cy="6.5"  r="0.9"/>
     <circle cx="9.5"  cy="10.5" r="0.9"/>
-    <circle cx="12.5" cy="6.5"  r="0.9"/>
     <circle cx="15.5" cy="12.5" r="0.9"/>
     <circle cx="18.5" cy="7.5"  r="0.9"/>
   </g>
+  <circle class="brud" cx="12.5" cy="4.5" r="1.05"/>
 </svg>
