@@ -120,8 +120,22 @@ export default class plotPropertiesClass {
         minTarget = (maxValueOrLimit - minValueOrLimit) / 2 + minValueOrLimit;
       }
 
-      const upperLimitRaw: number = maxTarget + (maxValueOrLimit - maxTarget) * limitMultiplier;
-      const lowerLimitRaw: number = minTarget - (minTarget - minValueOrLimit) * limitMultiplier;
+      // Skaleringsfaktoren må udvide aksen, men ikke skære kontrolgrænserne
+      // væk. Under 1,0 landede udtrykket inde mellem centerlinjen og den
+      // bredeste grænse, og drawLines dropper punkter uden for aksen — så
+      // grænselinjen forsvandt, helt eller i stykker, uden nogen besked.
+      //
+      // Det ramte især I′: dér er grænserne punktvise (3·s̄/√dᵢ), så de er
+      // brede ved små nævnere og smalle ved store. En akse, der ikke nåede de
+      // bredeste, viste derfor grænserne i stykker — de var der for nogle
+      // punkter og væk for andre.
+      //
+      // En eksplicit Nedre/Øvre grænse og loftet på 100 % for procentkort
+      // gælder stadig; de er brugerens eller kortets bevidste valg.
+      const upperLimitRaw: number = Math.max(maxTarget + (maxValueOrLimit - maxTarget) * limitMultiplier,
+                                             maxValueOrLimit);
+      const lowerLimitRaw: number = Math.min(minTarget - (minTarget - minValueOrLimit) * limitMultiplier,
+                                             minValueOrLimit);
       const multiplier: number = derivedSettings.multiplier;
 
       // Assume that observed values > 100% are intentional, and do not truncate
