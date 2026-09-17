@@ -10,6 +10,30 @@ To filer, to formål. Det er bevidst, og de skal holdes i sync i hånden.
 
 `pbiviz.json` peger på `icon.png`.
 
+## Sikker zone: den yderste pixelring vises ikke
+
+Power BI klipper den yderste pixelring væk, når ikonet vises i
+visualiseringsruden. Det blev opdaget, fordi aksen forsvandt: den lå i
+kolonne 0 og række 19, altså præcis i den ring.
+
+**Læg intet i ring 0 eller 19.** Alt indhold ligger nu inden for x 1..18 og
+y 1..18, med aksen langs x=1 og y=18. Kontrollér efter en ændring, at ringen
+er tom:
+
+```
+python3 -c "
+from PIL import Image
+p = Image.open('assets/icon.png').convert('RGBA').load()
+ring = ([p[i,0] for i in range(20)] + [p[i,19] for i in range(20)]
+        + [p[0,i] for i in range(20)] + [p[19,i] for i in range(20)])
+print('ikke-tomme pixels i yderste ring:', sum(1 for c in ring if c[3] > 0))
+"
+```
+
+De 18×18, der er tilbage, er den reelle tegneflade. Det er en tredjedel
+mindre areal end de 20×20 antyder, og det er værd at huske, næste gang
+motivet skal ændres.
+
 ## Hvorfor de 20×20 ikke kommer fra vektoren
 
 Det oplagte ville være at have én kilde og generere begge størrelser ud fra
