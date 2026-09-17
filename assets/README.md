@@ -68,56 +68,52 @@ motiv og dets SVG-kilde ligger i historikken frem til `5b14844`.
 
 ## Palet
 
-| Element | Farve | Kontrast |
-|---|---|---|
-| Bånd | `#a3c4e6` | 1,81:1 mod hvid |
-| Kontrolgrænser | `#3e89c1` | 3,78:1 mod hvid, 4,30:1 mod mørk |
-| Centerlinje | `#1a76aa` | 4,98:1 mod hvid, 3,26:1 mod mørk |
-| Serie, inde i båndet | `#424240` | 3,69–5,56:1 mod båndet |
-| Serie, uden for båndet | `#6b7480` | 4,74:1 mod hvid, 3,43:1 mod mørk |
-| Datapunkter | `#000000` | 11,60:1 mod båndet |
-| Punkt uden for kontrol | `#1a76aa` | 4,98:1 mod hvid, 3,26:1 mod mørk |
-| Akse | `#6b7480` | 4,74:1 mod hvid, 3,43:1 mod mørk |
+Farverne er Power BI's egne ikonfarver, så visualen står som en af husets i
+visualiseringsruden.
 
-`#3e89c1` er projektets blå og bruges også i visualen.
+| Element | Farve | Mod hvid | Mod mørk | Mod båndet |
+|---|---|---|---|---|
+| Bånd | `#83beec` | 1,99:1 | 8,16:1 | — |
+| Kontrolgrænser | `#0063b1` | 6,14:1 | 2,65:1 | 3,08:1 |
+| Centerlinje | `#0063b1` | 6,14:1 | 2,65:1 | 3,08:1 |
+| Punkt uden for kontrol | `#0063b1` | 6,14:1 | 2,65:1 | 3,08:1 |
+| Serie | `#3a3a38` | 11,40:1 | 1,43:1 | 5,72:1 |
+| Datapunkter | `#000000` | 21,00:1 | 1,29:1 | 10,54:1 |
+| Akse | `#3a3a38` | 11,40:1 | 1,43:1 | — |
 
-Brudpunktet har samme blå som centerlinjen. Visualens egen farve for punkter
-uden for kontrol (`beyond_limit`, `#490092`) blev prøvet først, men ikonet
-holder sig til to blå og en grå, og en tredje kulør trak uforholdsmæssigt
-meget opmærksomhed i et felt på 400 pixels.
+## Mørkt tema er bevidst nedprioriteret
 
-I `icon.png` er serien ikke én farve, men en håndsat udglatning hen over
-26 pixels. Tallet i tabellen er spændet. I `icon.svg` er den én streg.
+`#3a3a38` giver 1,43:1 mod en mørk baggrund. Aksen og den del af serien, der
+stikker op over grænselinjen, er derfor svage på mørkt tema. Båndet og de blå
+linjer står fint, og brudpunktet kan ses, så motivet er stadig læseligt — men
+det er tydeligt tegnet til en lys rude.
+
+Det er et bevidst valg: at bruge Power BI's egne ikonfarver vejer tungere end
+at klare begge temaer lige godt, og ruden er lys i langt de fleste
+installationer.
+
+En tidligere version brugte mellemtoner, der klarede 3:1 i begge temaer, og en
+særlig lysere farve til den del af serien, der forlader båndet. Det er væk nu —
+med én serie-farve er den konstruktion overflødig.
 
 ## Hvilken baggrund hvert element måles imod
 
 Det afgør, hvilke krav der giver mening, og det er ikke det samme for alle
 elementer.
 
-**Aksen** er det eneste, der rører den gennemsigtige baggrund. Den skal derfor
-klare både lyst og mørkt tema, og vinduet er smalt: relativ luminans mellem
-0,143 og 0,300. Uden for det falder den igennem i det ene tema eller det andet.
-Sort klarer kun lyst tema — derfor er aksen ikke sort.
-
 **Serien, punkterne, centerlinjen** ligger oven på båndet, som er
 uigennemsigtigt. Deres kontrast er den samme i begge temaer, og det er båndet,
-ikke sidens baggrund, de skal måles imod. Her er mørkt det rigtige valg.
+ikke sidens baggrund, de skal måles imod. Alle tre ligger over 3:1 dér.
 
-**Toppen, der stikker op over den øvre grænse**, er undtagelsen. Dér slipper
-serien båndet og rører baggrunden, og en mørk streg ville falde igennem på
-mørkt tema. Derfor skifter serien til aksens grå over grænselinjen. I
-`icon.svg` gøres det med en `clipPath` over række 5, så kurven kun står ét
-sted.
+**Aksen, grænselinjerne og brudpunktet** rører den gennemsigtige baggrund og
+afhænger derfor af temaet. Det er dem, kompromiset ovenfor handler om.
 
-Brudpunktet selv ligger højt nok til at have den gennemsigtige baggrund hele
-vejen rundt, og `#1a76aa` klarer 4,98:1 og 3,26:1.
+**Båndet** er en baggrundsflade, og grænselinjerne er dens kant. Det giver 1,99:1
+mod hvid — bevidst under de 3:1, grafik ellers bør have, for at linjerne på det
+kan ses. De står 3,08:1 fri af det.
 
-**Båndet** ligger bevidst under de 3:1, grafik ellers bør have. Det er en
-baggrundsflade, og grænselinjerne er dens kant — jo mørkere båndet bliver, jo
-mere æder det linjerne. Ved 1,81:1 står de 2,09:1 fri af det.
-
-Baggrunden er gennemsigtig. Det er væsentligt: en uigennemsigtig hvid baggrund
-ser upåfaldende ud på lyst tema og lyser op som en lampe på mørkt.
+Baggrunden er gennemsigtig. En uigennemsigtig hvid baggrund ser upåfaldende ud
+på lyst tema og lyser op som en lampe på mørkt.
 
 ## Regenerering
 

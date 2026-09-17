@@ -12,32 +12,27 @@
 
   Fjerde datapunkt ligger over den øvre kontrolgrænse. Det er motivets
   pointe: visualen findes for at finde den slags punkter. Punktet ligger to
-  rækker over grænsen, ikke én — ved én rørte det grænselinjen, og da de er
-  nært beslægtede blå, smeltede det sammen med den.
+  rækker over grænsen, ikke én — ved én rørte det grænselinjen, og da de har
+  samme farve, smeltede det sammen med den.
 
-  Den del af serien, der stikker op over grænsen, er grå og ikke mørk.
-  Uden for båndet er baggrunden gennemsigtig, og en mørk streg dér falder
-  igennem på mørkt tema — samme grund som aksens farve. Se README.
+  Farverne er Power BI's egne ikonfarver, så visualen står som en af husets
+  i visualiseringsruden. Prisen er, at ikonet er svagere på mørkt tema:
+  #3a3a38 giver 1,43:1 mod en mørk baggrund. Det er et bevidst valg —
+  ruden er lys i langt de fleste installationer.
 
   Farverne skal være de samme som i icon.png. Ændres en af dem, skal begge
   filer rettes.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 20 20">
   <style>
-    .baand   { fill:   #a3c4e6; }
-    .graense { stroke: #3e89c1; }
-    .center  { stroke: #1a76aa; }
-    .serie   { stroke: #424240; }
-    .udenfor { stroke: #6b7480; }
+    .baand   { fill:   #83beec; }
+    .graense { stroke: #0063b1; }
+    .center  { stroke: #0063b1; }
+    .serie   { stroke: #3a3a38; }
     .punkt   { fill:   #000000; }
-    .brud    { fill:   #1a76aa; }
+    .brud    { fill:   #0063b1; }
+    .akse    { stroke: #3a3a38; }
   </style>
-
-  <defs>
-    <path id="kurve" d="M2.5 11.5 L5.5 6.5 L8.5 10.5 L11.5 3.5 L14.5 12.5 L17.5 7.5"/>
-    <!-- alt over den øvre kontrolgrænse i række 5 -->
-    <clipPath id="over-graense"><rect x="0" y="0" width="20" height="5"/></clipPath>
-  </defs>
 
   <rect class="baand" x="2" y="6" width="17" height="7"/>
 
@@ -45,10 +40,9 @@
     <path class="graense" d="M2 5.5H19"/>
     <path class="graense" d="M2 13.5H19"/>
     <path class="center"  d="M2 9.5H19"/>
-    <use class="serie"   href="#kurve" stroke-linejoin="round" stroke-linecap="round"/>
-    <use class="udenfor" href="#kurve" stroke-linejoin="round" stroke-linecap="round"
-         clip-path="url(#over-graense)"/>
-    <path class="udenfor" d="M1.5 1V19M1 18.5H19"/>
+    <path class="serie" stroke-linejoin="round" stroke-linecap="round"
+          d="M2.5 11.5 L5.5 6.5 L8.5 10.5 L11.5 3.5 L14.5 12.5 L17.5 7.5"/>
+    <path class="akse" d="M1.5 1V19M1 18.5H19"/>
   </g>
 
   <g class="punkt">
