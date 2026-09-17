@@ -30,8 +30,12 @@ Et kontroldiagram: centerlinje, to kontrolgrænser med et udfyldt bånd imellem,
 og en serie på seks datapunkter, der svinger om centerlinjen.
 
 **Fjerde datapunkt ligger over den øvre kontrolgrænse.** Det er motivets
-pointe: visualen findes for at finde den slags punkter. Punktet er markeret
-med visualens egen farve for punkter uden for kontrol.
+pointe: visualen findes for at finde den slags punkter.
+
+Punktet ligger tre rækker over sin oprindelige plads, ikke to. Ved to rørte
+det grænselinjen i rækken under, og da de er nært beslægtede blå — 1,32:1
+imellem sig — smeltede punktet sammen med linjen. Den tredje række giver den
+tomme række, der skal til, for at det læses som et punkt.
 
 Det tidligere ikon viste en usædvanligt lang serie — det ene af de to signaler,
 runs-analysen leder efter. Det havde for mange detaljer til 20×20: den stiplede
@@ -48,14 +52,15 @@ motiv og dets SVG-kilde ligger i historikken frem til `5b14844`.
 | Serie, inde i båndet | `#424240` | 3,69–5,56:1 mod båndet |
 | Serie, uden for båndet | `#6b7480` | 4,74:1 mod hvid, 3,43:1 mod mørk |
 | Datapunkter | `#000000` | 11,60:1 mod båndet |
-| Punkt uden for kontrol | `#9457d0` | 4,63:1 mod hvid, 3,51:1 mod mørk |
+| Punkt uden for kontrol | `#1a76aa` | 4,98:1 mod hvid, 3,26:1 mod mørk |
 | Akse | `#6b7480` | 4,74:1 mod hvid, 3,43:1 mod mørk |
 
 `#3e89c1` er projektets blå og bruges også i visualen.
 
-`#9457d0` er visualens `beyond_limit` (`#490092`) lysnet. Den oprindelige
-ligger på 1,31:1 mod mørk baggrund og ville forsvinde dér — og punktet er det
-vigtigste i motivet.
+Brudpunktet har samme blå som centerlinjen. Visualens egen farve for punkter
+uden for kontrol (`beyond_limit`, `#490092`) blev prøvet først, men ikonet
+holder sig til to blå og en grå, og en tredje kulør trak uforholdsmæssigt
+meget opmærksomhed i et felt på 400 pixels.
 
 I `icon.png` er serien ikke én farve, men en håndsat udglatning hen over
 26 pixels. Tallet i tabellen er spændet. I `icon.svg` er den én streg.
@@ -76,9 +81,12 @@ ikke sidens baggrund, de skal måles imod. Her er mørkt det rigtige valg.
 
 **Toppen, der stikker op over den øvre grænse**, er undtagelsen. Dér slipper
 serien båndet og rører baggrunden, og en mørk streg ville falde igennem på
-mørkt tema. Derfor skifter serien til aksens grå over grænselinjen — og derfor
-er brudpunktet den lysnede lilla og ikke visualens egen. I `icon.svg` gøres det
-med en `clipPath` over række 5, så kurven kun står ét sted.
+mørkt tema. Derfor skifter serien til aksens grå over grænselinjen. I
+`icon.svg` gøres det med en `clipPath` over række 5, så kurven kun står ét
+sted.
+
+Brudpunktet selv ligger højt nok til at have den gennemsigtige baggrund hele
+vejen rundt, og `#1a76aa` klarer 4,98:1 og 3,26:1.
 
 **Båndet** ligger bevidst under de 3:1, grafik ellers bør have. Det er en
 baggrundsflade, og grænselinjerne er dens kant — jo mørkere båndet bliver, jo

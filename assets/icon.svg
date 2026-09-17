@@ -11,8 +11,12 @@
   frem for på kanten mellem to.
 
   Fjerde datapunkt ligger over den øvre kontrolgrænse. Det er motivets
-  pointe: visualen findes for at finde den slags punkter. Det er derfor
-  markeret med visualens egen farve for punkter uden for kontrol.
+  pointe: visualen findes for at finde den slags punkter.
+
+  Punktet ligger tre enheder over sin oprindelige plads, ikke to. Ved to
+  rørte det grænselinjen i rækken under, og da de er nært beslægtede blå,
+  smeltede punktet sammen med linjen. Den tredje enhed giver den luft, der
+  skal til, for at det læses som et punkt.
 
   Den del af serien, der stikker op over grænsen, er grå og ikke mørk.
   Uden for båndet er baggrunden gennemsigtig, og en mørk streg dér falder
@@ -29,11 +33,11 @@
     .serie   { stroke: #424240; }
     .udenfor { stroke: #6b7480; }
     .punkt   { fill:   #000000; }
-    .brud    { fill:   #9457d0; }
+    .brud    { fill:   #1a76aa; }
   </style>
 
   <defs>
-    <path id="kurve" d="M1.5 10.5 L3.5 11.5 L6.5 6.5 L9.5 10.5 L12.5 4.5 L15.5 12.5 L18.5 7.5"/>
+    <path id="kurve" d="M1.5 10.5 L3.5 11.5 L6.5 6.5 L9.5 10.5 L12.5 3.5 L15.5 12.5 L18.5 7.5"/>
     <!-- alt over den øvre kontrolgrænse i række 5 -->
     <clipPath id="over-graense"><rect x="0" y="0" width="20" height="5"/></clipPath>
   </defs>
@@ -57,5 +61,5 @@
     <circle cx="15.5" cy="12.5" r="0.9"/>
     <circle cx="18.5" cy="7.5"  r="0.9"/>
   </g>
-  <circle class="brud" cx="12.5" cy="4.5" r="1.05"/>
+  <circle class="brud" cx="12.5" cy="3.5" r="0.95"/>
 </svg>
