@@ -13,21 +13,35 @@ const FormattingComponent = {
 
 type FormattingComponentKeys = keyof typeof FormattingComponent;
 
+// Region Hovedstadens Power BI-tema ("Temafil Juni 2026"). Farverne er taget
+// derfra frem for valgt frit, så visualen står som en af husets i en rapport.
+// Paletten er uændret fra temafilen fra november 2023.
 const defaultColours: Record<string, string> = {
   // Observationer uden for kontrolgrænserne. Én farve, ens over og under:
   // qicharts2's sigma.signal er en ren boolean per punkt og fortolker ikke,
-  // om afvigelsen er ønsket. Lilla frem for rød/grøn, netop for ikke at
-  // antyde en vurdering.
-  beyond_limit: "#490092",
-  common_cause: "#A6A6A6",
-  limits: "#6495ED",
-  standard: "#000000",
-  lightgray: "#D3D3D3",
+  // om afvigelsen er ønsket.
+  //
+  // Orange, ikke rød. Designguiden (v1.3, §3 Farvebrug) siger, at grøn og rød
+  // kun bruges om noget med en klar positiv eller negativ værdi, mens
+  // neutrale emner — "fx afvigelse fra en målsætning" — altid markeres med
+  // #C47B00. Et punkt uden for kontrolgrænserne er præcis sådan et: det siger
+  // at processen har ændret sig, ikke om ændringen er god.
+  beyond_limit: "#C47B00",
+  // Temafarve 1: dataserien, altså det vigtigste i diagrammet.
+  common_cause: "#002555",
+  // Temafarve 2: kontrolgrænserne og båndet imellem dem. Dæmpet, så serien
+  // står forrest. Båndet tegnes med 0,15 i opacitet og bliver derfor en lys
+  // tone af samme farve.
+  limits: "#809bbc",
+  // Temaets foreground: akser, rammer, mållinjer og al tekst.
+  standard: "#333333",
+  // Temaets backgroundLight.
+  lightgray: "#e3e2e1",
   white: "#FFFFFF",
-  // Signal highlight in the SPC panel: a filled box with reversed text,
-  // matching the direktionsmøde layout. Grey rather than a hue so the
-  // marking survives greyscale printing and colour-vision deficiency.
-  signal_box: "#8C8C8C"
+  // Signalfremhævning i signalpanelet: en udfyldt boks med omvendt tekst.
+  // Grå frem for en kulør, så markeringen overlever sort-hvid print og
+  // farveblindhed — temaets egen neutrale grå (lightLabel).
+  signal_box: "#605E5C"
 };
 
 type UndefinedOrNumT<T> = T extends undefined ? undefined | number : T;
@@ -80,7 +94,8 @@ function fontOption(displayName: string) {
   return {
     displayName: displayName,
     type: FormattingComponent.FontPicker,
-    default: "'Arial', sans-serif",
+    // Temaets skrifttype. Alle textClasses i temafilen bruger Segoe UI.
+    default: "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
     valid: [
       "'Arial', sans-serif",
       "Arial",
@@ -114,7 +129,9 @@ function fontOption(displayName: string) {
 }
 
 function fontSizeOption(displayName: string) {
-  return numberOption(displayName, 10, { min: 0, max: 100 });
+  // 12 er temaets label- og header-størrelse. Signalpanelets egne størrelser
+  // er sat særskilt og følger ikke denne, fordi de er layoutkritiske.
+  return numberOption(displayName, 12, { min: 0, max: 100 });
 }
 
 type DropdownItem = { displayName: string; value: string; }
