@@ -88,6 +88,12 @@
         "ttip_label_denominator": {
           "type": { "text": true }
         },
+        "ttip_show_chart_type": {
+          "type" : { "bool" : true }
+        },
+        "ttip_label_chart_type": {
+          "type": { "text": true }
+        },
         "ttip_show_value": {
           "type" : { "bool" : true }
         },

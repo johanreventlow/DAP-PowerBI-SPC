@@ -178,6 +178,12 @@ export default class settingsClass {
               = VisualEnumerationInstanceKinds.ConstantOrRule
           }
 
+          // Info-ikon ved indstillingens navn. Kun de indstillinger, der selv
+          // bærer en description, får et — de øvrige slices er uændrede.
+          if ("description" in currSettings[currSettingName]) {
+            curr_slice.description = currSettings[currSettingName].description as string;
+          }
+
           if ("options" in currSettings[currSettingName]) {
             (curr_slice.control.properties as powerbi.visuals.NumUpDown).options
               = currSettings[currSettingName].options as powerbi.visuals.NumUpDownFormat

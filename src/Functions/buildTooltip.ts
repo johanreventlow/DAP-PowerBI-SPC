@@ -4,6 +4,7 @@ import type { settingsValueType } from "../settings";
 import type derivedSettingsClass from "../Classes/derivedSettingsClass";
 import isNullOrUndefined from "./isNullOrUndefined";
 import valueFormatter from "./valueFormatter";
+import chartTypeLabel from "./chartTypeLabel";
 import type { summaryTableRowData, groupStatsObject } from "../Classes/viewModelClass";
 
 
@@ -124,6 +125,14 @@ export default function buildTooltip(table_row: summaryTableRowData,
         value: `${spc_stats!.n_useful}`
       });
     }
+  }
+
+  // Sidst: det er kontekst om hele diagrammet, ikke om punktet.
+  if (inputSettings.spc.ttip_show_chart_type) {
+    tooltip.push({
+      displayName: inputSettings.spc.ttip_label_chart_type,
+      value: chartTypeLabel(inputSettings.spc.chart_type)
+    });
   }
 
   if (!isNullOrUndefined(inputTooltips) && inputTooltips.length > 0) {
