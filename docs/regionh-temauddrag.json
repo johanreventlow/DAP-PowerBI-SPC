@@ -9,21 +9,26 @@
               "color": "#002555"
             }
           },
+          "width_main": 3,
           "colour_99": {
             "solid": {
               "color": "#809bbc"
             }
           },
+          "width_99": 1,
+          "show_band_99": true,
           "band_colour_99": {
             "solid": {
-              "color": "#809bbc"
+              "color": "#CCD7E4"
             }
           },
+          "band_opacity_99": 1,
           "colour_target": {
             "solid": {
-              "color": "#333333"
+              "color": "#99a8bb"
             }
           },
+          "width_target": 2,
           "colour_alt_target": {
             "solid": {
               "color": "#333333"
@@ -178,6 +183,7 @@
       ],
       "scatter": [
         {
+          "size": 5,
           "colour": {
             "solid": {
               "color": "#002555"

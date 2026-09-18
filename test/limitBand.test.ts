@@ -4,8 +4,8 @@ import { Visual } from "../src/visual";
 import buildDataView from "./helpers/buildDataView";
 import { describe, it, expect } from "vitest";
 
-// Båndet mellem 3σ-grænserne. Default fra, ét bånd per fase, og intet bånd
-// hvor der ikke er kontrolgrænser at spænde det ud imellem.
+// Båndet mellem 3σ-grænserne. Default til på kontrolkort, ét bånd per fase,
+// og intet bånd hvor der ikke er kontrolgrænser at spænde det ud imellem.
 
 const keys: string[] = ["2024-01-01","2024-02-01","2024-03-01","2024-04-01","2024-05-01",
                         "2024-06-01","2024-07-01","2024-08-01","2024-09-01","2024-10-01",
@@ -30,8 +30,14 @@ function render(overrides: (s: any) => void = () => undefined) {
 }
 
 describe("Kontrolgrænse-bånd", () => {
-  it("tegnes ikke som default", () => {
+  it("tegnes som default på et kontrolkort", () => {
     const { element, paths } = render();
+    expect(paths.length).toBe(1);
+    element.remove();
+  });
+
+  it("tegnes ikke, når det slås fra", () => {
+    const { element, paths } = render(s => { s.lines.show_band_99 = false; });
     expect(paths.length).toBe(0);
     element.remove();
   });
@@ -67,6 +73,15 @@ describe("Kontrolgrænse-bånd", () => {
     // SVG maler i dokumentorden, så et lavere indeks er længere bagude.
     expect(band).toBeLessThan(lines);
     expect(band).toBeLessThan(dots);
+    element.remove();
+  });
+
+  it("tegner båndet på et mr-diagram, som har ét punkt mindre end datasættet", () => {
+    // mr-diagrammet har en grænse per differens, altså n-1 punkter, mens
+    // faseindekserne dækker alle n rækker.
+    const { element, paths } = render(s => { s.spc.chart_type = "mr"; });
+    expect(element.querySelector(".errormessage")).toBeNull();
+    expect(paths.length).toBe(1);
     element.remove();
   });
 

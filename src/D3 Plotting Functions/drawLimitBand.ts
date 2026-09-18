@@ -49,7 +49,14 @@ export default function drawLimitBand(selection: svgBaseType, visualObj: Visual)
   const phases: bandPoint[][] = groupBounds.map(bounds => {
     const points: bandPoint[] = [];
     for (let i: number = bounds[0]; i < bounds[1]; i++) {
-      const x: number = limits.keys[i].x;
+      // Faseindekserne er dannet ud fra rækkerne i datasættet, mens
+      // mr-diagrammet kun har en grænse per differens og derfor ét punkt
+      // mindre. Et indeks uden en grænse springes over.
+      const key = limits.keys[i];
+      if (isNullOrUndefined(key)) {
+        continue;
+      }
+      const x: number = key.x;
       const lower = limits.ll99?.[i];
       const upper = limits.ul99?.[i];
       if (between(x, xlower, xupper) && Number.isFinite(lower) && Number.isFinite(upper)) {
