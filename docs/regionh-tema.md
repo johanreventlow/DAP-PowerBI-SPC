@@ -19,7 +19,7 @@ sammenligne de to filer felt for felt. Det, der ændrede sig, er den globale
 | Centerlinjen | `#99a8bb` | lys tone af temafarve 1 |
 | Kontrolgrænser | `#809bbc` | temafarve 2 |
 | Fladen mellem grænserne | `#CCD7E4` | lys tone af temafarve 2 |
-| Punkt uden for kontrol | `#AB7194` | temafarve 4 |
+| Punkt uden for kontrol | `#C47B00` | neutral signalfarve |
 | Tekst, akser, rammer, mållinjer | `#333333` | `foreground` |
 | Lys baggrund (tabelhoved) | `#e3e2e1` | `backgroundLight` |
 | Signalfremhævning i panelet | `#605E5C` | `lightLabel` |
@@ -49,7 +49,7 @@ Alle tre linjer er fuldt optrukne. Dermed er en stiplet linje ikke længere
 bare en stilart i diagrammet, men betyder én ting: den stiplede centerlinje,
 der markerer et signal i seriens mønster.
 
-## Hvorfor brudpunktet hverken er grønt eller rødt
+## Hvorfor brudpunktet er orange og ikke rødt
 
 Designguidens §3 om farvebrug siger:
 
@@ -61,14 +61,7 @@ Designguidens §3 om farvebrug siger:
 Et punkt uden for kontrolgrænserne er netop et neutralt emne. `sigma.signal`
 er en ren boolean per punkt: den siger, at processen har ændret sig, ikke om
 ændringen er god. Det er samme grund til, at retningsfarverne blev fjernet i
-trin 3 af `complete-qicharts2-alignment` — huset og metoden er enige om, at
-markeringen ikke må læses som en dom.
-
-**Afvigelse fra guidens bogstav:** markeringen er `#AB7194` (temafarve 4), ikke
-guidens `#C47B00`. Reglen om hverken grønt eller rødt er fulgt; valget af kulør
-er husets eget, så markeringen hører til paletten frem for at stå uden for den.
-Skal guidens bogstav følges, er det `beyond_limit` i
-`src/Settings Model/common.ts`, der skal tilbage til `#C47B00`.
+trin 3 af `complete-qicharts2-alignment` — huset og metoden er enige her.
 
 ## Kontrast
 
@@ -76,10 +69,10 @@ Skal guidens bogstav følges, er det `beyond_limit` i
 |---|---|
 | Serie mod hvid | 15,05:1 |
 | Grænser mod hvid | 2,86:1 |
-| Brudpunkt mod hvid | 3,80:1 |
+| Brudpunkt mod hvid | 3,40:1 |
 | Tekst mod hvid | 12,63:1 |
 | Serie mod grænser | 5,25:1 |
-| Brudpunkt mod serie | 3,96:1 |
+| Brudpunkt mod serie | 4,43:1 |
 | Serie mod fladen | 10,32:1 |
 | Grænser mod fladen | 1,96:1 |
 | Centerlinje mod fladen | 1,66:1 |
@@ -87,7 +80,7 @@ Skal guidens bogstav følges, er det `beyond_limit` i
 Guiden kræver "tydelig kontrast mellem primære elementer". Rækkerne, hvor
 serien og brudpunktet står mod de øvrige elementer, er dem, det handler om.
 
-**Kendt svaghed:** brudpunktet står kun 1,33:1 fra grænselinjen. Ligger et
+**Kendt svaghed:** brudpunktet står kun 1,19:1 fra grænselinjen. Ligger et
 punkt tæt på grænsen, er de to svære at skelne. Det kræver rigtige data at
 vurdere, om det er et problem i praksis.
 

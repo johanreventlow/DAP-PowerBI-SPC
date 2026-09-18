@@ -34,12 +34,12 @@ function lineLabels(element: HTMLElement): string[] {
 }
 
 describe("Punkter uden for kontrolgrænser", () => {
-  it("fremhæves som default i temafarve 4", () => {
+  it("fremhæves som default i designguidens signalfarve", () => {
     const { element } = render();
     const fills: string[] = Array.from(element.querySelectorAll<SVGPathElement>(".dotsgroup path"))
                                  .map(p => p.style.fill);
     // Observation 13 (68) ligger over den øvre grænse.
-    expect(fills[12]).toBe("rgb(171, 113, 148)");
+    expect(fills[12]).toBe("rgb(196, 123, 0)");
     expect(new Set(fills.filter((_, i) => i !== 12)).size).toBe(1);
     element.remove();
   });

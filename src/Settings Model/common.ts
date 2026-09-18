@@ -21,12 +21,12 @@ const defaultColours: Record<string, string> = {
   // qicharts2's sigma.signal er en ren boolean per punkt og fortolker ikke,
   // om afvigelsen er ønsket.
   //
-  // Temafarve 4. En kulør, der ikke er grøn eller rød: et punkt uden for
-  // kontrolgrænserne siger, at processen har ændret sig, ikke om ændringen er
-  // god. Designguiden (v1.3, §3 Farvebrug) foreskriver #C47B00 til neutrale
-  // afvigelser; her er husets egen temafarve valgt i stedet, så markeringen
-  // hører til paletten frem for at stå uden for den.
-  beyond_limit: "#AB7194",
+  // Orange, ikke rød. Designguiden (v1.3, §3 Farvebrug) siger, at grøn og rød
+  // kun bruges om noget med en klar positiv eller negativ værdi, mens
+  // neutrale emner — "fx afvigelse fra en målsætning" — altid markeres med
+  // #C47B00. Et punkt uden for kontrolgrænserne er præcis sådan et: det siger
+  // at processen har ændret sig, ikke om ændringen er god.
+  beyond_limit: "#C47B00",
   // Temafarve 1: dataserien, altså det vigtigste i diagrammet.
   common_cause: "#002555",
   // Temafarve 2: kontrolgrænserne. Dæmpet, så serien står forrest.
