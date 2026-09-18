@@ -17,9 +17,7 @@
     "roles": [ "tooltips" ],
     "supportEnhancedTooltips": true
   },
-  "privileges": [
-    { "name": "ExportContent", "essential": false }
-  ],
+  "privileges": [],
   "dataRoles": [
     { "displayName": "Værdi/Tæller",     "name": "numerators",   "kind": "Measure" },
     { "displayName": "Nævner",           "name": "denominators", "kind": "Measure" },
