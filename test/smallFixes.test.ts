@@ -6,6 +6,7 @@ import buildDataView from "./helpers/buildDataView";
 import buildTooltip from "../src/Functions/buildTooltip";
 import derivedSettingsClass from "../src/Classes/derivedSettingsClass";
 import targetOperator from "../src/Functions/targetOperator";
+import spcLines from "../src/Settings Model/linesSettings";
 
 const keys: string[] = Array.from({ length: 20 }, (_, i) => String(i + 1));
 const numerators: number[] = [50, 52, 48, 51, 49, 53, 47, 50, 52, 48,
@@ -49,7 +50,8 @@ describe("Centerlinjens værdi", () => {
   it("vises som default på diagrammet", () => {
     const { element } = render();
     expect(lineLabels(element).length).toBe(1);
-    expect(lineLabels(element)[0]).toMatch(/^5\d,\d\d$/);
+    // Y-aksens decimaler (0) gælder også etiketten.
+    expect(lineLabels(element)[0]).toMatch(/^5\d$/);
     element.remove();
   });
 
@@ -113,6 +115,38 @@ describe("Margenen til højre", () => {
   });
 });
 
+describe("Decimaler og størrelse på etiketterne", () => {
+  it("skriver centerlinjens værdi med y-aksens decimaler", () => {
+    const { element } = render(s => { s.y_axis.ylimit_sig_figs = 2; });
+    expect(lineLabels(element)[0]).toMatch(/^5\d,\d\d$/);
+    element.remove();
+  });
+
+  it("skriver 0 decimaler som default", () => {
+    const { element } = render();
+    expect(lineLabels(element)[0]).toMatch(/^5\d$/);
+    element.remove();
+  });
+
+  it("lader tooltippet beholde sin egen præcision", () => {
+    // Tooltippet læses ét punkt ad gangen og har plads til flere cifre.
+    const settings = JSON.parse(JSON.stringify(defaultSettings));
+    const row: any = { date: "1", value: 50.905, target: 50.905, ll99: 0, ul99: 2, astpoint: "none" };
+    const tooltip = buildTooltip(row, undefined, settings, new derivedSettingsClass(settings.spc));
+    expect(tooltip.some(t => t.value === "50,91")).toBe(true);
+  });
+
+  it("skriver centerlinje og mållinje i skriftstørrelse 24", () => {
+    const { element } = render(s => { s.lines.show_alt_target = true; s.lines.alt_target = 55; });
+    const sizes: string[] = Array.from(element.querySelectorAll(".linesgroup text"))
+                                 .filter(t => (t.textContent ?? "") !== "")
+                                 .map(t => t.getAttribute("font-size") ?? "");
+    expect(sizes.length).toBe(2);
+    expect(new Set(sizes)).toEqual(new Set(["24px"]));
+    element.remove();
+  });
+});
+
 describe("Mållinjen", () => {
   const withTarget = (s: any) => {
     s.lines.show_alt_target = true;
@@ -123,13 +157,13 @@ describe("Mållinjen", () => {
     const { element } = render(withTarget);
     const path = element.querySelector(".alt_targets-linegroup path")!;
     expect(path.getAttribute("stroke-dasharray")).toBe("10 10");
-    expect(lineLabels(element).some(t => t.includes("55,00"))).toBe(true);
+    expect(lineLabels(element).some(t => t === "55")).toBe(true);
     element.remove();
   });
 
   it("sætter retningen foran værdien, når den er valgt", () => {
     const { element } = render(s => { withTarget(s); s.lines.operator_alt_target = ">="; });
-    expect(lineLabels(element).some(t => t === "≥ 55,00")).toBe(true);
+    expect(lineLabels(element).some(t => t === "≥ 55")).toBe(true);
     element.remove();
   });
 
@@ -184,5 +218,37 @@ describe("Sigtelinjerne ved musemarkøren", () => {
     expect(band).toBeLessThan(ttip);
     expect(ttip).toBeLessThan(lines);
     element.remove();
+  });
+});
+
+describe("Danske etiketter", () => {
+  it("navngiver tooltippets rækker på dansk", () => {
+    const settings = JSON.parse(JSON.stringify(defaultSettings));
+    settings.spc.chart_type = "i";
+    settings.lines.show_alt_target = true;
+    const row: any = { date: "1", value: 1, numerator: 3, denominator: 4, target: 1,
+                       alt_target: 55, ll99: 0, ul99: 2, astpoint: "none" };
+    const names: string[] = buildTooltip(row, undefined, settings,
+                                         new derivedSettingsClass(settings.spc))
+                              .map(t => t.displayName);
+    expect(names).toContain("Tæller");
+    expect(names).toContain("Nævner");
+    expect(names).toContain("Nuværende niveau");
+    expect(names).toContain("Udviklingsmål");
+    expect(names).toContain("Øvre Kontrolgrænse");
+    expect(names).toContain("Nedre Kontrolgrænse");
+    // Dato og værdi navngives af diagramtypen, når brugeren ikke selv har
+    // skrevet en etiket.
+    expect(names).toContain("Dato");
+    expect(names).toContain("Værdi");
+    // Ingen engelske rester.
+    expect(names.join(" ")).not.toMatch(/Numerator|Denominator|Centerline|Target|Limit|Date|Observation/);
+  });
+
+  it("kalder kontrolgrænserne det, uden procentsatsen", () => {
+    const group = (spcLines as any).settingsGroups;
+    expect(Object.keys(group)).toContain("Kontrolgrænser");
+    expect(Object.keys(group).join(" ")).not.toContain("99%");
+    expect(group["Kontrolgrænser"].show_99.displayName).toBe("Vis kontrolgrænser");
   });
 });

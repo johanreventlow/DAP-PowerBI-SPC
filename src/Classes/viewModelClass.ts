@@ -560,10 +560,10 @@ export default class viewModelClass {
       this.tableColumns[0].push({ name: "denominator", label: "Nævner" });
     }
     if (settings.lines.show_target) {
-      this.tableColumns[0].push({ name: "target", label: "Centerlinje" });
+      this.tableColumns[0].push({ name: "target", label: "Nuv. niveau" });
     }
     if (settings.lines.show_alt_target) {
-      this.tableColumns[0].push({ name: "alt_target", label: "Mållinje" });
+      this.tableColumns[0].push({ name: "alt_target", label: "Udviklingsmål" });
     }
     if (derivedSettings.chart_type_props.has_control_limits) {
       if (settings.lines.show_99) {
