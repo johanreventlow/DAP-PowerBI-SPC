@@ -15,6 +15,15 @@ export type optionalSettingsTypes = Partial<{
   [K in keyof typeof defaultSettings]: Partial<settingsValueType[K]>;
 }>;
 
+// Kort, der ikke vises i formateringsruden. Indstillingerne bliver stående i
+// både settings-modellen og capabilities.json, så en rapport, der allerede har
+// gemt en værdi, ikke mister den — de er blot ikke længere noget, brugeren kan
+// stille på.
+//
+// "labels": datafeltet med værdietiketter er fjernet fra Byg-ruden, så kortet
+// ville kun kunne stille på noget, der aldrig får data.
+const hiddenCards: readonly settingsModelKeys[] = ["labels"] as const;
+
 // Re-declare enum to avoid importing powerbi module everywhere settingsClass is used
 const VisualEnumerationInstanceKinds = {
   Constant: 1 << 0 as powerbi.VisualEnumerationInstanceKinds.Rule,
@@ -101,6 +110,9 @@ export default class settingsClass {
 
     for (const settingsModelKey in settingsModel) {
       const currCardName: settingsModelKeys = settingsModelKey as settingsModelKeys;
+      if (hiddenCards.includes(currCardName)) {
+        continue;
+      }
       let curr_card: powerbi.visuals.FormattingCard = {
         description: settingsModel[currCardName].description,
         displayName: settingsModel[currCardName].displayName,

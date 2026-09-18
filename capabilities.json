@@ -23,12 +23,8 @@
   "dataRoles": [
     { "displayName": "Værdi/Tæller",     "name": "numerators",   "kind": "Measure" },
     { "displayName": "Nævner",           "name": "denominators", "kind": "Measure" },
-    { "displayName": "Nøgle (dato)",         "name": "key",          "kind": "Grouping" },
-    { "displayName": "Gruppering (oversigtstabel)",         "name": "indicator",          "kind": "Grouping" },
-    { "displayName": "Faser (rebaseline)",  "name": "groupings",    "kind": "Measure" },
-    { "displayName": "SD (til xbar)",         "name": "xbar_sds",     "kind": "Measure" },
-    { "displayName": "Tooltips",              "name": "tooltips",     "kind": "Measure" },
-    { "displayName": "Værdietiketter",          "name": "labels",     "kind": "Measure" }
+    { "displayName": "X akse",               "name": "key",          "kind": "Grouping" },
+    { "displayName": "Gruppering (oversigtstabel)", "name": "indicator",    "kind": "Grouping" }
   ],
   "objects": {
     "split_indexes_storage" : {
@@ -772,9 +768,7 @@
     "conditions": [{
       "key": { "max": 10 },
       "numerators": { "max": 1 },
-      "denominators": { "max": 1 },
-      "xbar_sds": { "max": 1 },
-      "labels": { "max": 1 }
+      "denominators": { "max": 1 }
     }],
     "categorical": {
       "categories": {
@@ -787,11 +781,7 @@
       "values": {
         "select": [
           { "bind": { "to": "numerators" } },
-          { "bind": { "to": "denominators" } },
-          { "bind": { "to": "groupings" } },
-          { "bind": { "to": "xbar_sds" } },
-          { "bind": { "to": "tooltips" } },
-          { "bind": { "to": "labels" } }
+          { "bind": { "to": "denominators" } }
         ]
       }
     }

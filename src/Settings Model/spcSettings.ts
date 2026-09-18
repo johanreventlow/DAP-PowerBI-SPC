@@ -10,6 +10,11 @@ const spcSettings = {
       // allerede er gemt som en af dem, stadig renderer i stedet for at falde
       // tilbage til default med en fejlbesked.
       // Se openspec/changes/complete-qicharts2-alignment.
+      //
+      // xbar og s er ude af samme grund: datafeltet med gruppens
+      // standardafvigelse er fjernet fra Byg-ruden, og uden det kan de to
+      // korttyper ikke beregnes. De bliver i `valid`, så en gammel rapport
+      // stadig åbner.
       chart_type: dropdownOption(
         // Default som i qicharts2: `formals(qic)$chart` har "run" først.
         // Et seriediagram stiller ingen krav til fordelingen og er derfor det
@@ -33,7 +38,7 @@ const spcSettings = {
           "g - Antal enheder mellem hændelser",
           "t - Tid mellem hændelser"
         ],
-        ["i_m", "i_mm"]
+        ["i_m", "i_mm", "xbar", "s"]
       ),
       outliers_in_limits: toggleOption("Behold outliers i grænseberegning", false),
       multiplier: numberOption("Multiplikator", 1, { min: 0 }),
