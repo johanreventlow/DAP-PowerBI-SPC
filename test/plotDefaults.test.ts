@@ -32,27 +32,29 @@ function line(element: HTMLElement, group: string) {
   expect(path, group).toBeTruthy();
   return {
     width: path!.getAttribute("stroke-width"),
-    colour: path!.getAttribute("stroke")
+    colour: path!.getAttribute("stroke"),
+    dash: path!.getAttribute("stroke-dasharray")
   };
 }
 
 describe("Plottets defaults", () => {
   it("tegner dataserien tyk i temafarve 1", () => {
     const element = render();
-    expect(line(element, "values")).toEqual({ width: "3", colour: "#002555" });
+    expect(line(element, "values")).toEqual({ width: "3", colour: "#002555", dash: "10 0" });
     element.remove();
   });
 
   it("tegner centerlinjen i en lys tone af temafarve 1", () => {
     const element = render();
-    expect(line(element, "targets")).toEqual({ width: "2", colour: "#99a8bb" });
+    expect(line(element, "targets")).toEqual({ width: "2", colour: "#99a8bb", dash: "10 0" });
     element.remove();
   });
 
-  it("tegner kontrolgrænserne tynde i temafarve 2", () => {
+  it("tegner kontrolgrænserne tynde og fuldt optrukne i temafarve 2", () => {
     const element = render();
-    expect(line(element, "ll99")).toEqual({ width: "1", colour: "#809bbc" });
-    expect(line(element, "ul99")).toEqual({ width: "1", colour: "#809bbc" });
+    // "10 0" er en streg uden mellemrum, altså fuldt optrukket.
+    expect(line(element, "ll99")).toEqual({ width: "1", colour: "#809bbc", dash: "10 0" });
+    expect(line(element, "ul99")).toEqual({ width: "1", colour: "#809bbc", dash: "10 0" });
     element.remove();
   });
 

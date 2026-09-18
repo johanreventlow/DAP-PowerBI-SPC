@@ -75,7 +75,7 @@ const linesSettings = {
     "99%-kontrolgrænser": {
       show_99: toggleOption("Vis 99%-kontrolgrænser", true),
       width_99: numberOption("Linjetykkelse", 1, { min: 0, max: 100 }),
-      type_99: lineTypeOption("Linjetype", "10 10"),
+      type_99: lineTypeOption("Linjetype", "10 0"),
       colour_99: colourOption("Linjefarve", "limits"),
       opacity_99: numberOption("Gennemsigtighed", 1, { min: 0, max: 1 }),
       opacity_unselected_99: numberOption("Gennemsigtighed (andre valgt)", 0.2, { min: 0, max: 1 }),

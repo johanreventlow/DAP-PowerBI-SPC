@@ -34,6 +34,10 @@ Fladen tegnes uigennemsigtigt bag linjer og punkter, så farven i tabellen er
 den, der ses. Stregtykkelserne følger samme rangorden: serien 3 px og
 punkterne radius 5, centerlinjen 2 px, grænserne 1 px.
 
+Alle tre linjer er fuldt optrukne. Dermed er en stiplet linje ikke længere
+bare en stilart i diagrammet, men betyder én ting: den stiplede centerlinje,
+der markerer et signal i seriens mønster.
+
 ## Hvorfor brudpunktet er orange og ikke rødt
 
 Designguidens §3 om farvebrug siger:
