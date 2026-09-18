@@ -37,6 +37,18 @@ export default function drawXAxis(selection: svgBaseType, visualObj: Visual) {
     xAxis.tickValues([]);
   }
 
+  const tickRotation: number = xAxisProperties.tick_rotation;
+  const tickAnchor: string = tickRotation === 0.0
+                               ? "middle"
+                               : (tickRotation < 0.0 ? "end" : "start");
+  const tickDx: string = tickRotation === 0.0
+                           ? "0"
+                           : (tickRotation < 0.0 ? "-.8em" : ".8em");
+  // .71em er d3's egen linjeplacering for en bundakse.
+  const tickDy: string = tickRotation === 0.0
+                           ? ".71em"
+                           : (tickRotation < 0.0 ? "-.15em" : ".15em");
+
   const plotHeight: number = visualObj.viewModel.svgHeight;
   const xAxisHeight: number = plotHeight - visualObj.plotProperties.yAxis.start_padding;
   const displayPlot: boolean = visualObj.plotProperties.displayPlot;
@@ -46,12 +58,13 @@ export default function drawXAxis(selection: svgBaseType, visualObj: Visual) {
       // Plots the axis at the correct height
       .attr("transform", `translate(0, ${xAxisHeight})`)
       .selectAll(".tick text")
-      // Right-align
-      .style("text-anchor", xAxisProperties.tick_rotation < 0.0 ? "end" : "start")
-      // Rotate tick labels
-      .attr("dx", xAxisProperties.tick_rotation < 0.0 ? "-.8em" : ".8em")
-      .attr("dy", xAxisProperties.tick_rotation < 0.0 ? "-.15em" : ".15em")
-      .attr("transform","rotate(" + xAxisProperties.tick_rotation + ")")
+      // Uroteret tekst hører centreret under sit mærke. Forskydningerne
+      // gælder kun en roteret etiket, der skal trækkes ind mod mærket, og
+      // fortegnet afgør, hvilken ende teksten drejer om.
+      .style("text-anchor", tickAnchor)
+      .attr("dx", tickDx)
+      .attr("dy", tickDy)
+      .attr("transform","rotate(" + tickRotation + ")")
       // Scale font
       .style("font-size", xAxisProperties.tick_size)
       .style("font-family", xAxisProperties.tick_font)

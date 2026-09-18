@@ -26,6 +26,13 @@ sammenligne de to filer felt for felt. Det, der ændrede sig, er den globale
 | Skrifttype | Segoe UI | alle `textClasses` |
 | Skriftstørrelse | 12 | `label` og `header` |
 
+Alle tolv skriftstørrelser i indstillingerne står på 12, og alle skriftvalg
+på Segoe UI. Signalpanelets to egne størrelser (tallet 25, etiketten 9,5) er
+undtagelsen: de er layoutkritiske og følger panelets højde, ikke temaet.
+
+Aksemærkerne står uroteret. Det er en afvigelse fra upstream, som roterer
+dem 35 grader.
+
 De to lyse toner står ikke i temafilen. De er valgt til rollen: centerlinjen
 og fladen er referencer, som serien skal læses op imod, og de må derfor ikke
 konkurrere med den.

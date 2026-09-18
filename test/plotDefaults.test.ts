@@ -13,11 +13,12 @@ const keys: string[] = ["2024-01-01","2024-02-01","2024-03-01","2024-04-01","202
                         "2024-11-01","2024-12-01"];
 const numerators: number[] = [50, 51, 49, 50, 52, 48, 51, 49, 50, 52, 48, 51];
 
-function render() {
+function render(overrides: (s: any) => void = () => undefined) {
   const element = testDom("500", "500");
   const visual = new Visual({ element: element, host: createVisualHost({}) });
   const settings = JSON.parse(JSON.stringify(defaultSettings));
   settings.spc.chart_type = "i";
+  overrides(settings);
 
   visual.update({
     dataViews: [ buildDataView({ key: keys, numerators: numerators }, settings) ],
@@ -64,6 +65,28 @@ describe("Plottets defaults", () => {
     expect(band).toBeTruthy();
     expect(band!.getAttribute("fill")).toBe("#CCD7E4");
     expect(band!.getAttribute("fill-opacity")).toBe("1");
+    element.remove();
+  });
+
+  it("skriver aksemærkerne uroteret og centreret i temaets skrift", () => {
+    const element = render();
+    const tick = element.querySelector(".xaxisgroup .tick text") as HTMLElement | null;
+    expect(tick).toBeTruthy();
+    expect(tick!.getAttribute("transform")).toBe("rotate(0)");
+    expect(tick!.style.textAnchor).toBe("middle");
+    expect(tick!.getAttribute("dx")).toBe("0");
+    expect(tick!.style.fontSize).toBe("12px");
+    expect(tick!.style.fontFamily).toContain("Segoe UI");
+    element.remove();
+  });
+
+  it("trækker aksemærkerne ind mod mærket, når de roteres", () => {
+    // Forskydningerne hører til en roteret etiket og må ikke gælde en uroteret.
+    const element = render(s => { s.x_axis.xlimit_tick_rotation = -35; });
+    const tick = element.querySelector(".xaxisgroup .tick text") as HTMLElement | null;
+    expect(tick!.getAttribute("transform")).toBe("rotate(-35)");
+    expect(tick!.style.textAnchor).toBe("end");
+    expect(tick!.getAttribute("dx")).toBe("-.8em");
     element.remove();
   });
 

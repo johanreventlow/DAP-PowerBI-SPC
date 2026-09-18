@@ -85,6 +85,7 @@
           },
           "xlimit_tick_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
           "xlimit_tick_size": 12,
+          "xlimit_tick_rotation": 0,
           "xlimit_label_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
           "xlimit_label_size": 12
         }
@@ -179,7 +180,7 @@
           },
           "label_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
           "label_size": 12,
-          "label_marker_size": 12
+          "label_marker_size": 3
         }
       ],
       "scatter": [
