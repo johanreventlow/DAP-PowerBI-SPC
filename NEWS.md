@@ -1,6 +1,6 @@
 # NEWS
 
-## 1.0.0.0 — DAP SPC
+## 1.0.0.0 — SPC til DAP
 
 Første udgivelse under det nye navn. Visualen har eget GUID (`DAPSPC`) og
 kan derfor installeres side om side med den oprindelige AUS-DOH-visual.
@@ -11,7 +11,7 @@ Versionen starter forfra på 1.0.0.0. Den tidligere `1.8.0.0` var upstreams
 eget løbenummer, arvet gennem merge `91b03ef` fra AUS-DOH-commit `7fc0f5f`
 (13. august 2026) — ikke et tal denne fork havde tildelt.
 
-Efter fjernelsen af NHS-reglerne er DAP SPC ikke en nyere udgave af
+Efter fjernelsen af NHS-reglerne er SPC til DAP ikke en nyere udgave af
 AUS-DOH-visualen, men et andet produkt med et andet regelsæt, eget navn og
 eget GUID. En fælles nummerserie ville få de to til at se sammenlignelige ud
 og ville kollidere ved fremtidige merges fra upstream. Repoet havde ingen tags

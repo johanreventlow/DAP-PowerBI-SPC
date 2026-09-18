@@ -1,7 +1,7 @@
 {
   "visual":{
     "name":"DAPSPC",
-    "displayName":"DAP SPC",
+    "displayName":"SPC til DAP",
     "guid":"DAPSPC",
     "visualClassName":"Visual",
     "version":"1.0.0.0",
@@ -11,7 +11,7 @@
   },
   "apiVersion":"5.1.0",
   "author":{
-    "name":"Johan Reventlow",
+    "name":"Bispebjerg og Frederiksberg Hospital",
     "email":"johan.reventlow@regionh.dk"
   },
   "assets":{
