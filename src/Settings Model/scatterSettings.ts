@@ -8,7 +8,7 @@ const scatterSettings = {
       show_dots: toggleOption("Vis datapunkter", true),
       shape: dropdownOption("Form", "Circle", ["Circle", "Cross", "Diamond", "Square", "Star", "Triangle", "Wye"], "none",
                           ["Cirkel", "Kryds", "Diamant", "Firkant", "Stjerne", "Trekant", "Y-form"]),
-      size: numberOption("Størrelse", 2.5, { min: 0, max: 100 }),
+      size: numberOption("Størrelse", 5, { min: 0, max: 100 }),
       colour: colourOption("Farve", "common_cause"),
       colour_outline: colourOption("Kantfarve", "common_cause"),
       width_outline: numberOption("Kanttykkelse", 1, { min: 0, max: 100 }),

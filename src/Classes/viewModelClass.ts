@@ -13,6 +13,7 @@ import type { dataObject } from "../Functions/extractInputData";
 import extractInputData from "../Functions/extractInputData";
 import isNullOrUndefined from "../Functions/isNullOrUndefined";
 import validateDataViewColumns from "../Functions/validateDataViewColumns";
+import chartTypeWarning from "../Functions/chartTypeWarning";
 import valueFormatter from "../Functions/valueFormatter";
 import groupBy from "../Functions/groupBy";
 import astronomical from "../Outlier Flagging/astronomical";
@@ -178,6 +179,11 @@ export default class viewModelClass {
   headless: boolean;
   frontend: boolean;
 
+  // Advarsel om, at de bundne data ikke passer til diagramtypen. Tom, når
+  // alt passer. Tegnes på lærredet, ikke som en fejl: diagrammet er gyldigt,
+  // valget er blot sandsynligvis forkert.
+  chartTypeWarning: string;
+
   indicatorVarNames: string[];
   groupNames: string[][];
   identities: ISelectionId[][];
@@ -194,6 +200,7 @@ export default class viewModelClass {
     this.plotPoints = new Array<plotData[] | plotDataGrouped[]>();
     this.groupedLines = new Array<[string, lineData[]]>();
     this.firstRun = true
+    this.chartTypeWarning = "";
     this.splitIndexes = new Array<number>();
     this.groupStartEndIndexes = new Array<number[][]>();
     this.identities = new Array<ISelectionId[]>();
@@ -277,6 +284,11 @@ export default class viewModelClass {
       res.error = checkDV;
       return res;
     }
+
+    const denominatorsPresent: boolean
+      = options.dataViews[0].categorical?.values?.some(d => d.source?.roles?.denominators) ?? false;
+    this.chartTypeWarning = chartTypeWarning(denominatorsPresent,
+                                             this.inputSettings.derivedSettings[0].chart_type_props);
 
     let invalidData: boolean = false;
 

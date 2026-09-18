@@ -19,7 +19,7 @@ const xAxisSettings = {
       xlimit_tick_font: fontOption("Skrifttype"),
       xlimit_tick_size: fontSizeOption("Skriftstørrelse"),
       xlimit_tick_colour: colourOption("Skriftfarve", "standard"),
-      xlimit_tick_rotation: numberOption("Rotation (grader)", -35, { min: -360, max: 360 })
+      xlimit_tick_rotation: numberOption("Rotation (grader)", 0, { min: -360, max: 360 })
     },
     "Aksetitel": {
       xlimit_label: textOption("Aksetitel", ""),

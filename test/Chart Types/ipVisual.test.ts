@@ -56,7 +56,7 @@ function expectNoNaN(element: HTMLElement, visual: Visual): void {
 describe("I′ i brugerfladen", () => {
   it("kan vælges i dropdownen med dansk tekst", () => {
     const item = spcSettings.settingsGroups.all.chart_type.items.find(d => d.value === "ip");
-    expect(item?.displayName).toBe("i' - Normaliseret individkort (varierende nævner)");
+    expect(item?.displayName).toBe("Måling – fx ventetid, blodtryk (I')");
   });
 
   it("har de forventede chart-egenskaber", () => {

@@ -16,4 +16,6 @@ export default function initialiseSVG(selection: svgBaseType,
   selection.append('g').classed("limitbandgroup", true)
   selection.append('g').classed("linesgroup", true)
   selection.append('g').classed("dotsgroup", true)
+  // Sidst: advarslen skal kunne læses oven på alt andet.
+  selection.append('g').classed("warninggroup", true)
 }

@@ -11,7 +11,7 @@ const linesSettings = {
   settingsGroups: {
     "Hovedlinje": {
       show_main: toggleOption("Vis datalinje", true),
-      width_main: numberOption("Linjetykkelse", 1, { min: 0, max: 100 }),
+      width_main: numberOption("Linjetykkelse", 3, { min: 0, max: 100 }),
       type_main: lineTypeOption("Linjetype", "10 0"),
       colour_main: colourOption("Linjefarve", "common_cause"),
       opacity_main: numberOption("Gennemsigtighed", 1, { min: 0, max: 1 }),
@@ -30,9 +30,9 @@ const linesSettings = {
     },
     "Centerlinje": {
       show_target: toggleOption("Vis centerlinje", true),
-      width_target: numberOption("Linjetykkelse", 1.5, { min: 0, max: 100 }),
+      width_target: numberOption("Linjetykkelse", 2, { min: 0, max: 100 }),
       type_target: lineTypeOption("Linjetype", "10 0"),
-      colour_target: colourOption("Linjefarve", "standard"),
+      colour_target: colourOption("Linjefarve", "centerline"),
       opacity_target: numberOption("Gennemsigtighed", 1, { min: 0, max: 1 }),
       opacity_unselected_target: numberOption("Gennemsigtighed (andre valgt)", 0.2, { min: 0, max: 1 }),
       join_rebaselines_target: toggleOption("Forbind linjer over faseskift", false),
@@ -74,8 +74,8 @@ const linesSettings = {
     },
     "99%-kontrolgrænser": {
       show_99: toggleOption("Vis 99%-kontrolgrænser", true),
-      width_99: numberOption("Linjetykkelse", 2, { min: 0, max: 100 }),
-      type_99: lineTypeOption("Linjetype", "10 10"),
+      width_99: numberOption("Linjetykkelse", 1, { min: 0, max: 100 }),
+      type_99: lineTypeOption("Linjetype", "10 0"),
       colour_99: colourOption("Linjefarve", "limits"),
       opacity_99: numberOption("Gennemsigtighed", 1, { min: 0, max: 1 }),
       opacity_unselected_99: numberOption("Gennemsigtighed (andre valgt)", 0.2, { min: 0, max: 1 }),
@@ -94,11 +94,12 @@ const linesSettings = {
       plot_label_size_99: fontSizeOption("Skriftstørrelse"),
       plot_label_colour_99: colourOption("Skriftfarve", "standard"),
       plot_label_prefix_99: textOption("Tekstpræfiks", ""),
-      // Default fra: båndet er en tilvalgt læsehjælp, ikke en del af
-      // qicharts2's udtryk.
-      show_band_99: toggleOption("Udfyld kontrolgrænseområde", false),
-      band_colour_99: colourOption("Områdefarve", "limits"),
-      band_opacity_99: numberOption("Områdets gennemsigtighed", 0.15, { min: 0, max: 1 })
+      // Default til: fladen mellem grænserne aflæses lettere end to streger
+      // alene. Tegnes kun på diagrammer, der har kontrolgrænser.
+      show_band_99: toggleOption("Udfyld kontrolgrænseområde", true),
+      band_colour_99: colourOption("Områdefarve", "limits_band"),
+      // Uigennemsigtigt: områdefarven er valgt som den færdige tone.
+      band_opacity_99: numberOption("Områdets gennemsigtighed", 1, { min: 0, max: 1 })
     }
   }
 };

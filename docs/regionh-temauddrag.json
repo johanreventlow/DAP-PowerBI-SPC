@@ -9,21 +9,27 @@
               "color": "#002555"
             }
           },
+          "width_main": 3,
           "colour_99": {
             "solid": {
               "color": "#809bbc"
             }
           },
+          "width_99": 1,
+          "type_99": "10 0",
+          "show_band_99": true,
           "band_colour_99": {
             "solid": {
-              "color": "#809bbc"
+              "color": "#CCD7E4"
             }
           },
+          "band_opacity_99": 1,
           "colour_target": {
             "solid": {
-              "color": "#333333"
+              "color": "#99a8bb"
             }
           },
+          "width_target": 2,
           "colour_alt_target": {
             "solid": {
               "color": "#333333"
@@ -79,6 +85,7 @@
           },
           "xlimit_tick_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
           "xlimit_tick_size": 12,
+          "xlimit_tick_rotation": 0,
           "xlimit_label_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
           "xlimit_label_size": 12
         }
@@ -173,11 +180,12 @@
           },
           "label_font": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
           "label_size": 12,
-          "label_marker_size": 12
+          "label_marker_size": 3
         }
       ],
       "scatter": [
         {
+          "size": 5,
           "colour": {
             "solid": {
               "color": "#002555"

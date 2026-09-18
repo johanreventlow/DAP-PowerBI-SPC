@@ -29,10 +29,14 @@ const defaultColours: Record<string, string> = {
   beyond_limit: "#C47B00",
   // Temafarve 1: dataserien, altså det vigtigste i diagrammet.
   common_cause: "#002555",
-  // Temafarve 2: kontrolgrænserne og båndet imellem dem. Dæmpet, så serien
-  // står forrest. Båndet tegnes med 0,15 i opacitet og bliver derfor en lys
-  // tone af samme farve.
+  // Temafarve 2: kontrolgrænserne. Dæmpet, så serien står forrest.
   limits: "#809bbc",
+  // Lys tone af temafarve 2: fladen mellem de to kontrolgrænser. Tegnes
+  // uigennemsigtigt bag linjer og punkter, så tonen er præcis denne.
+  limits_band: "#CCD7E4",
+  // Lys tone af temafarve 1: centerlinjen. Lysere end serien, fordi serien
+  // er det, der læses, og centerlinjen kun er dens reference.
+  centerline: "#99a8bb",
   // Temaets foreground: akser, rammer, mållinjer og al tekst.
   standard: "#333333",
   // Temaets backgroundLight.

@@ -16,7 +16,9 @@ sammenligne de to filer felt for felt. Det, der ændrede sig, er den globale
 | Vores rolle | Farve | Temaets navn |
 |---|---|---|
 | Dataserien | `#002555` | temafarve 1 |
-| Kontrolgrænser og bånd | `#809bbc` | temafarve 2 |
+| Centerlinjen | `#99a8bb` | lys tone af temafarve 1 |
+| Kontrolgrænser | `#809bbc` | temafarve 2 |
+| Fladen mellem grænserne | `#CCD7E4` | lys tone af temafarve 2 |
 | Punkt uden for kontrol | `#C47B00` | neutral signalfarve |
 | Tekst, akser, rammer, mållinjer | `#333333` | `foreground` |
 | Lys baggrund (tabelhoved) | `#e3e2e1` | `backgroundLight` |
@@ -24,8 +26,28 @@ sammenligne de to filer felt for felt. Det, der ændrede sig, er den globale
 | Skrifttype | Segoe UI | alle `textClasses` |
 | Skriftstørrelse | 12 | `label` og `header` |
 
-Båndet tegnes med 0,15 i opacitet og bliver derfor en lys tone af
-grænsefarven, ikke en flade i fuld styrke.
+Alle tolv skriftstørrelser i indstillingerne står på 12, og alle skriftvalg
+på Segoe UI. Signalpanelets to egne størrelser (tallet 25, etiketten 9,5) er
+undtagelsen: de er layoutkritiske og følger panelets højde, ikke temaet.
+
+Aksemærkerne står uroteret. Det er en afvigelse fra upstream, som roterer
+dem 35 grader. Uroteret tekst kan ikke vige for sin nabo, så en etiket, der
+ville lande oven i den forrige, skjules — mærket bliver stående. Antallet af
+etiketter følger derfor aksens bredde af sig selv: en smal akse med
+datoetiketter viser tre, en bred viser fem. Vælger man selv en rotation, er
+alle etiketter med igen.
+
+De to lyse toner står ikke i temafilen. De er valgt til rollen: centerlinjen
+og fladen er referencer, som serien skal læses op imod, og de må derfor ikke
+konkurrere med den.
+
+Fladen tegnes uigennemsigtigt bag linjer og punkter, så farven i tabellen er
+den, der ses. Stregtykkelserne følger samme rangorden: serien 3 px og
+punkterne radius 5, centerlinjen 2 px, grænserne 1 px.
+
+Alle tre linjer er fuldt optrukne. Dermed er en stiplet linje ikke længere
+bare en stilart i diagrammet, men betyder én ting: den stiplede centerlinje,
+der markerer et signal i seriens mønster.
 
 ## Hvorfor brudpunktet er orange og ikke rødt
 
@@ -51,13 +73,22 @@ trin 3 af `complete-qicharts2-alignment` — huset og metoden er enige her.
 | Tekst mod hvid | 12,63:1 |
 | Serie mod grænser | 5,25:1 |
 | Brudpunkt mod serie | 4,43:1 |
+| Serie mod fladen | 10,32:1 |
+| Grænser mod fladen | 1,96:1 |
+| Centerlinje mod fladen | 1,66:1 |
 
-Guiden kræver "tydelig kontrast mellem primære elementer". De to sidste rækker
-er dem, det handler om.
+Guiden kræver "tydelig kontrast mellem primære elementer". Rækkerne, hvor
+serien og brudpunktet står mod de øvrige elementer, er dem, det handler om.
 
 **Kendt svaghed:** brudpunktet står kun 1,19:1 fra grænselinjen. Ligger et
 punkt tæt på grænsen, er de to svære at skelne. Det kræver rigtige data at
 vurdere, om det er et problem i praksis.
+
+**Kendt svaghed:** centerlinjen (1,66:1) og grænserne (1,96:1) står under
+WCAG's 3:1 for ikke-tekstligt indhold, når de ligger oven på fladen. Det er
+en bevidst prioritering: serien skal stå alene forrest, og de tre lyse
+elementer er dens baggrund. Skal kontrasten op, er det centerlinjen, der skal
+mørkere — ikke fladen, som ellers begynder at konkurrere med serien.
 
 ## Temauddrag til den centrale temafil
 
