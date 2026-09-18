@@ -13,8 +13,10 @@ const canvasSettings = {
       upper_padding: paddingOption("Margen over plot (px):"),
       left_padding: paddingOption("Margen til venstre (px):"),
       // Bredere end de øvrige: centerlinjens værdi står som default til højre
-      // for sidste punkt, og uden plads til den ville den lægge sig ind over
-      // signalpanelet. Panelets egen bredde er reserveret særskilt.
+      // for sidste punkt. Tallet er et minimum — er etiketten bredere, måler
+      // adjustPaddingForPanel den og udvider margenen tilsvarende, så den
+      // aldrig lægger sig ind over signalpanelet. Panelets egen bredde er
+      // reserveret særskilt.
       right_padding: numberOption("Margen til højre (px):", 50)
     }
   }

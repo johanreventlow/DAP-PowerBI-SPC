@@ -67,6 +67,52 @@ describe("Centerlinjens værdi", () => {
   });
 });
 
+describe("Margenen til højre", () => {
+  // Store tal giver brede etiketter. Indstillingen er et minimum; margenen
+  // måler den faktiske etiket og udvider med det, der mangler.
+  const bigNumerators: number[] = numerators.map(v => v * 100000 + 0.55);
+
+  function renderBig() {
+    const element = testDom("420", "760");
+    const visual = new Visual({ element: element, host: createVisualHost({}) });
+    const settings = JSON.parse(JSON.stringify(defaultSettings));
+    settings.spc.chart_type = "i";
+    visual.update({
+      dataViews: [ buildDataView({ key: keys, numerators: bigNumerators }, settings) ],
+      viewport: { width: 760, height: 420 },
+      type: 2
+    });
+    return { element, visual };
+  }
+
+  function labelEnd(element: HTMLElement): number {
+    const label = Array.from(element.querySelectorAll<SVGGraphicsElement>(".linesgroup text"))
+                       .find(t => (t.textContent ?? "") !== "")!;
+    expect(label.getBBox().width).toBeGreaterThan(0);
+    return label.getBBox().x + label.getBBox().width;
+  }
+
+  it("udvider sig, når etiketten er bredere end margenen", () => {
+    const { element, visual } = renderBig();
+    const settings = visual.viewModel.inputSettings.settings[0];
+    const panelStart: number = 760 - settings.signal_panel.panel_width;
+
+    expect(labelEnd(element)).toBeLessThan(panelStart);
+    // Margenen er større end indstillingens minimum, altså målt frem.
+    expect(visual.plotProperties.xAxis.end_padding)
+      .toBeGreaterThan(settings.canvas.right_padding + settings.signal_panel.panel_width);
+    element.remove();
+  });
+
+  it("lader margenen stå, når etiketten er smal nok", () => {
+    const { element, visual } = render();
+    const settings = visual.viewModel.inputSettings.settings[0];
+    expect(visual.plotProperties.xAxis.end_padding)
+      .toBe(settings.canvas.right_padding + settings.signal_panel.panel_width);
+    element.remove();
+  });
+});
+
 describe("Mållinjen", () => {
   const withTarget = (s: any) => {
     s.lines.show_alt_target = true;
