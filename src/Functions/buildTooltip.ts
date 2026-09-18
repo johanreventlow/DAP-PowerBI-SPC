@@ -5,6 +5,7 @@ import type derivedSettingsClass from "../Classes/derivedSettingsClass";
 import isNullOrUndefined from "./isNullOrUndefined";
 import valueFormatter from "./valueFormatter";
 import chartTypeLabel from "./chartTypeLabel";
+import targetOperator from "./targetOperator";
 import type { summaryTableRowData, groupStatsObject } from "../Classes/viewModelClass";
 
 
@@ -72,7 +73,8 @@ export default function buildTooltip(table_row: summaryTableRowData,
   if (inputSettings.lines.show_alt_target && inputSettings.lines.ttip_show_alt_target && !isNullOrUndefined(table_row.alt_target)) {
     tooltip.push({
       displayName: inputSettings.lines.ttip_label_alt_target,
-      value: formatValues(table_row.alt_target, "value")
+      value: targetOperator(inputSettings.lines.operator_alt_target)
+             + formatValues(table_row.alt_target, "value")
     })
   }
   if (derivedSettings.chart_type_props.has_control_limits
@@ -119,12 +121,12 @@ export default function buildTooltip(table_row: summaryTableRowData,
         value: withExpectation(spc_stats!.n_beyond_limits, 0)
       });
     }
-    if (inputSettings.signal_panel.panel_show_n_useful) {
-      tooltip.push({
-        displayName: inputSettings.signal_panel.label_n_useful,
-        value: `${spc_stats!.n_useful}`
-      });
-    }
+    // Uafhængig af panelrækken: tallet hører til de øvrige signaltal her,
+    // også når panelet er skruet ned til de tre, der bærer et verdikt.
+    tooltip.push({
+      displayName: inputSettings.signal_panel.label_n_useful,
+      value: `${spc_stats!.n_useful}`
+    });
   }
 
   // Sidst: det er kontekst om hele diagrammet, ikke om punktet.

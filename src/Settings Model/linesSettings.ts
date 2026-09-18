@@ -2,7 +2,7 @@ import {
   toggleOption, lineTypeOption,
   colourOption, numberOption,
   fontOption, fontSizeOption, textOption,
-  lineLabelPositionOption
+  lineLabelPositionOption, dropdownOption
 } from "./common";
 
 const linesSettings = {
@@ -30,7 +30,7 @@ const linesSettings = {
     },
     "Centerlinje": {
       show_target: toggleOption("Vis centerlinje", true),
-      width_target: numberOption("Linjetykkelse", 2, { min: 0, max: 100 }),
+      width_target: numberOption("Linjetykkelse", 3, { min: 0, max: 100 }),
       type_target: lineTypeOption("Linjetype", "10 0"),
       colour_target: colourOption("Linjefarve", "centerline"),
       opacity_target: numberOption("Gennemsigtighed", 1, { min: 0, max: 1 }),
@@ -38,7 +38,7 @@ const linesSettings = {
       join_rebaselines_target: toggleOption("Forbind linjer over faseskift", false),
       ttip_show_target: toggleOption("Vis værdi i tooltip", true),
       ttip_label_target: textOption("Tooltip-etiket", "Centerline"),
-      plot_label_show_target: toggleOption("Vis værdi på diagram", false),
+      plot_label_show_target: toggleOption("Vis værdi på diagram", true),
       plot_label_show_all_target: toggleOption("Vis værdi ved alle faser", false),
       plot_label_show_n_target: numberOption("Vis værdi ved seneste N faser", 1, { min: 1 }),
       plot_label_position_target: lineLabelPositionOption(),
@@ -53,15 +53,20 @@ const linesSettings = {
       show_alt_target: toggleOption("Vis mållinje", false),
       alt_target: numberOption("Målværdi:", undefined),
       multiplier_alt_target: toggleOption("Anvend multiplikator på mållinje", false),
+      // Retningen vises foran målets værdi ("≥ 55"). Den fortolkes ikke:
+      // diagrammet farver eller markerer ikke efter, om målet er nået.
+      operator_alt_target: dropdownOption("Målets retning", "none",
+                                          ["none", ">=", "<=", ">", "<"], "none",
+                                          ["Ingen", "Mindst (≥)", "Højst (≤)", "Over (>)", "Under (<)"]),
       width_alt_target: numberOption("Linjetykkelse", 1.5, { min: 0, max: 100 }),
-      type_alt_target: lineTypeOption("Linjetype", "10 0"),
+      type_alt_target: lineTypeOption("Linjetype", "10 10"),
       colour_alt_target: colourOption("Linjefarve", "standard"),
       opacity_alt_target: numberOption("Gennemsigtighed", 1, { min: 0, max: 1 }),
       opacity_unselected_alt_target: numberOption("Gennemsigtighed (andre valgt)", 0.2, { min: 0, max: 1 }),
       join_rebaselines_alt_target: toggleOption("Forbind linjer over faseskift", false),
       ttip_show_alt_target: toggleOption("Vis værdi i tooltip", true),
       ttip_label_alt_target: textOption("Tooltip-etiket", "Alt. Target"),
-      plot_label_show_alt_target: toggleOption("Vis værdi på diagram", false),
+      plot_label_show_alt_target: toggleOption("Vis værdi på diagram", true),
       plot_label_show_all_alt_target: toggleOption("Vis værdi ved alle faser", false),
       plot_label_show_n_alt_target: numberOption("Vis værdi ved seneste N faser", 1, { min: 1 }),
       plot_label_position_alt_target: lineLabelPositionOption(),

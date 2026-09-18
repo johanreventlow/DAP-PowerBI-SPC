@@ -355,6 +355,9 @@
         "multiplier_alt_target": {
           "type" : { "bool" : true }
         },
+        "operator_alt_target": {
+          "type": { "enumeration": [] }
+        },
         "plot_label_show_99": {
           "type": { "bool": true }
         },

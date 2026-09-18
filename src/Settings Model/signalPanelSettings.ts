@@ -13,7 +13,7 @@ const signalPanelSettings = {
       panel_hide_below_width: numberOption("Skjul under diagrambredde", 480, { min: 0 }),
       panel_periods: dropdownOption("Perioder der vises", "newest", ["newest", "all"],
                                     "none", ["Kun seneste", "Alle (kompakt)"]),
-      panel_show_n_useful: toggleOption("Vis antal brugbare observationer", true),
+      panel_show_n_useful: toggleOption("Vis antal brugbare observationer", false),
       panel_title: textOption("Paneltitel", "Statistisk proceskontrol (SPC)"),
       panel_font_size: numberOption("Talstørrelse", 25, { min: 6, max: 60 }),
       panel_label_size: numberOption("Etiketstørrelse", 9.5, { min: 4, max: 30 }),

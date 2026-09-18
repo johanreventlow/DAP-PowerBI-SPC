@@ -1,6 +1,7 @@
 import type { svgBaseType, Visual } from "../visual";
 import { lineNameMap } from "../Functions/getAesthetic";
 import valueFormatter from "../Functions/valueFormatter";
+import targetOperator from "../Functions/targetOperator";
 import * as d3 from "./D3 Modules";
 import type { lineData } from "../Classes/viewModelClass";
 import { type settingsValueType } from "../settings";
@@ -72,8 +73,12 @@ export default function drawLineLabels(selection: svgBaseType, visualObj: Visual
     .join("text")
     .text((d: lineLabelType) => {
       const lineGroup: [string, lineData[]] = visualObj.viewModel.groupedLines[d.limit];
+      // Målets retning står foran værdien, efter brugerens eget præfiks.
+      const operator: string = lineGroup[0] === "alt_targets"
+                                 ? targetOperator(lineSettings.operator_alt_target)
+                                 : "";
       return lineSettings[`plot_label_show_${lineNameMap[lineGroup[0]]}` as LineSettingsKey]
-              ? lineSettings[`plot_label_prefix_${lineNameMap[lineGroup[0]]}` as LineSettingsKey] + formatValue(lineGroup[1][d.index].line_value, "value")
+              ? lineSettings[`plot_label_prefix_${lineNameMap[lineGroup[0]]}` as LineSettingsKey] + operator + formatValue(lineGroup[1][d.index].line_value, "value")
               : "";
     })
     .attr("x", (d: lineLabelType) => {
