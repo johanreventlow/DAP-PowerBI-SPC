@@ -181,6 +181,9 @@
         "show_errors": {
           "type": { "bool": true }
         },
+        "show_chart_type_warning": {
+          "type": { "bool": true }
+        },
         "lower_padding":{
           "type": { "numeric": true }
         },
