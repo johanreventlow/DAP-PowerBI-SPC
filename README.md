@@ -1,4 +1,4 @@
-# DAP SPC
+# SPC til DAP
 
 En Power BI custom visual til SPC-diagrammer (statistisk proceskontrol) med
 runs-analyse efter den danske metode — som implementeret i R-pakken

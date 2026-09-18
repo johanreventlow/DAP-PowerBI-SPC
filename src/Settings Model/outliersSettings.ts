@@ -5,7 +5,7 @@ const outliersSettings = {
   displayName: "Signaler",
   settingsGroups: {
     "Punkter uden for kontrolgrænser" : {
-      astronomical: toggleOption("Fremhæv punkter uden for kontrolgrænser", false),
+      astronomical: toggleOption("Fremhæv punkter uden for kontrolgrænser", true),
       ast_colour: colourOption("Punktfarve", "beyond_limit")
     },
     "Signaldetektion": {

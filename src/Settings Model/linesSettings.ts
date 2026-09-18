@@ -2,7 +2,7 @@ import {
   toggleOption, lineTypeOption,
   colourOption, numberOption,
   fontOption, fontSizeOption, textOption,
-  lineLabelPositionOption
+  lineLabelPositionOption, dropdownOption
 } from "./common";
 
 const linesSettings = {
@@ -28,52 +28,60 @@ const linesSettings = {
       plot_label_colour_main: colourOption("Skriftfarve", "standard"),
       plot_label_prefix_main: textOption("Tekstpræfiks", "")
     },
-    "Centerlinje": {
-      show_target: toggleOption("Vis centerlinje", true),
-      width_target: numberOption("Linjetykkelse", 2, { min: 0, max: 100 }),
+    "Nuværende niveau": {
+      show_target: toggleOption("Vis nuværende niveau", true),
+      width_target: numberOption("Linjetykkelse", 3, { min: 0, max: 100 }),
       type_target: lineTypeOption("Linjetype", "10 0"),
       colour_target: colourOption("Linjefarve", "centerline"),
       opacity_target: numberOption("Gennemsigtighed", 1, { min: 0, max: 1 }),
       opacity_unselected_target: numberOption("Gennemsigtighed (andre valgt)", 0.2, { min: 0, max: 1 }),
       join_rebaselines_target: toggleOption("Forbind linjer over faseskift", false),
       ttip_show_target: toggleOption("Vis værdi i tooltip", true),
-      ttip_label_target: textOption("Tooltip-etiket", "Centerline"),
-      plot_label_show_target: toggleOption("Vis værdi på diagram", false),
+      ttip_label_target: textOption("Tooltip-etiket", "Nuværende niveau"),
+      plot_label_show_target: toggleOption("Vis værdi på diagram", true),
       plot_label_show_all_target: toggleOption("Vis værdi ved alle faser", false),
       plot_label_show_n_target: numberOption("Vis værdi ved seneste N faser", 1, { min: 1 }),
       plot_label_position_target: lineLabelPositionOption(),
       plot_label_vpad_target: numberOption("Lodret afstand", 0),
       plot_label_hpad_target: numberOption("Vandret afstand", 10),
       plot_label_font_target: fontOption("Skrifttype"),
-      plot_label_size_target: fontSizeOption("Skriftstørrelse"),
+      // Større end de øvrige etiketter: centerlinjens værdi er et af de to
+      // tal, en læser tager med sig fra diagrammet.
+      plot_label_size_target: numberOption("Skriftstørrelse", 24, { min: 0, max: 100 }),
       plot_label_colour_target: colourOption("Skriftfarve", "standard"),
       plot_label_prefix_target: textOption("Tekstpræfiks", "")
     },
-    "Mållinje": {
-      show_alt_target: toggleOption("Vis mållinje", false),
-      alt_target: numberOption("Målværdi:", undefined),
-      multiplier_alt_target: toggleOption("Anvend multiplikator på mållinje", false),
+    "Udviklingsmål": {
+      show_alt_target: toggleOption("Vis udviklingsmål", false),
+      alt_target: numberOption("Udviklingsmålets værdi:", undefined),
+      multiplier_alt_target: toggleOption("Anvend multiplikator på udviklingsmål", false),
+      // Retningen vises foran målets værdi ("≥ 55"). Den fortolkes ikke:
+      // diagrammet farver eller markerer ikke efter, om målet er nået.
+      operator_alt_target: dropdownOption("Udviklingsmålets retning", "none",
+                                          ["none", ">=", "<=", ">", "<"], "none",
+                                          ["Ingen", "Mindst (≥)", "Højst (≤)", "Over (>)", "Under (<)"]),
       width_alt_target: numberOption("Linjetykkelse", 1.5, { min: 0, max: 100 }),
-      type_alt_target: lineTypeOption("Linjetype", "10 0"),
+      type_alt_target: lineTypeOption("Linjetype", "10 10"),
       colour_alt_target: colourOption("Linjefarve", "standard"),
       opacity_alt_target: numberOption("Gennemsigtighed", 1, { min: 0, max: 1 }),
       opacity_unselected_alt_target: numberOption("Gennemsigtighed (andre valgt)", 0.2, { min: 0, max: 1 }),
       join_rebaselines_alt_target: toggleOption("Forbind linjer over faseskift", false),
       ttip_show_alt_target: toggleOption("Vis værdi i tooltip", true),
-      ttip_label_alt_target: textOption("Tooltip-etiket", "Alt. Target"),
-      plot_label_show_alt_target: toggleOption("Vis værdi på diagram", false),
+      ttip_label_alt_target: textOption("Tooltip-etiket", "Udviklingsmål"),
+      plot_label_show_alt_target: toggleOption("Vis værdi på diagram", true),
       plot_label_show_all_alt_target: toggleOption("Vis værdi ved alle faser", false),
       plot_label_show_n_alt_target: numberOption("Vis værdi ved seneste N faser", 1, { min: 1 }),
       plot_label_position_alt_target: lineLabelPositionOption(),
       plot_label_vpad_alt_target: numberOption("Lodret afstand", 0),
       plot_label_hpad_alt_target: numberOption("Vandret afstand", 10),
       plot_label_font_alt_target: fontOption("Skrifttype"),
-      plot_label_size_alt_target: fontSizeOption("Skriftstørrelse"),
+      // Som centerlinjens: målet er det andet tal, der skal kunne aflæses.
+      plot_label_size_alt_target: numberOption("Skriftstørrelse", 24, { min: 0, max: 100 }),
       plot_label_colour_alt_target: colourOption("Skriftfarve", "standard"),
       plot_label_prefix_alt_target: textOption("Tekstpræfiks", "")
     },
-    "99%-kontrolgrænser": {
-      show_99: toggleOption("Vis 99%-kontrolgrænser", true),
+    "Kontrolgrænser": {
+      show_99: toggleOption("Vis kontrolgrænser", true),
       width_99: numberOption("Linjetykkelse", 1, { min: 0, max: 100 }),
       type_99: lineTypeOption("Linjetype", "10 0"),
       colour_99: colourOption("Linjefarve", "limits"),
@@ -81,9 +89,9 @@ const linesSettings = {
       opacity_unselected_99: numberOption("Gennemsigtighed (andre valgt)", 0.2, { min: 0, max: 1 }),
       join_rebaselines_99: toggleOption("Forbind linjer over faseskift", false),
       ttip_show_99: toggleOption("Vis værdi i tooltip", true),
-      ttip_label_99: textOption("Tooltip-etiket", "99% Limit"),
-      ttip_label_99_prefix_lower: textOption("Tooltip-præfiks (nedre)", "Lower "),
-      ttip_label_99_prefix_upper: textOption("Tooltip-præfiks (øvre)", "Upper "),
+      ttip_label_99: textOption("Tooltip-etiket", "Kontrolgrænse"),
+      ttip_label_99_prefix_lower: textOption("Tooltip-præfiks (nedre)", "Nedre "),
+      ttip_label_99_prefix_upper: textOption("Tooltip-præfiks (øvre)", "Øvre "),
       plot_label_show_99: toggleOption("Vis værdi på diagram", false),
       plot_label_show_all_99: toggleOption("Vis værdi ved alle faser", false),
       plot_label_show_n_99: numberOption("Vis værdi ved seneste N faser", 1, { min: 1 }),

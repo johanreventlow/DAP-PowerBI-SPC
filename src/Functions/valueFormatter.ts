@@ -5,9 +5,12 @@ import toFixedComma from "./toFixedComma";
 
 const formatValues = function<T>(value: T, name: string,
                                         inputSettings: settingsValueType,
-                                        derivedSettings: derivedSettingsClass): string {
+                                        derivedSettings: derivedSettingsClass,
+                                        sigFigsOverride?: number): string {
   const suffix: string = derivedSettings.percentLabels ? "%" : "";
-  const sig_figs: number = inputSettings.spc.sig_figs;
+  const sig_figs: number = isNullOrUndefined(sigFigsOverride)
+                             ? inputSettings.spc.sig_figs
+                             : sigFigsOverride as number;
   if (isNullOrUndefined(value)) {
     return "";
   }
@@ -22,9 +25,16 @@ const formatValues = function<T>(value: T, name: string,
   }
 }
 
-export default function valueFormatter(inputSettings: settingsValueType, derivedSettings: derivedSettingsClass) {
+/**
+ * @param sigFigsOverride - Antal decimaler i stedet for SPC-indstillingernes.
+ *   Bruges af de etiketter, der skal stemme med y-aksen frem for med
+ *   tooltippets fulde præcision.
+ */
+export default function valueFormatter(inputSettings: settingsValueType,
+                                       derivedSettings: derivedSettingsClass,
+                                       sigFigsOverride?: number) {
   const formatValuesImpl = function<T>(value: T, name: string): string {
-    return formatValues(value, name, inputSettings, derivedSettings);
+    return formatValues(value, name, inputSettings, derivedSettings, sigFigsOverride);
   }
   return formatValuesImpl;
 }

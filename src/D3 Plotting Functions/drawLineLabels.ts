@@ -1,6 +1,8 @@
 import type { svgBaseType, Visual } from "../visual";
 import { lineNameMap } from "../Functions/getAesthetic";
 import valueFormatter from "../Functions/valueFormatter";
+import isNullOrUndefined from "../Functions/isNullOrUndefined";
+import targetOperator from "../Functions/targetOperator";
 import * as d3 from "./D3 Modules";
 import type { lineData } from "../Classes/viewModelClass";
 import { type settingsValueType } from "../settings";
@@ -64,7 +66,12 @@ export default function drawLineLabels(selection: svgBaseType, visualObj: Visual
       }
     });
   });
-  const formatValue = valueFormatter(visualObj.viewModel.inputSettings.settings[0], visualObj.viewModel.inputSettings.derivedSettings[0]);
+  // Etiketterne læses sammen med y-aksen og følger derfor dens decimaler.
+  const settings = visualObj.viewModel.inputSettings.settings[0];
+  const labelSigFigs: number = isNullOrUndefined(settings.y_axis.ylimit_sig_figs)
+                                 ? settings.spc.sig_figs
+                                 : settings.y_axis.ylimit_sig_figs;
+  const formatValue = valueFormatter(settings, visualObj.viewModel.inputSettings.derivedSettings[0], labelSigFigs);
   selection
     .select(".linesgroup")
     .selectAll("text")
@@ -72,8 +79,12 @@ export default function drawLineLabels(selection: svgBaseType, visualObj: Visual
     .join("text")
     .text((d: lineLabelType) => {
       const lineGroup: [string, lineData[]] = visualObj.viewModel.groupedLines[d.limit];
+      // Målets retning står foran værdien, efter brugerens eget præfiks.
+      const operator: string = lineGroup[0] === "alt_targets"
+                                 ? targetOperator(lineSettings.operator_alt_target)
+                                 : "";
       return lineSettings[`plot_label_show_${lineNameMap[lineGroup[0]]}` as LineSettingsKey]
-              ? lineSettings[`plot_label_prefix_${lineNameMap[lineGroup[0]]}` as LineSettingsKey] + formatValue(lineGroup[1][d.index].line_value, "value")
+              ? lineSettings[`plot_label_prefix_${lineNameMap[lineGroup[0]]}` as LineSettingsKey] + operator + formatValue(lineGroup[1][d.index].line_value, "value")
               : "";
     })
     .attr("x", (d: lineLabelType) => {

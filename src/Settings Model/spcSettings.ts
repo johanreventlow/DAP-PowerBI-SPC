@@ -66,9 +66,9 @@ const spcSettings = {
       ttip_show_date: toggleOption("Vis dato i tooltip", true),
       ttip_label_date: textOption("Dato-etiket i tooltip", "Automatic"),
       ttip_show_numerator: toggleOption("Vis tæller i tooltip", true),
-      ttip_label_numerator: textOption("Tæller-etiket i tooltip", "Numerator"),
+      ttip_label_numerator: textOption("Tæller-etiket i tooltip", "Tæller"),
       ttip_show_denominator: toggleOption("Vis nævner i tooltip", true),
-      ttip_label_denominator: textOption("Nævner-etiket i tooltip", "Denominator"),
+      ttip_label_denominator: textOption("Nævner-etiket i tooltip", "Nævner"),
       // Diagramtypen i tooltippet frem for på lærredet: en forkert valgt
       // korttype er matematisk forkert uden at se forkert ud, og her kan en
       // kollega opdage det uden at åbne formateringsruden.

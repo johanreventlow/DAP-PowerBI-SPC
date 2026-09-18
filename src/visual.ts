@@ -27,6 +27,9 @@ import identitySelected from "./Functions/identitySelected";
 export type svgBaseType = d3.Selection<SVGSVGElement, unknown, null, undefined>;
 export type divBaseType = d3.Selection<HTMLDivElement, unknown, null, undefined>;
 
+// Luft mellem en linjeetiket og signalpanelets venstre kant.
+const LABEL_PANEL_GAP: number = 8;
+
 export class Visual implements powerbi.extensibility.IVisual {
   host: powerbi.extensibility.visual.IVisualHost;
   tableDiv: divBaseType;
@@ -102,6 +105,7 @@ export class Visual implements powerbi.extensibility.IVisual {
       } else {
         this.resizeCanvas(options.viewport.width, options.viewport.height);
         this.drawVisual();
+        this.adjustPaddingForPanel();
         this.adjustPaddingForOverflow();
       }
 
@@ -127,6 +131,41 @@ export class Visual implements powerbi.extensibility.IVisual {
             .call(drawValueLabels, this)
             .call(drawSignalPanel, this)
             .call(drawWarning, this);
+  }
+
+  /**
+   * Giver linjeetiketterne plads, hvor signalpanelet står.
+   *
+   * Indstillingen "Margen til højre" er et rimeligt gæt på, hvor bred en
+   * etiket bliver, men bredden afhænger af tallet: "50,90" fylder en tredjedel
+   * af "1.234.567,89". Her måles den faktiske etiket, og margenen udvides med
+   * præcis det, der mangler — indstillingen bliver dermed et minimum frem for
+   * et tal, brugeren selv skal ramme.
+   *
+   * Kun panelets kant: lærredets egen kant håndteres af
+   * adjustPaddingForOverflow, som kører umiddelbart efter.
+   */
+  adjustPaddingForPanel(): void {
+    // Uden layout (headless eksport) er der intet at måle.
+    if (this.viewModel.headless || !this.plotProperties.showSignalPanel) {
+      return;
+    }
+    const panelLeft: number = this.viewModel.svgWidth
+                              - this.viewModel.inputSettings.settings[0].signal_panel.panel_width;
+    let overlap: number = 0;
+    this.svg.selectAll<SVGGraphicsElement, unknown>(".linesgroup text").each(function() {
+      const box: DOMRect = this.getBBox();
+      // En tom etiket har ingen boks at måle.
+      if (box.width > 0) {
+        overlap = Math.max(overlap, box.x + box.width + LABEL_PANEL_GAP - panelLeft);
+      }
+    });
+
+    if (overlap > 0) {
+      this.plotProperties.xAxis.end_padding += overlap;
+      this.plotProperties.initialiseScale(this.viewModel.svgWidth, this.viewModel.svgHeight);
+      this.drawVisual();
+    }
   }
 
   adjustPaddingForOverflow(): void {

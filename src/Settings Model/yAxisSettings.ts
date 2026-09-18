@@ -11,7 +11,13 @@ const yAxisSettings = {
       ylimit_show: toggleOption("Vis Y-akse", true),
       ylimit_colour: colourOption("Aksefarve", "standard"),
       limit_multiplier: numberOption("Skaleringsfaktor", 1.5, { min: 0 }),
-      ylimit_sig_figs: numberOption("Antal decimaler", undefined, { min: 0, max: 100 }),
+      ylimit_sig_figs: {
+        ...numberOption("Antal decimaler", 0, { min: 0, max: 100 }),
+        // Samme tal bruges til værdierne på centerlinje og mållinje i
+        // diagrammet: en etiket med to decimaler ved siden af en akse uden
+        // ser ud som en fejl, selv når begge er rigtige.
+        description: "Bruges også til værdierne på centerlinje og mållinje i diagrammet."
+      },
       ylimit_l: numberOption("Nedre grænse", undefined),
       ylimit_u: numberOption("Øvre grænse", undefined)
     },

@@ -65,7 +65,7 @@ describe("I′ i brugerfladen", () => {
       needs_denominator: false, denominator_optional: true, numerator_non_negative: false,
       numerator_leq_denominator: false, has_control_limits: true, runs_analysis_applies: true,
       needs_sd: false, integer_num_den: false, x_axis_use_date: true, denominator_gt_one: false,
-      denominator_positive: true, value_name: "Observation"
+      denominator_positive: true, value_name: "Værdi"
     });
   });
 

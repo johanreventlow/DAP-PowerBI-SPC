@@ -1,5 +1,5 @@
 {
-  "name": "DAP SPC — tilføjelse til Region H-temafilen",
+  "name": "SPC til DAP — tilføjelse til Region H-temafilen",
   "visualStyles": {
     "DAPSPC": {
       "lines": [
@@ -30,11 +30,13 @@
             }
           },
           "width_target": 2,
+          "plot_label_show_target": true,
           "colour_alt_target": {
             "solid": {
               "color": "#333333"
             }
           },
+          "type_alt_target": "10 10",
           "plot_label_colour_main": {
             "solid": {
               "color": "#333333"
@@ -63,7 +65,8 @@
             "solid": {
               "color": "#C47B00"
             }
-          }
+          },
+          "astronomical": true
         }
       ],
       "x_axis": [

@@ -1,19 +1,21 @@
 import type { settingsValueType } from "../settings"
 
+// Navnet på det, en observation er, per diagramtype. Bruges som etiket i
+// tooltippet, når brugeren ikke selv har skrevet en.
 const valueNames: Record<string, string> = {
-  "i": "Observation",
-  "ip": "Observation",
-  "i_m": "Observation",
-  "i_mm": "Observation",
-  "c": "Count",
-  "t": "Time",
-  "xbar": "Group Mean",
-  "s": "Group SD",
-  "g": "Non-Events",
-  "run": "Observation",
-  "mr": "Moving Range",
-  "p": "Proportion",
-  "pp": "Proportion",
+  "i": "Værdi",
+  "ip": "Værdi",
+  "i_m": "Værdi",
+  "i_mm": "Værdi",
+  "c": "Antal",
+  "t": "Tid",
+  "xbar": "Gruppegennemsnit",
+  "s": "Gruppe-SD",
+  "g": "Enheder mellem hændelser",
+  "run": "Værdi",
+  "mr": "Variationsbredde",
+  "p": "Andel",
+  "pp": "Andel",
   "u": "Rate",
   "up": "Rate"
 }
@@ -74,7 +76,7 @@ export default class derivedSettingsClass {
       integer_num_den: ["c", "p", "pp"].includes(chartType),
       value_name: valueNames[chartType],
       x_axis_use_date: !(["g", "t"].includes(chartType)),
-      date_name: !(["g", "t"].includes(chartType)) ? "Date" : "Event",
+      date_name: !(["g", "t"].includes(chartType)) ? "Dato" : "Hændelse",
       denominator_gt_one: ["xbar", "s"].includes(chartType),
       // I′ deler med √d_i, så en nævner på 0 (eller negativ/uendelig) giver
       // ingen meningsfuld grænse. Kun ip — andre typers validering er uændret.

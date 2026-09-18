@@ -47,7 +47,7 @@ describe("Plottets defaults", () => {
 
   it("tegner centerlinjen i en lys tone af temafarve 1", () => {
     const element = render();
-    expect(line(element, "targets")).toEqual({ width: "2", colour: "#99a8bb", dash: "10 0" });
+    expect(line(element, "targets")).toEqual({ width: "3", colour: "#99a8bb", dash: "10 0" });
     element.remove();
   });
 

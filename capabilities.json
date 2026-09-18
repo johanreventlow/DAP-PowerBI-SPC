@@ -17,9 +17,7 @@
     "roles": [ "tooltips" ],
     "supportEnhancedTooltips": true
   },
-  "privileges": [
-    { "name": "ExportContent", "essential": false }
-  ],
+  "privileges": [],
   "dataRoles": [
     { "displayName": "Værdi/Tæller",     "name": "numerators",   "kind": "Measure" },
     { "displayName": "Nævner",           "name": "denominators", "kind": "Measure" },
@@ -354,6 +352,9 @@
         },
         "multiplier_alt_target": {
           "type" : { "bool" : true }
+        },
+        "operator_alt_target": {
+          "type": { "enumeration": [] }
         },
         "plot_label_show_99": {
           "type": { "bool": true }
