@@ -31,7 +31,11 @@ på Segoe UI. Signalpanelets to egne størrelser (tallet 25, etiketten 9,5) er
 undtagelsen: de er layoutkritiske og følger panelets højde, ikke temaet.
 
 Aksemærkerne står uroteret. Det er en afvigelse fra upstream, som roterer
-dem 35 grader.
+dem 35 grader. Uroteret tekst kan ikke vige for sin nabo, så en etiket, der
+ville lande oven i den forrige, skjules — mærket bliver stående. Antallet af
+etiketter følger derfor aksens bredde af sig selv: en smal akse med
+datoetiketter viser tre, en bred viser fem. Vælger man selv en rotation, er
+alle etiketter med igen.
 
 De to lyse toner står ikke i temafilen. De er valgt til rollen: centerlinjen
 og fladen er referencer, som serien skal læses op imod, og de må derfor ikke

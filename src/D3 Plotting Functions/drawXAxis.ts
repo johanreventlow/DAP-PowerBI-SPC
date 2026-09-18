@@ -2,6 +2,38 @@ import * as d3 from "./D3 Modules";
 import type { axisProperties } from "../Classes/plotPropertiesClass";
 import type { svgBaseType, Visual } from "../visual";
 
+// Mindste luft mellem to uroterede etiketter, i px.
+const TICK_LABEL_GAP: number = 4;
+
+/**
+ * Skjuler uroterede aksemærke-etiketter, der ville lande oven i naboen.
+ *
+ * En roteret etiket kan vige for sin nabo; en uroteret kan ikke. Etiketterne
+ * gennemløbes fra venstre, og den, der overlapper den senest beholdte,
+ * skjules. Selve mærket bliver stående, så aksen fortsat viser, hvor
+ * punkterne ligger.
+ *
+ * Måler vi ingen bredde — et skjult plot, eller en frontend uden layout —
+ * skjules intet. En etiket, der ikke kan måles, er ikke bevist at overlappe.
+ *
+ * Optegningen nulstiller selv `display` på alle etiketter, så en etiket, der
+ * blev skjult sidst, måles frit igen.
+ */
+function hideOverlappingTickLabels(labels: SVGGraphicsElement[]): void {
+  let lastRight: number = -Infinity;
+  for (const label of labels) {
+    const rect: DOMRect = label.getBoundingClientRect();
+    if (rect.width === 0) {
+      continue;
+    }
+    if (rect.left < lastRight + TICK_LABEL_GAP) {
+      label.style.display = "none";
+    } else {
+      lastRight = rect.right;
+    }
+  }
+}
+
 export default function drawXAxis(selection: svgBaseType, visualObj: Visual) {
   const xAxisGroup = selection.select(".xaxisgroup") as d3.Selection<SVGGElement, unknown, null, undefined>;
   const xAxisLabel = selection.select(".xaxislabel") as d3.Selection<SVGTextElement, unknown, null, undefined>;
@@ -65,10 +97,17 @@ export default function drawXAxis(selection: svgBaseType, visualObj: Visual) {
       .attr("dx", tickDx)
       .attr("dy", tickDy)
       .attr("transform","rotate(" + tickRotation + ")")
+      // Nulstil en skjult etiket fra forrige optegning, så aksen kan vise den
+      // igen, når der er blevet plads — eller når rotationen slås til.
+      .style("display", null)
       // Scale font
       .style("font-size", xAxisProperties.tick_size)
       .style("font-family", xAxisProperties.tick_font)
       .style("fill", displayPlot ? xAxisProperties.tick_colour : "#FFFFFF");
+
+  if (tickRotation === 0.0) {
+    hideOverlappingTickLabels(xAxisGroup.selectAll<SVGGraphicsElement, unknown>(".tick text").nodes());
+  }
 
   const textX: number = visualObj.viewModel.svgWidth / 2;
   let textY: number;
