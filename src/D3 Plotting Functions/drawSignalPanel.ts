@@ -195,7 +195,8 @@ export default function drawSignalPanel(selection: svgBaseType, visualObj: Visua
   // so the two never disagree about whether a signal fired.
   const enabled: runsRulesEnabled = {
     long_run: inputSettings.outliers.anhoj_long_run,
-    few_crossings: inputSettings.outliers.anhoj_few_crossings
+    few_crossings: inputSettings.outliers.anhoj_few_crossings,
+    beyond_limits: inputSettings.outliers.astronomical
   };
   const blocks: signalPanelBlock[] = visualObj.plotProperties.showSignalPanel
     ? buildSignalPanelBlocks(perGroupStats, settings, enabled)

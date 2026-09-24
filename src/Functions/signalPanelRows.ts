@@ -24,6 +24,9 @@ export type signalPanelRow = {
 export type runsRulesEnabled = {
   long_run: boolean;
   few_crossings: boolean;
+  // Ikke en runs-regel, men samme logik: en bruger, der har slået
+  // fremhævningen fra, har bedt om ikke at få punktet markeret som signal.
+  beyond_limits: boolean;
 };
 
 /**
@@ -116,7 +119,7 @@ export function buildSignalPanelRows(stats: groupStatsObject,
       label: splitPanelLabel(settings.label_beyond_limits),
       expected: "0",
       actual: formatCount(stats.n_beyond_limits),
-      signal: stats.beyond_limits_signal
+      signal: stats.beyond_limits_signal && enabled.beyond_limits
     });
   }
   // The usable-observation count has no threshold: the expected cell is a
