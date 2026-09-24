@@ -16,7 +16,9 @@ const yAxisSettings = {
         // Samme tal bruges til værdierne på centerlinje og mållinje i
         // diagrammet: en etiket med to decimaler ved siden af en akse uden
         // ser ud som en fejl, selv når begge er rigtige.
-        description: "Bruges også til værdierne på centerlinje og mållinje i diagrammet."
+        // Et minimum: yAxisDecimals lægger decimaler til, når aksens mærker
+        // ellers ville blive ens.
+        description: "Bruges også til værdierne for nuværende niveau og udviklingsmål. Flere decimaler bruges automatisk, hvis aksens tal ellers ville blive ens."
       },
       ylimit_l: numberOption("Nedre grænse", undefined),
       ylimit_u: numberOption("Øvre grænse", undefined)

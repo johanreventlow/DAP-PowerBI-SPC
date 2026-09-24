@@ -402,11 +402,16 @@ export default class viewModelClass {
 
     const { num_points_subset, subset_points_from, subset_rebaselines } = inputSettings.spc;
     const args = inputData.limitInputArgs;
+    // Et antal punkter er et heltal. Et decimaltal (fx 5,5) gav et brøkindeks
+    // og fik seq() til at kaste "Invalid array length"; det rundes ned.
+    const requestedSubset: number | undefined = isNullOrUndefined(num_points_subset)
+                                                  ? undefined
+                                                  : Math.floor(num_points_subset);
     const calcLimitsGrouped: controlLimitsObject[] = groupStartEndIndexes.map(([start, end], groupIndex) => {
       const n: number = end - start;
       const applySubset: boolean = groupIndex === 0 || subset_rebaselines;
-      const subsetCount: number = applySubset && !isNullOrUndefined(num_points_subset) && between(num_points_subset, 1, n)
-        ? num_points_subset : n;
+      const subsetCount: number = applySubset && !isNullOrUndefined(requestedSubset) && between(requestedSubset, 1, n)
+        ? requestedSubset as number : n;
       const subsetStart: number = subset_points_from === "Start" ? 0 : n - subsetCount;
       return limitFunction({
         keys: args.keys.slice(start, end),
