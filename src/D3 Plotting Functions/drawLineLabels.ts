@@ -1,8 +1,8 @@
 import type { svgBaseType, Visual } from "../visual";
 import { lineNameMap } from "../Functions/getAesthetic";
 import valueFormatter from "../Functions/valueFormatter";
-import isNullOrUndefined from "../Functions/isNullOrUndefined";
 import targetOperator from "../Functions/targetOperator";
+import yAxisDecimals from "../Functions/yAxisDecimals";
 import * as d3 from "./D3 Modules";
 import type { lineData } from "../Classes/viewModelClass";
 import { type settingsValueType } from "../settings";
@@ -67,11 +67,9 @@ export default function drawLineLabels(selection: svgBaseType, visualObj: Visual
     });
   });
   // Etiketterne læses sammen med y-aksen og følger derfor dens decimaler.
-  const settings = visualObj.viewModel.inputSettings.settings[0];
-  const labelSigFigs: number = isNullOrUndefined(settings.y_axis.ylimit_sig_figs)
-                                 ? settings.spc.sig_figs
-                                 : settings.y_axis.ylimit_sig_figs;
-  const formatValue = valueFormatter(settings, visualObj.viewModel.inputSettings.derivedSettings[0], labelSigFigs);
+  const formatValue = valueFormatter(visualObj.viewModel.inputSettings.settings[0],
+                                     visualObj.viewModel.inputSettings.derivedSettings[0],
+                                     yAxisDecimals(visualObj));
   selection
     .select(".linesgroup")
     .selectAll("text")

@@ -48,8 +48,13 @@ export default function drawLines(selection: svgBaseType, visualObj: Visual) {
           // to a data-group whose long-run or few-crossings signal has
           // fired, force a dashed stroke regardless of the configured
           // line type.
-          if (currLine === "targets" && currPoint.group_signal_dashed) {
-            strokeDashArray[i] = "4 2";
+          //
+          // Stiplingen er forbeholdt signalet: uden signal er centerlinjen
+          // altid fuldt optrukket, uanset en gemt linjetype. Ellers kunne en
+          // bruger, der har valgt en stiplet centerlinje, ikke se forskel på
+          // signal og intet signal. Linjetypen er derfor taget ud af ruden.
+          if (currLine === "targets") {
+            strokeDashArray[i] = currPoint.group_signal_dashed ? "4 2" : "10 0";
           }
 
           if (i > 0) {

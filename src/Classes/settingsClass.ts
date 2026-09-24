@@ -24,6 +24,12 @@ export type optionalSettingsTypes = Partial<{
 // ville kun kunne stille på noget, der aldrig får data.
 const hiddenCards: readonly settingsModelKeys[] = ["labels"] as const;
 
+// Enkelte indstillinger, der ikke vises, af samme grund som kortene ovenfor.
+//
+// "lines.type_target": centerlinjens stipling er forbeholdt runs-signalet
+// (se drawLines), så en valgt linjetype ville ikke have nogen virkning.
+const hiddenSettings: readonly string[] = ["lines.type_target"] as const;
+
 // Re-declare enum to avoid importing powerbi module everywhere settingsClass is used
 const VisualEnumerationInstanceKinds = {
   Constant: 1 << 0 as powerbi.VisualEnumerationInstanceKinds.Rule,
@@ -133,6 +139,9 @@ export default class settingsClass {
         const currSettings = currSettingsGroups[currSettingsGroupName] as MergeUnions<(typeof currSettingsGroups)[keyof typeof currSettingsGroups]>;
         for (const settingNamekey in currSettings) {
           const currSettingName = settingNamekey as keyof typeof currSettings;
+          if (hiddenSettings.includes(`${currCardName}.${String(currSettingName)}`)) {
+            continue;
+          }
           curr_card.revertToDefaultDescriptors!.push({
             objectName: currCardName,
             propertyName: currSettingName

@@ -74,13 +74,13 @@ describe("Margenen til højre", () => {
   // måler den faktiske etiket og udvider med det, der mangler.
   const bigNumerators: number[] = numerators.map(v => v * 100000 + 0.55);
 
-  function renderBig() {
+  function renderWith(values: number[]) {
     const element = testDom("420", "760");
     const visual = new Visual({ element: element, host: createVisualHost({}) });
     const settings = JSON.parse(JSON.stringify(defaultSettings));
     settings.spc.chart_type = "i";
     visual.update({
-      dataViews: [ buildDataView({ key: keys, numerators: bigNumerators }, settings) ],
+      dataViews: [ buildDataView({ key: keys, numerators: values }, settings) ],
       viewport: { width: 760, height: 420 },
       type: 2
     });
@@ -94,16 +94,31 @@ describe("Margenen til højre", () => {
     return label.getBBox().x + label.getBBox().width;
   }
 
-  it("udvider sig, når etiketten er bredere end margenen", () => {
-    const { element, visual } = renderBig();
-    const settings = visual.viewModel.inputSettings.settings[0];
-    const panelStart: number = 760 - settings.signal_panel.panel_width;
+  // Panelets venstre kant, som den faktisk er tegnet — ikke som den burde
+  // være. Panelet er forankret til end_padding og flytter sig, hvis margenen
+  // vokser, så en beregnet konstant ville måle forbi fejlen.
+  function panelStart(element: HTMLElement): number {
+    const clip = element.querySelector(".signal-panel clipPath rect")!;
+    return Number(clip.getAttribute("x"));
+  }
 
-    expect(labelEnd(element)).toBeLessThan(panelStart);
-    // Margenen er større end indstillingens minimum, altså målt frem.
+  it("holder etiketten fri af panelet, når den er bredere end margenen", () => {
+    const { element, visual } = renderWith(bigNumerators);
+    const settings = visual.viewModel.inputSettings.settings[0];
+    expect(labelEnd(element)).toBeLessThan(panelStart(element));
+    // Margenen er målt frem, ud over indstillingens minimum.
     expect(visual.plotProperties.xAxis.end_padding)
       .toBeGreaterThan(settings.canvas.right_padding + settings.signal_panel.panel_width);
     element.remove();
+  });
+
+  it("lader panelet blive stående, når margenen udvides", () => {
+    // Panelet skal ikke blive smallere af, at en etiket er bred.
+    const small = renderWith(numerators);
+    const big = renderWith(bigNumerators);
+    expect(panelStart(big.element)).toBe(panelStart(small.element));
+    small.element.remove();
+    big.element.remove();
   });
 
   it("lader margenen stå, når etiketten er smal nok", () => {

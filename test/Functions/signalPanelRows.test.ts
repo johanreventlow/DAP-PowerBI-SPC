@@ -31,7 +31,7 @@ function statsWith(overrides: Partial<groupStatsObject> = {}): groupStatsObject 
 
 // Both runs rules on unless a test says otherwise: whether a rule is enabled
 // is a separate concern from the row contents, with its own tests below.
-const BOTH_ON: runsRulesEnabled = { long_run: true, few_crossings: true };
+const BOTH_ON: runsRulesEnabled = { long_run: true, few_crossings: true, beyond_limits: true };
 
 describe("splitPanelLabel", () => {
   it("breaks in front of a parenthesised qualifier and upper-cases", () => {

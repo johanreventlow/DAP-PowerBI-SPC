@@ -1,6 +1,7 @@
 import type powerbi from "powerbi-visuals-api";
 import settingsClass from "../Classes/settingsClass";
 import isNullOrUndefined from "./isNullOrUndefined";
+import chartTypeLabel from "./chartTypeLabel";
 
 export default function validateDataViewColumns(inputDV: powerbi.DataView[], inputSettingsClass: settingsClass): string {
   // Show blank error messages for empty data or categories as settings are
@@ -18,7 +19,8 @@ export default function validateDataViewColumns(inputDV: powerbi.DataView[], inp
                    ?.some(d => d.source?.roles?.numerators) ?? false;
 
   if (!numeratorsPresent) {
-    return "No Numerators passed!";
+    // Feltets navn, som brugeren ser det i Byg-ruden.
+    return "Tilføj et felt til Værdi/Tæller.";
   }
 
   let needs_denominator: boolean = false;
@@ -49,7 +51,7 @@ export default function validateDataViewColumns(inputDV: powerbi.DataView[], inp
                      ?.some(d => d.source?.roles?.denominators) ?? false;
 
     if (!denominatorsPresent) {
-      return `Chart type '${chart_type}' requires denominators!`;
+      return `${chartTypeLabel(chart_type)} kræver en nævner. Tilføj et felt til Nævner.`;
     }
   }
 
@@ -60,7 +62,10 @@ export default function validateDataViewColumns(inputDV: powerbi.DataView[], inp
                      ?.some(d => d.source?.roles?.xbar_sds) ?? false;
 
     if (!xbarSDPresent) {
-      return `Chart type '${chart_type}' requires SDs!`;
+      // Feltet med gruppens standardafvigelse er fjernet fra Byg-ruden, så
+      // beskeden kan ikke bede om det. Den rammer kun en ældre rapport, der
+      // har xbar eller s gemt som diagramtype.
+      return `${chartTypeLabel(chart_type)} kan ikke længere beregnes. Vælg en anden diagramtype.`;
     }
   }
 

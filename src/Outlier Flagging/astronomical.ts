@@ -17,6 +17,14 @@ export default function astronomical(val: readonly number[], ll99: readonly numb
   let rtn: string[] = new Array<string>(n);
 
   for (let i = 0; i < n; i++) {
+    // En værdi, der ikke er et endeligt tal — fx 5/0 eller 0/0 fra en nævner
+    // på 0 — er ikke en observation uden for grænserne, men ingen observation.
+    // Samme regel som optællingen i flagOutliers, så punktets farve og
+    // panelets tal ikke kan være uenige.
+    if (!Number.isFinite(val[i])) {
+      rtn[i] = "none";
+      continue;
+    }
     // Check if point is outside 99% control limits
     if (!between(val[i], ll99[i], ul99[i])) {
       rtn[i] = val[i] > ul99[i] ? "upper" : "lower";
