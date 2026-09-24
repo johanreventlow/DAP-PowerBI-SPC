@@ -150,8 +150,11 @@ export class Visual implements powerbi.extensibility.IVisual {
     if (this.viewModel.headless || !this.plotProperties.showSignalPanel) {
       return;
     }
+    // Samme kant, som drawSignalPanel tegner panelet ved.
     const panelLeft: number = this.viewModel.svgWidth
-                              - this.viewModel.inputSettings.settings[0].signal_panel.panel_width;
+                              - this.plotProperties.xAxis.end_padding
+                              + this.viewModel.inputSettings.settings[0].canvas.right_padding
+                              + this.plotProperties.panelLabelGap;
     let overlap: number = 0;
     this.svg.selectAll<SVGGraphicsElement, unknown>(".linesgroup text").each(function() {
       const box: DOMRect = this.getBBox();
@@ -162,7 +165,10 @@ export class Visual implements powerbi.extensibility.IVisual {
     });
 
     if (overlap > 0) {
+      // Plottet rykker til venstre, panelet bliver stående: margenen vokser,
+      // og luften vokser lige så meget, så panelets kant er uændret.
       this.plotProperties.xAxis.end_padding += overlap;
+      this.plotProperties.panelLabelGap += overlap;
       this.plotProperties.initialiseScale(this.viewModel.svgWidth, this.viewModel.svgHeight);
       this.drawVisual();
     }

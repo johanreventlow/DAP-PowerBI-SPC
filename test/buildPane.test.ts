@@ -24,7 +24,9 @@ describe("Byg-ruden", () => {
     const bound: string[] = [
       ...mapping.categorical.categories.select.map((s: any) => s.for.in),
       ...mapping.categorical.values.select.map((s: any) => s.bind.to),
-      ...Object.keys(mapping.conditions[0])
+      ...Object.keys(mapping.conditions[0]),
+      // Tooltip-kapabiliteten kan også pege på en rolle.
+      ...((capabilities as any).tooltips?.roles ?? [])
     ];
     const names: string[] = roles.map(r => r.name);
     expect(bound.filter(b => !names.includes(b))).toEqual([]);

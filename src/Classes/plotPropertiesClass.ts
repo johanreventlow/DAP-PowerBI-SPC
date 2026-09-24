@@ -42,6 +42,11 @@ export default class plotPropertiesClass {
   // drawing of it can never disagree — otherwise a narrow tile would keep
   // an empty strip to the right of the plot.
   showSignalPanel: boolean;
+  // Ekstra luft mellem plottet og signalpanelet, målt frem af
+  // adjustPaddingForPanel, når en linjeetiket er bredere end "Margen til
+  // højre". Panelet er forankret til end_padding, så en udvidet margen alene
+  // ville flytte panelet med; denne luft holder det på plads.
+  panelLabelGap: number = 0;
 
   // Separate function so that the axis can be re-calculated on changes to padding
   initialiseScale(svgWidth: number, svgHeight: number): void {
@@ -175,6 +180,7 @@ export default class plotPropertiesClass {
       && options.viewport.width >= inputSettings.signal_panel.panel_hide_below_width
       && (viewModel.outliers[0]?.per_group_stats?.length ?? 0) > 0;
     const panelPadding: number = this.showSignalPanel ? inputSettings.signal_panel.panel_width : 0;
+    this.panelLabelGap = 0;
 
     this.xAxis = {
       lower: !isNullOrUndefined(xLowerLimit) ? xLowerLimit : 0,
